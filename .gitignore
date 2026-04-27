@@ -1,0 +1,11 @@
+# Ignore large model artifact directories
+**/models/
+**/models/**
+
+# Files above GitHub's 100 MB push limit
+Data/372 band/full.mat
+Data/planet_data_hisar/planet.csv
+
+# Notebook checkpoints
+.ipynb_checkpoints/
+**/.ipynb_checkpoints/
