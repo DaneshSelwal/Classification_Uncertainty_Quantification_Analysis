@@ -1,34 +1,321 @@
 # Classification Uncertainty Quantification Analysis
 
-This repository contains experiments and analysis pipelines for classification uncertainty across multiple workflows:
+> **Status**: This project is under ongoing development. Documentation and features are being actively improved.
 
-- Baseline model training and uncertainty comparison
-- CREDIT uncertainty workflow
-- DAPM full pipeline training and uncertainty
-- Ensemble and MultiCP uncertainty methods
-- SACP comparison outputs
+[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
+[![TensorFlow 2.x](https://img.shields.io/badge/TensorFlow-2.x-orange.svg)](https://www.tensorflow.org/)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Development Status](https://img.shields.io/badge/status-in%20development-yellow.svg)](.)
+
+A comprehensive framework for uncertainty quantification in remote sensing image classification. This repository provides multiple uncertainty estimation methods including Bayesian deep learning, ensemble techniques, conformal prediction, and evidential deep learning for hyperspectral and multispectral image analysis.
+
+## Overview
+
+This project implements and compares various uncertainty quantification approaches for classification tasks in remote sensing:
+
+| Method | Description | Key Features |
+|--------|-------------|--------------|
+| **Baseline** | Standard uncertainty estimation | Monte Carlo Dropout, Temperature Scaling |
+| **CREDIT** | Confidence-calibrated uncertainty | Calibration-aware training |
+| **DAPM** | Deep Adaptive Predictive Modeling | Full pipeline with adaptive mechanisms |
+| **Ensemble (CreDE)** | Deep Ensemble methods | Credal Deep Ensembles for robust uncertainty |
+| **MultiCP** | Multi-head Conformal Prediction | Distribution-free uncertainty sets |
+| **SACP** | Self-Adaptive Conformal Prediction | Online calibration and adaptation |
 
 ## Repository Structure
 
-- `Baseline/` - baseline model training and uncertainty notebooks, metrics, and outputs
-- `Credit/` - CREDIT training notebook and uncertainty results
-- `DAPM/` - DAPM training, uncertainty notebooks, and result summaries
-- `Data/` - source datasets used by experiments
-- `Ensemble/` - ensemble training and CreDE uncertainty outputs
-- `MultiCP/` - multi-head training and uncertainty notebooks
-- `SACP/` - SACP comparison metrics and run configurations
+```
+Classification_Uncertainty_Quantification_Analysis/
+├── Baseline/                    # Baseline models (AlexNet, GFNet, ViT)
+│   ├── Model_training.ipynb     # Training pipeline
+│   ├── Model_uncertainty_comparison.ipynb
+│   └── results/                 # Experiment outputs
+├── Credit/                      # CREDIT uncertainty workflow
+│   ├── Model_training_credit.ipynb
+│   └── results/
+├── DAPM/                        # Deep Adaptive Predictive Modeling
+│   ├── Model_training_dapm_full.ipynb
+│   ├── Model_uncertainty_dapm_full.ipynb
+│   └── results/
+├── Ensemble/                    # Ensemble & CreDE methods
+│   ├── Model_training_ensembles.ipynb
+│   ├── Model_uncertainty_CreDE.ipynb
+│   └── results/
+├── MultiCP/                     # Multi-head Conformal Prediction
+│   ├── Model_training_multihead.ipynb
+│   ├── Model_uncertainty_multicp.ipynb
+│   └── results/
+├── SACP/                        # Self-Adaptive Conformal Prediction
+│   ├── Model_sacp_comparison.ipynb
+│   └── results/
+├── Data/                        # Datasets (not tracked in git)
+│   ├── Indian_pines/
+│   ├── pavia/
+│   ├── multispectral/
+│   └── [...]
+├── .gitignore                   # Excludes large model artifacts
+├── LICENSE                      # MIT License
+├── README.md                    # This file
+└── SKILL.md                     # Workflow conventions
+```
 
-## Notes
+## Features
 
-- Large model artifact directories named `models/` are intentionally excluded from version control.
-- Experiment outputs and summaries are provided in each module's `results/` directory.
+- **Multiple Architectures**: Support for AlexNet, Global Filter Networks (GFNet), and Vision Transformers (ViT)
+- **Uncertainty Methods**: Bayesian (MC Dropout), Ensemble, Conformal Prediction, Evidential Deep Learning
+- **Metrics**: Accuracy, Cohen's Kappa, Expected Calibration Error (ECE), Brier Score
+- **Visualization**: Confusion matrices, calibration curves, uncertainty histograms
+- **Reproducible Pipelines**: Modular Jupyter notebooks for each method
+
+## Requirements
+
+### System Requirements
+
+- Python 3.9 or higher
+- GPU recommended for training (CUDA 11.2+)
+- 16GB+ RAM recommended for large hyperspectral datasets
+
+### Python Dependencies
+
+Create a virtual environment and install dependencies:
+
+```bash
+# Create virtual environment
+python -m venv venv
+
+# Activate environment
+# On Windows:
+venv\Scripts\activate
+# On macOS/Linux:
+source venv/bin/activate
+
+# Install core dependencies
+pip install tensorflow>=2.10.0
+pip install numpy>=1.21.0
+pip install pandas>=1.3.0
+pip install scikit-learn>=1.0.0
+pip install matplotlib>=3.5.0
+pip install seaborn>=0.11.0
+
+# For Jupyter notebooks
+pip install jupyter>=1.0.0
+pip install ipywidgets>=7.6.0
+```
+
+### Optional Dependencies
+
+```bash
+# For Vision Transformer support
+pip install vit-keras>=0.1.0
+
+# For advanced conformal prediction
+pip install mapie>=0.3.0
+
+# For experiment tracking
+pip install tensorboard>=2.10.0
+```
 
 ## Quick Start
 
-1. Create and activate a Python virtual environment.
-2. Install notebook dependencies required by your target workflow.
-3. Open the corresponding notebook in each module and run cells in sequence.
+### 1. Dataset Setup
+
+Place your hyperspectral/multispectral datasets in the `Data/` directory:
+
+```bash
+# Example dataset structure
+Data/
+├── Indian_pines/
+│   ├── indian_pines_corrected.mat
+│   └── indian_pines_gt.mat
+├── pavia/
+│   ├── PaviaU.mat
+│   └── PaviaU_gt.mat
+└── multispectral/
+    └── [your dataset]
+```
+
+### 2. Run Baseline Experiments
+
+```bash
+# Navigate to repository root
+cd Classification_Uncertainty_Quantification_Analysis
+
+# Open Jupyter Notebook
+jupyter notebook Baseline/Model_training.ipynb
+```
+
+**Notebook Workflow:**
+1. Run all cells in `Model_training.ipynb` to train models
+2. Models and results are saved to `Baseline/results/`
+3. Open `Model_uncertainty_comparison.ipynb` for uncertainty analysis
+
+### 3. Run Specific Uncertainty Methods
+
+Each module follows a consistent two-stage pipeline:
+
+```bash
+# Stage 1: Train models
+jupyter notebook <Module>/Model_training_*.ipynb
+
+# Stage 2: Compute uncertainty metrics
+jupyter notebook <Module>/Model_uncertainty_*.ipynb
+```
+
+| Module | Training Notebook | Uncertainty Notebook |
+|--------|-------------------|---------------------|
+| Baseline | `Model_training.ipynb` | `Model_uncertainty_comparison.ipynb` |
+| CREDIT | `Model_training_credit.ipynb` | (integrated) |
+| DAPM | `Model_training_dapm_full.ipynb` | `Model_uncertainty_dapm_full.ipynb` |
+| Ensemble | `Model_training_ensembles.ipynb` | `Model_uncertainty_CreDE.ipynb` |
+| MultiCP | `Model_training_multihead.ipynb` | `Model_uncertainty_multicp.ipynb` |
+| SACP | (integrated) | `Model_sacp_comparison.ipynb` |
+
+## Usage Examples
+
+### Training a Baseline Model
+
+```python
+import tensorflow as tf
+from pathlib import Path
+
+# Configuration
+DATA_DIR = Path("Data/multispectral")
+MODEL_SAVE_DIR = Path("Baseline/results/models")
+RESULTS_DIR = Path("Baseline/results")
+
+# Load data (example for .mat files)
+from scipy.io import loadmat
+data = loadmat(DATA_DIR / "dataset.mat")
+X, y = data["features"], data["labels"]
+
+# Train model (see notebooks for full implementation)
+# Models: AlexNet, GFNet, ViT
+```
+
+### Computing Uncertainty Metrics
+
+```python
+from sklearn.metrics import accuracy_score, cohen_kappa_score
+import numpy as np
+
+# After obtaining predictions and uncertainties
+accuracy = accuracy_score(y_true, y_pred)
+kappa = cohen_kappa_score(y_true, y_pred)
+
+# Expected Calibration Error
+def compute_ece(confidences, predictions, targets, n_bins=10):
+    # Implementation in uncertainty notebooks
+    pass
+
+ece = compute_ece(confidences, predictions, y_true)
+```
+
+## Output Format
+
+Each module generates results in a standardized format:
+
+```
+<Module>/results/
+├── models/              # Trained model weights (.keras or .h5)
+├── predictions.csv      # Model predictions with confidence scores
+├── metrics.json         # Accuracy, Kappa, ECE, Brier Score
+├── confusion_matrix.png # Visualization
+└── calibration_curve.png # Reliability diagram
+```
+
+### Metrics JSON Format
+
+```json
+{
+  "model": "ViT",
+  "dataset": "Indian_pines",
+  "accuracy": 0.9234,
+  "kappa": 0.9156,
+  "ece": 0.0423,
+  "brier_score": 0.0312,
+  "uncertainty_method": "MC_Dropout",
+  "num_samples": 50,
+  "training_time_seconds": 1847.23
+}
+```
+
+## Configuration
+
+Modify experiment parameters in notebook cells:
+
+```python
+# Hyperparameters
+CONFIG = {
+    "batch_size": 32,
+    "epochs": 100,
+    "learning_rate": 0.001,
+    "dropout_rate": 0.5,
+    "mc_samples": 50,        # For MC Dropout
+    "ensemble_size": 5,      # For Deep Ensembles
+    "conformity_score": "softmax",  # For Conformal Prediction
+}
+```
+
+## Datasets
+
+This framework supports various hyperspectral and multispectral datasets:
+
+| Dataset | Bands | Classes | Resolution |
+|---------|-------|---------|------------|
+| Indian Pines | 220 | 16 | 145x145 |
+| Pavia University | 103 | 9 | 610x340 |
+| Salinas | 204 | 16 | 512x217 |
+| Custom | Variable | Variable | Variable |
+
+## Troubleshooting
+
+### Common Issues
+
+**GPU Memory Errors**
+```bash
+# Reduce batch size or enable memory growth
+tf.config.experimental.set_memory_growth(gpu, True)
+```
+
+**Dataset Loading Errors**
+- Ensure `.mat` files are in correct format (MATLAB v7.3+)
+- Check that label indices start from 0 or 1 (adjust in preprocessing)
+
+**Notebook Kernel Crashes**
+- Reduce model complexity or input patch size
+- Close other memory-intensive applications
+
+## Contributing
+
+This project is under active development. Contributions are welcome:
+
+1. Follow the workflow conventions in `SKILL.md`
+2. Keep module outputs in respective `results/` directories
+3. Do not commit large model artifacts under `models/`
+4. Update documentation when adding new methods
 
 ## License
 
-This project is distributed under the terms in `LICENSE`.
+This project is distributed under the MIT License. See [LICENSE](LICENSE) for details.
+
+## Citation
+
+If you use this framework in your research, please cite:
+
+```bibtex
+@software{classification_uncertainty_2026,
+  title = {Classification Uncertainty Quantification Analysis},
+  author = {Selwal, Danesh},
+  year = {2026},
+  url = {https://github.com/DaneshSelwal/Classification_Uncertainty_Quantification_Analysis}
+}
+```
+
+## Contact
+
+- **Repository**: https://github.com/DaneshSelwal/Classification_Uncertainty_Quantification_Analysis
+- **Issues**: Please file bugs and feature requests on the GitHub issue tracker
+
+---
+
+*Last updated: April 2026*
