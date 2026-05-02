@@ -3,8 +3,8 @@
 **/models/**
 
 # Files above GitHub's 100 MB push limit
-Data/372 band/full.mat
-Data/planet_data_hisar/planet.csv
+data/372 band/full.mat
+data/planet_data_hisar/planet.csv
 
 # Notebook checkpoints
 .ipynb_checkpoints/
