@@ -26,38 +26,51 @@ This project implements and compares various uncertainty quantification approach
 
 ```
 Classification_Uncertainty_Quantification_Analysis/
-├── Baseline/                    # Baseline models (AlexNet, GFNet, ViT)
-│   ├── Model_training.ipynb     # Training pipeline
-│   ├── Model_uncertainty_comparison.ipynb
+├── baseline/                    # Baseline models (AlexNet, GFNet, ViT)
+│   ├── model_training.ipynb     # Training pipeline
+│   ├── model_uncertainty_comparison.ipynb
 │   └── results/                 # Experiment outputs
-├── Credit/                      # CREDIT uncertainty workflow
-│   ├── Model_training_credit.ipynb
+├── credit/                      # CREDIT uncertainty workflow
+│   ├── model_training_credit.ipynb
 │   └── results/
-├── DAPM/                        # Deep Adaptive Predictive Modeling
-│   ├── Model_training_dapm_full.ipynb
-│   ├── Model_uncertainty_dapm_full.ipynb
+├── dapm/                        # Deep Adaptive Predictive Modeling
+│   ├── model_training_dapm_full.ipynb
+│   ├── model_uncertainty_dapm_full.ipynb
 │   └── results/
-├── Ensemble/                    # Ensemble & CreDE methods
-│   ├── Model_training_ensembles.ipynb
-│   ├── Model_uncertainty_CreDE.ipynb
+├── ensemble/                    # Ensemble & CreDE methods
+│   ├── model_training_ensembles.ipynb
+│   ├── model_uncertainty_credal_ensemble.ipynb
 │   └── results/
-├── MultiCP/                     # Multi-head Conformal Prediction
-│   ├── Model_training_multihead.ipynb
-│   ├── Model_uncertainty_multicp.ipynb
+├── multi_cp/                    # Multi-head Conformal Prediction
+│   ├── model_training_multihead.ipynb
+│   ├── model_uncertainty_multicp.ipynb
 │   └── results/
-├── SACP/                        # Self-Adaptive Conformal Prediction
-│   ├── Model_sacp_comparison.ipynb
+├── sacp/                        # Self-Adaptive Conformal Prediction
+│   ├── model_sacp_comparison.ipynb
 │   └── results/
-├── Data/                        # Datasets (not tracked in git)
+├── data/                        # Datasets (not tracked in git)
 │   ├── Indian_pines/
 │   ├── pavia/
 │   ├── multispectral/
 │   └── [...]
+├── tools/                       # Utility scripts for maintenance
+│   ├── patch_notebooks.py       # Standardization tool
+│   ├── clean_notebooks.py       # Refinement tool
+│   └── automate_sacp.py         # Experiment automation
 ├── .gitignore                   # Excludes large model artifacts
 ├── LICENSE                      # MIT License
 ├── README.md                    # This file
 └── SKILL.md                     # Workflow conventions
 ```
+
+## Professional Features (New)
+
+This repository has been standardized for professional research workflows:
+
+- **Unified Google Colab Integration**: All notebooks are pre-configured for seamless Google Colab execution. They include automatic drive mounting and path resolution logic.
+- **Path Standardization**: Uses a robust `REPO_ROOT` based path logic to ensure all notebooks correctly reference shared data and save results in their respective module subfolders.
+- **Automated Experimentation**: Key experiments are automated. For example, the SACP comparison now includes a built-in sensitivity loop for window sizes `[3, 5, 7, 9]`.
+- **Cleaned & Refined Notebooks**: All notebooks follow a professional "Documentation First" structure, with redundant setup code consolidated and legacy snippets removed.
 
 ## Features
 
@@ -119,11 +132,11 @@ pip install tensorboard>=2.10.0
 
 ### 1. Dataset Setup
 
-Place your hyperspectral/multispectral datasets in the `Data/` directory:
+Place your hyperspectral/multispectral datasets in the `data/` directory:
 
 ```bash
 # Example dataset structure
-Data/
+data/
 ├── Indian_pines/
 │   ├── indian_pines_corrected.mat
 │   └── indian_pines_gt.mat
@@ -138,10 +151,10 @@ Data/
 
 ```bash
 # Navigate to repository root
-cd Classification_Uncertainty_Quantification_Analysis
+cd classification_uncertainty_analysis
 
 # Open Jupyter Notebook
-jupyter notebook Baseline/Model_training.ipynb
+jupyter notebook baseline/model_training.ipynb
 ```
 
 **Notebook Workflow:**
@@ -163,12 +176,12 @@ jupyter notebook <Module>/Model_uncertainty_*.ipynb
 
 | Module | Training Notebook | Uncertainty Notebook |
 |--------|-------------------|---------------------|
-| Baseline | `Model_training.ipynb` | `Model_uncertainty_comparison.ipynb` |
-| CREDIT | `Model_training_credit.ipynb` | (integrated) |
-| DAPM | `Model_training_dapm_full.ipynb` | `Model_uncertainty_dapm_full.ipynb` |
-| Ensemble | `Model_training_ensembles.ipynb` | `Model_uncertainty_CreDE.ipynb` |
-| MultiCP | `Model_training_multihead.ipynb` | `Model_uncertainty_multicp.ipynb` |
-| SACP | (integrated) | `Model_sacp_comparison.ipynb` |
+| baseline | `model_training.ipynb` | `model_uncertainty_comparison.ipynb` |
+| credit | `model_training_credit.ipynb` | (integrated) |
+| dapm | `model_training_dapm_full.ipynb` | `model_uncertainty_dapm_full.ipynb` |
+| ensemble | `model_training_ensembles.ipynb` | `model_uncertainty_credal_ensemble.ipynb` |
+| multi_cp | `model_training_multihead.ipynb` | `model_uncertainty_multicp.ipynb` |
+| sacp | (integrated) | `model_sacp_comparison.ipynb` |
 
 ## Usage Examples
 
@@ -179,9 +192,10 @@ import tensorflow as tf
 from pathlib import Path
 
 # Configuration
-DATA_DIR = Path("Data/multispectral")
-MODEL_SAVE_DIR = Path("Baseline/results/models")
-RESULTS_DIR = Path("Baseline/results")
+DATA_DIR = Path("data/multispectral")
+MODEL_SAVE_DIR = Path("baseline/results/models")
+RESULTS_DIR = Path("baseline/results")
+```
 
 # Load data (example for .mat files)
 from scipy.io import loadmat
