@@ -27,6 +27,12 @@ This file serves as a persistent record of all tasks, modifications, and finding
     - Added dynamic path updates for each iteration (e.g., `summary_sacp_3_metrics.csv`).
     - Implemented a master summary collection to display all results at the end of the run.
     - Verified indentation and Colab compatibility to prevent runtime errors.
+- **Dataset-Centric Reorganization**: Completed a massive restructuring of the entire repository based on specific datasets.
+    - Consolidated newly uploaded raw data into the central `data/` directory.
+    - Created 9 standalone suite folders (e.g., `Indian_Pines_Uncertainty_Quantification`, `HISAR_3mts_Uncertainty_Quantification`).
+    - Cloned the full 10-notebook suite into each of the 9 dataset folders (creating 90 tailored notebooks).
+    - Injected a robust `universal_load_data` function into every notebook to automatically handle `.mat`, `.csv`, and `.tif` files.
+    - Added dynamic inference logic to automatically determine spatial dimensions (`H, W, B`), class counts, and generate customized seaborn color palettes for each specific dataset.
 
 ### Status
 - [x] Initial codebase analysis
@@ -38,7 +44,9 @@ This file serves as a persistent record of all tasks, modifications, and finding
 - [x] Professional notebook refinement
 - [x] Notebook cell rearrangement
 - [x] SACP experiment automation ([3, 5, 7, 9] loop)
+- [x] Dataset-Centric Reorganization (9 suites generated)
 - [x] Create/Update `work_memory.md` log book
+
 
 
 ---

@@ -5,7 +5,14 @@
 # Files above GitHub's 100 MB push limit
 data/372 band/full.mat
 data/planet_data_hisar/planet.csv
+data/pavia/pavia.mat
+data/planet_data_hisar/planetgt.csv
+data/achla-multi-temporal/vh_dectomarch.csv
+data/multispectral/etm 108/all_etmls.csv
 
 # Notebook checkpoints
 .ipynb_checkpoints/
 **/.ipynb_checkpoints/
+
+# Ignore data in dataset suites to prevent pushing large files to GitHub
+*_Uncertainty_Quantification/data/
