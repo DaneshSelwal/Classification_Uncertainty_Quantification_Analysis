@@ -1,0 +1,19 @@
+{
+  "seed": 42,
+  "project_root": "/content/drive/My Drive/m_p",
+  "data_file": "/content/drive/My Drive/m_p/data/multispectral/data.csv",
+  "label_file": "/content/drive/My Drive/m_p/data/multispectral/ref.csv",
+  "model_dir": "/content/drive/My Drive/m_p/saved_models",
+  "output_dir": "/content/drive/My Drive/m_p/uncertainty_results",
+  "h": 330,
+  "w": 307,
+  "b": 6,
+  "patch_size": 9,
+  "train_percent": 0.75,
+  "calib_fraction_of_test": 0.5,
+  "alpha": 0.05,
+  "lambda": 0.5,
+  "k": 1,
+  "batch_size": 128,
+  "timestamp_utc": "2026-03-10T10:47:18.187476+00:00"
+}
