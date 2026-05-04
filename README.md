@@ -286,7 +286,6 @@ tf.config.experimental.set_memory_growth(gpu, True)
 
 This project is under active development. Contributions are welcome:
 
-1. Follow the workflow conventions in `SKILL.md`
 2. Keep module outputs in respective `results/` directories
 3. Do not commit large model artifacts under `models/`
 4. Update documentation when adding new methods
