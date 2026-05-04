@@ -33,7 +33,7 @@ Classification_Uncertainty_Quantification_Analysis/
 │   ├── ensemble/                # Ensemble & CreDE methods
 │   ├── multi_cp/                # Multi-head Conformal Prediction
 │   └── sacp/                    # Self-Adaptive Conformal Prediction
-├── Examples/                    # Dataset-specific UQ suites
+├── examples/                    # Dataset-specific UQ suites
 │   ├── Indian_Pines_Uncertainty_Quantification/
 │   ├── Pavia_Uncertainty_Quantification/
 │   ├── HISAR_3mts_Uncertainty_Quantification/

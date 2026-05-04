@@ -8,8 +8,8 @@ data/
 legacy_and_temp_files/
 
 # Ignore localized data in suites (prevent pushing large files)
-6_band_uncertainty_quantification/data/
-Examples/*/data/
+classification_uncertainty_quantification/data/
+examples/*/data/
 
 # Notebook checkpoints
 .ipynb_checkpoints/
