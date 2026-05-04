@@ -15,4 +15,4 @@ data/multispectral/etm 108/all_etmls.csv
 **/.ipynb_checkpoints/
 
 # Ignore data in dataset suites to prevent pushing large files to GitHub
-*_Uncertainty_Quantification/data/
+Examples/*_Uncertainty_Quantification/data/

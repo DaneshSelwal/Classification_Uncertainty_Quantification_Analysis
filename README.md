@@ -26,37 +26,20 @@ This project implements and compares various uncertainty quantification approach
 
 ```
 Classification_Uncertainty_Quantification_Analysis/
-├── baseline/                    # Baseline models (AlexNet, GFNet, ViT)
-│   ├── model_training.ipynb     # Training pipeline
-│   ├── model_uncertainty_comparison.ipynb
-│   └── results/                 # Experiment outputs
-├── credit/                      # CREDIT uncertainty workflow
-│   ├── model_training_credit.ipynb
-│   └── results/
-├── dapm/                        # Deep Adaptive Predictive Modeling
-│   ├── model_training_dapm_full.ipynb
-│   ├── model_uncertainty_dapm_full.ipynb
-│   └── results/
-├── ensemble/                    # Ensemble & CreDE methods
-│   ├── model_training_ensembles.ipynb
-│   ├── model_uncertainty_credal_ensemble.ipynb
-│   └── results/
-├── multi_cp/                    # Multi-head Conformal Prediction
-│   ├── model_training_multihead.ipynb
-│   ├── model_uncertainty_multicp.ipynb
-│   └── results/
-├── sacp/                        # Self-Adaptive Conformal Prediction
-│   ├── model_sacp_comparison.ipynb
-│   └── results/
+├── Generalized_6Band_Framework/ # Original modular notebooks for 6-band data
+│   ├── baseline/                # Baseline models (AlexNet, GFNet, ViT)
+│   ├── credit/                  # CREDIT uncertainty workflow
+│   ├── dapm/                    # Deep Adaptive Predictive Modeling
+│   ├── ensemble/                # Ensemble & CreDE methods
+│   ├── multi_cp/                # Multi-head Conformal Prediction
+│   └── sacp/                    # Self-Adaptive Conformal Prediction
+├── Examples/                    # Dataset-specific UQ suites
+│   ├── Indian_Pines_Uncertainty_Quantification/
+│   ├── Pavia_Uncertainty_Quantification/
+│   ├── HISAR_3mts_Uncertainty_Quantification/
+│   └── [6 other dataset suites...]
 ├── data/                        # Datasets (not tracked in git)
-│   ├── Indian_pines/
-│   ├── pavia/
-│   ├── multispectral/
-│   └── [...]
 ├── tools/                       # Utility scripts for maintenance
-│   ├── patch_notebooks.py       # Standardization tool
-│   ├── clean_notebooks.py       # Refinement tool
-│   └── automate_sacp.py         # Experiment automation
 ├── .gitignore                   # Excludes large model artifacts
 ├── LICENSE                      # MIT License
 ├── README.md                    # This file

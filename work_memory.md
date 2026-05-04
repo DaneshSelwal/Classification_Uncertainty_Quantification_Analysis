@@ -33,6 +33,7 @@ This file serves as a persistent record of all tasks, modifications, and finding
     - Cloned the full 10-notebook suite into each of the 9 dataset folders (creating 90 tailored notebooks).
     - Injected a robust `universal_load_data` function into every notebook to automatically handle `.mat`, `.csv`, and `.tif` files.
     - Added dynamic inference logic to automatically determine spatial dimensions (`H, W, B`), class counts, and generate customized seaborn color palettes for each specific dataset.
+- **Workspace Cleanup**: Moved all original unmanaged folders, raw data downloads, and temporary tool scripts into a single `legacy_and_temp_files` archive directory to keep the root workspace clean and focused strictly on the final repository.
 
 ### Status
 - [x] Initial codebase analysis
@@ -45,6 +46,7 @@ This file serves as a persistent record of all tasks, modifications, and finding
 - [x] Notebook cell rearrangement
 - [x] SACP experiment automation ([3, 5, 7, 9] loop)
 - [x] Dataset-Centric Reorganization (9 suites generated)
+- [x] Workspace Cleanup (Archived legacy files)
 - [x] Create/Update `work_memory.md` log book
 
 
