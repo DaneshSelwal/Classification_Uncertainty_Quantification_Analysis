@@ -22,141 +22,72 @@ This project implements and compares various uncertainty quantification approach
 | **MultiCP** | Multi-head Conformal Prediction | Distribution-free uncertainty sets |
 | **SACP** | Self-Adaptive Conformal Prediction | Online calibration and adaptation |
 
+## New Portable Architecture (May 2026)
+
+The repository has been restructured to support **Modular Portability**. Every module is now a self-contained unit designed for immediate execution on platforms like Google Colab without complex external data dependencies.
+
+### Key Changes:
+- **Local Data Storage**: Each module folder (`baseline`, `credit`, etc.) and each `examples/` subfolder now contains its own `data/` directory.
+- **Pre-Configured Paths**: Notebooks are updated to point to these local `data/` folders by default.
+- **Colab Ready**: Simply upload a specific module folder (e.g., `indian_pines_uncertainty_quantification`) to your Google Drive, open the notebooks in Colab, and run.
+
 ## Repository Structure
 
 ```
 Classification_Uncertainty_Quantification_Analysis/
-├── Generalized_6Band_Framework/ # Original modular notebooks for 6-band data
-│   ├── baseline/                # Baseline models (AlexNet, GFNet, ViT)
-│   ├── credit/                  # CREDIT uncertainty workflow
-│   ├── dapm/                    # Deep Adaptive Predictive Modeling
-│   ├── ensemble/                # Ensemble & CreDE methods
-│   ├── multi_cp/                # Multi-head Conformal Prediction
-│   └── sacp/                    # Self-Adaptive Conformal Prediction
-├── examples/                    # Dataset-specific UQ suites
-│   ├── Indian_Pines_Uncertainty_Quantification/
-│   ├── Pavia_Uncertainty_Quantification/
-│   ├── HISAR_3mts_Uncertainty_Quantification/
-│   └── [6 other dataset suites...]
-├── data/                        # Datasets (not tracked in git)
-├── tools/                       # Utility scripts for maintenance
-├── .gitignore                   # Excludes large model artifacts
+├── classification_uncertainty_quantification/ # Main 6-band multispectral framework
+│   ├── baseline/                # Baseline models & local data
+│   │   ├── data/                # [NEW] Contains 6-band data.csv, ref.csv
+│   │   └── ...
+│   ├── credit/                  # CREDIT workflow & local data
+│   ├── dapm/                    # DAPM workflow & local data
+│   ├── ensemble/                # Ensemble methods & local data
+│   ├── multi_cp/                # Multi-head CP & local data
+│   └── sacp/                    # Self-Adaptive CP & local data
+├── examples/                    # Dataset-specific self-contained suites
+│   ├── 372_band_uncertainty_quantification/
+│   │   ├── data/                # [NEW] Contains full_gt.mat, etc.
+│   │   └── ...
+│   ├── indian_pines_uncertainty_quantification/
+│   │   ├── data/                # [NEW] Contains Indian_pines.mat, etc.
+│   │   └── ...
+│   └── [Other dataset-specific suites...]
 ├── LICENSE                      # MIT License
-├── README.md                    # This file
-└── SKILL.md                     # Workflow conventions
+└── README.md                    # This file
 ```
 
-## Professional Features (New)
+## Professional Features
 
-This repository has been standardized for professional research workflows:
-
-- **Unified Google Colab Integration**: All notebooks are pre-configured for seamless Google Colab execution. They include automatic drive mounting and path resolution logic.
-- **Path Standardization**: Uses a robust `REPO_ROOT` based path logic to ensure all notebooks correctly reference shared data and save results in their respective module subfolders.
-- **Automated Experimentation**: Key experiments are automated. For example, the SACP comparison now includes a built-in sensitivity loop for window sizes `[3, 5, 7, 9]`.
-- **Cleaned & Refined Notebooks**: All notebooks follow a professional "Documentation First" structure, with redundant setup code consolidated and legacy snippets removed.
-
-## Features
-
-- **Multiple Architectures**: Support for AlexNet, Global Filter Networks (GFNet), and Vision Transformers (ViT)
-- **Uncertainty Methods**: Bayesian (MC Dropout), Ensemble, Conformal Prediction, Evidential Deep Learning
-- **Metrics**: Accuracy, Cohen's Kappa, Expected Calibration Error (ECE), Brier Score
-- **Visualization**: Confusion matrices, calibration curves, uncertainty histograms
-- **Reproducible Pipelines**: Modular Jupyter notebooks for each method
+- **Unified Google Colab Integration**: All notebooks include automatic drive mounting and path resolution logic.
+- **Automated Experimentation**: Key experiments are automated (e.g., SACP sensitivity loops).
+- **Cleaned & Refined Notebooks**: Modular "Documentation First" structure with consolidated setup code.
 
 ## Requirements
 
 ### System Requirements
-
 - Python 3.9 or higher
 - GPU recommended for training (CUDA 11.2+)
-- 16GB+ RAM recommended for large hyperspectral datasets
+- 16GB+ RAM recommended for large datasets
 
-### Python Dependencies
-
-Create a virtual environment and install dependencies:
-
+### Core Dependencies
 ```bash
-# Create virtual environment
-python -m venv venv
-
-# Activate environment
-# On Windows:
-venv\Scripts\activate
-# On macOS/Linux:
-source venv/bin/activate
-
-# Install core dependencies
-pip install tensorflow>=2.10.0
-pip install numpy>=1.21.0
-pip install pandas>=1.3.0
-pip install scikit-learn>=1.0.0
-pip install matplotlib>=3.5.0
-pip install seaborn>=0.11.0
-
-# For Jupyter notebooks
-pip install jupyter>=1.0.0
-pip install ipywidgets>=7.6.0
-```
-
-### Optional Dependencies
-
-```bash
-# For Vision Transformer support
-pip install vit-keras>=0.1.0
-
-# For advanced conformal prediction
-pip install mapie>=0.3.0
-
-# For experiment tracking
-pip install tensorboard>=2.10.0
+pip install tensorflow>=2.10.0 numpy pandas scikit-learn matplotlib seaborn jupyter openpyxl
 ```
 
 ## Quick Start
 
-### 1. Dataset Setup
+### 1. Choose a Module
+Decide which uncertainty method or dataset you want to analyze.
 
-Place your hyperspectral/multispectral datasets in the `data/` directory:
+### 2. Upload to Google Drive
+Upload the specific folder (e.g., `classification_uncertainty_quantification/baseline`) to your Drive.
 
-```bash
-# Example dataset structure
-data/
-├── Indian_pines/
-│   ├── indian_pines_corrected.mat
-│   └── indian_pines_gt.mat
-├── pavia/
-│   ├── PaviaU.mat
-│   └── PaviaU_gt.mat
-└── multispectral/
-    └── [your dataset]
-```
+### 3. Run in Colab
+1. Open the `.ipynb` files in Google Colab.
+2. Ensure the `REPO_ROOT` path in the first code cell matches your Drive folder location.
+3. Run the cells. The data will be loaded automatically from the local `data/` folder within that directory.
 
-### 2. Run Baseline Experiments
-
-```bash
-# Navigate to repository root
-cd classification_uncertainty_analysis
-
-# Open Jupyter Notebook
-jupyter notebook baseline/model_training.ipynb
-```
-
-**Notebook Workflow:**
-1. Run all cells in `Model_training.ipynb` to train models
-2. Models and results are saved to `Baseline/results/`
-3. Open `Model_uncertainty_comparison.ipynb` for uncertainty analysis
-
-### 3. Run Specific Uncertainty Methods
-
-Each module follows a consistent two-stage pipeline:
-
-```bash
-# Stage 1: Train models
-jupyter notebook <Module>/Model_training_*.ipynb
-
-# Stage 2: Compute uncertainty metrics
-jupyter notebook <Module>/Model_uncertainty_*.ipynb
-```
-
+## Features Matrix
 | Module | Training Notebook | Uncertainty Notebook |
 |--------|-------------------|---------------------|
 | baseline | `model_training.ipynb` | `model_uncertainty_comparison.ipynb` |
@@ -166,137 +97,7 @@ jupyter notebook <Module>/Model_uncertainty_*.ipynb
 | multi_cp | `model_training_multihead.ipynb` | `model_uncertainty_multicp.ipynb` |
 | sacp | (integrated) | `model_sacp_comparison.ipynb` |
 
-## Usage Examples
-
-### Training a Baseline Model
-
-```python
-import tensorflow as tf
-from pathlib import Path
-
-# Configuration
-DATA_DIR = Path("data/multispectral")
-MODEL_SAVE_DIR = Path("baseline/results/models")
-RESULTS_DIR = Path("baseline/results")
-```
-
-# Load data (example for .mat files)
-from scipy.io import loadmat
-data = loadmat(DATA_DIR / "dataset.mat")
-X, y = data["features"], data["labels"]
-
-# Train model (see notebooks for full implementation)
-# Models: AlexNet, GFNet, ViT
-```
-
-### Computing Uncertainty Metrics
-
-```python
-from sklearn.metrics import accuracy_score, cohen_kappa_score
-import numpy as np
-
-# After obtaining predictions and uncertainties
-accuracy = accuracy_score(y_true, y_pred)
-kappa = cohen_kappa_score(y_true, y_pred)
-
-# Expected Calibration Error
-def compute_ece(confidences, predictions, targets, n_bins=10):
-    # Implementation in uncertainty notebooks
-    pass
-
-ece = compute_ece(confidences, predictions, y_true)
-```
-
-## Output Format
-
-Each module generates results in a standardized format:
-
-```
-<Module>/results/
-├── models/              # Trained model weights (.keras or .h5)
-├── predictions.csv      # Model predictions with confidence scores
-├── metrics.json         # Accuracy, Kappa, ECE, Brier Score
-├── confusion_matrix.png # Visualization
-└── calibration_curve.png # Reliability diagram
-```
-
-### Metrics JSON Format
-
-```json
-{
-  "model": "ViT",
-  "dataset": "Indian_pines",
-  "accuracy": 0.9234,
-  "kappa": 0.9156,
-  "ece": 0.0423,
-  "brier_score": 0.0312,
-  "uncertainty_method": "MC_Dropout",
-  "num_samples": 50,
-  "training_time_seconds": 1847.23
-}
-```
-
-## Configuration
-
-Modify experiment parameters in notebook cells:
-
-```python
-# Hyperparameters
-CONFIG = {
-    "batch_size": 32,
-    "epochs": 100,
-    "learning_rate": 0.001,
-    "dropout_rate": 0.5,
-    "mc_samples": 50,        # For MC Dropout
-    "ensemble_size": 5,      # For Deep Ensembles
-    "conformity_score": "softmax",  # For Conformal Prediction
-}
-```
-
-## Datasets
-
-This framework supports various hyperspectral and multispectral datasets:
-
-| Dataset | Bands | Classes | Resolution |
-|---------|-------|---------|------------|
-| Indian Pines | 220 | 16 | 145x145 |
-| Pavia University | 103 | 9 | 610x340 |
-| Salinas | 204 | 16 | 512x217 |
-| Custom | Variable | Variable | Variable |
-
-## Troubleshooting
-
-### Common Issues
-
-**GPU Memory Errors**
-```bash
-# Reduce batch size or enable memory growth
-tf.config.experimental.set_memory_growth(gpu, True)
-```
-
-**Dataset Loading Errors**
-- Ensure `.mat` files are in correct format (MATLAB v7.3+)
-- Check that label indices start from 0 or 1 (adjust in preprocessing)
-
-**Notebook Kernel Crashes**
-- Reduce model complexity or input patch size
-- Close other memory-intensive applications
-
-## Contributing
-
-This project is under active development. Contributions are welcome:
-
-2. Keep module outputs in respective `results/` directories
-3. Do not commit large model artifacts under `models/`
-4. Update documentation when adding new methods
-
-## License
-
-This project is distributed under the MIT License. See [LICENSE](LICENSE) for details.
-
 ## Citation
-
-If you use this framework in your research, please cite:
 
 ```bibtex
 @software{classification_uncertainty_2026,
@@ -308,10 +109,7 @@ If you use this framework in your research, please cite:
 ```
 
 ## Contact
-
 - **Repository**: https://github.com/DaneshSelwal/Classification_Uncertainty_Quantification_Analysis
-- **Issues**: Please file bugs and feature requests on the GitHub issue tracker
 
 ---
-
-*Last updated: April 2026*
+*Last updated: May 2026*
