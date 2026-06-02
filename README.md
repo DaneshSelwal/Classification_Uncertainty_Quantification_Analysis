@@ -1,115 +1,161 @@
-# Classification Uncertainty Quantification Analysis
+# 🚀 Advanced Classification Uncertainty Quantification: Remote Sensing & Hyperspectral Analysis
 
-> **Status**: This project is under ongoing development. Documentation and features are being actively improved.
+[![Python](https://img.shields.io/badge/Python-3.9%2B-blue?style=for-the-badge&logo=python&logoColor=white)](https://img.shields.io/badge/Python-3.9%2B-blue?style=for-the-badge&logo=python&logoColor=white)
+[![TensorFlow](https://img.shields.io/badge/TensorFlow-2.10%2B-orange?style=for-the-badge&logo=tensorflow&logoColor=white)](https://img.shields.io/badge/TensorFlow-2.10%2B-orange?style=for-the-badge&logo=tensorflow&logoColor=white)
+[![Uncertainty](https://img.shields.io/badge/Uncertainty-Conformal%20%7C%20Ensemble%20%7C%20Bayesian-green?style=for-the-badge)](https://img.shields.io/badge/Uncertainty-Conformal%20%7C%20Ensemble%20%7C%20Bayesian-green?style=for-the-badge)
+[![Status](https://img.shields.io/badge/Status-Active-success?style=for-the-badge)](https://img.shields.io/badge/Status-Active-success?style=for-the-badge)
 
-[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
-[![TensorFlow 2.x](https://img.shields.io/badge/TensorFlow-2.x-orange.svg)](https://www.tensorflow.org/)
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Development Status](https://img.shields.io/badge/status-in%20development-yellow.svg)](.)
+Welcome to the **Classification Uncertainty Quantification (UQ) Analysis** framework. This repository provides a comprehensive, modular pipeline for quantifying predictive uncertainty in complex classification tasks, specifically optimized for high-dimensional remote sensing and multispectral imagery.
 
-A comprehensive framework for uncertainty quantification in remote sensing image classification. This repository provides multiple uncertainty estimation methods including Bayesian deep learning, ensemble techniques, conformal prediction, and evidential deep learning for hyperspectral and multispectral image analysis.
-
-## Overview
-
-This project implements and compares various uncertainty quantification approaches for classification tasks in remote sensing:
-
-| Method | Description | Key Features |
-|--------|-------------|--------------|
-| **Baseline** | Standard uncertainty estimation | Monte Carlo Dropout, Temperature Scaling |
-| **CREDIT** | Confidence-calibrated uncertainty | Calibration-aware training |
-| **DAPM** | Deep Adaptive Predictive Modeling | Full pipeline with adaptive mechanisms |
-| **Ensemble (CreDE)** | Deep Ensemble methods | Credal Deep Ensembles for robust uncertainty |
-| **MultiCP** | Multi-head Conformal Prediction | Distribution-free uncertainty sets |
-| **SACP** | Self-Adaptive Conformal Prediction | Online calibration and adaptation |
-
-## New Portable Architecture (May 2026)
-
-The repository has been restructured to support **Modular Portability**. Every module is now a self-contained unit designed for immediate execution on platforms like Google Colab without complex external data dependencies.
-
-### Key Changes:
-- **Local Data Storage**: Each module folder (`baseline`, `credit`, etc.) and each `examples/` subfolder now contains its own `data/` directory.
-- **Pre-Configured Paths**: Notebooks are updated to point to these local `data/` folders by default.
-- **Colab Ready**: Simply upload a specific module folder (e.g., `indian_pines_uncertainty_quantification`) to your Google Drive, open the notebooks in Colab, and run.
-
-## Repository Structure
-
-```
-Classification_Uncertainty_Quantification_Analysis/
-├── classification_uncertainty_quantification/ # Main 6-band multispectral framework
-│   ├── baseline/                # Baseline models & local data
-│   │   ├── data/                # [NEW] Contains 6-band data.csv, ref.csv
-│   │   └── ...
-│   ├── credit/                  # CREDIT workflow & local data
-│   ├── dapm/                    # DAPM workflow & local data
-│   ├── ensemble/                # Ensemble methods & local data
-│   ├── multi_cp/                # Multi-head CP & local data
-│   └── sacp/                    # Self-Adaptive CP & local data
-├── examples/                    # Dataset-specific self-contained suites
-│   ├── 372_band_uncertainty_quantification/
-│   │   ├── data/                # [NEW] Contains full_gt.mat, etc.
-│   │   └── ...
-│   ├── indian_pines_uncertainty_quantification/
-│   │   ├── data/                # [NEW] Contains Indian_pines.mat, etc.
-│   │   └── ...
-│   └── [Other dataset-specific suites...]
-├── LICENSE                      # MIT License
-└── README.md                    # This file
-```
-
-## Professional Features
-
-- **Unified Google Colab Integration**: All notebooks include automatic drive mounting and path resolution logic.
-- **Automated Experimentation**: Key experiments are automated (e.g., SACP sensitivity loops).
-- **Cleaned & Refined Notebooks**: Modular "Documentation First" structure with consolidated setup code.
-
-## Requirements
-
-### System Requirements
-- Python 3.9 or higher
-- GPU recommended for training (CUDA 11.2+)
-- 16GB+ RAM recommended for large datasets
-
-### Core Dependencies
-```bash
-pip install tensorflow>=2.10.0 numpy pandas scikit-learn matplotlib seaborn jupyter openpyxl
-```
-
-## Quick Start
-
-### 1. Choose a Module
-Decide which uncertainty method or dataset you want to analyze.
-
-### 2. Upload to Google Drive
-Upload the specific folder (e.g., `classification_uncertainty_quantification/baseline`) to your Drive.
-
-### 3. Run in Colab
-1. Open the `.ipynb` files in Google Colab.
-2. Ensure the `REPO_ROOT` path in the first code cell matches your Drive folder location.
-3. Run the cells. The data will be loaded automatically from the local `data/` folder within that directory.
-
-## Features Matrix
-| Module | Training Notebook | Uncertainty Notebook |
-|--------|-------------------|---------------------|
-| baseline | `model_training.ipynb` | `model_uncertainty_comparison.ipynb` |
-| credit | `model_training_credit.ipynb` | (integrated) |
-| dapm | `model_training_dapm_full.ipynb` | `model_uncertainty_dapm_full.ipynb` |
-| ensemble | `model_training_ensembles.ipynb` | `model_uncertainty_credal_ensemble.ipynb` |
-| multi_cp | `model_training_multihead.ipynb` | `model_uncertainty_multicp.ipynb` |
-| sacp | (integrated) | `model_sacp_comparison.ipynb` |
-
-## Citation
-
-```bibtex
-@software{classification_uncertainty_2026,
-  title = {Classification Uncertainty Quantification Analysis},
-  author = {Selwal, Danesh},
-  year = {2026},
-  url = {https://github.com/DaneshSelwal/Classification_Uncertainty_Quantification_Analysis}
-}
-```
-
-## Contact
-- **Repository**: https://github.com/DaneshSelwal/Classification_Uncertainty_Quantification_Analysis
+Beyond traditional point-wise accuracy, this framework implements state-of-the-art methods including **Conformal Prediction**, **Credal Deep Ensembles**, and **Deep Adaptive Predictive Modeling**, ensuring every classification decision is backed by a statistically valid measure of confidence.
 
 ---
-*Last updated: May 2026*
+
+## 📑 Table of Contents
+
+1. [📌 Project Overview](#-project-overview)
+2. [📂 Repository Structure](#-repository-structure)
+3. [📊 Dataset & Usage](#-dataset--usage)
+4. [🛠️ Workflow & Methodology](#-workflow--methodology)
+    * [Method 1: Baseline Uncertainty](#method-1-baseline-uncertainty)
+    * [Method 2: CREDIT (Calibration-Aware)](#method-2-credit-calibration-aware)
+    * [Method 3: DAPM (Deep Adaptive Modeling)](#method-3-dapm-deep-adaptive-modeling)
+    * [Method 4: Ensemble (CreDE)](#method-4-ensemble-crede)
+    * [Method 5: MultiCP (Multi-head Conformal)](#method-5-multicp-multi-head-conformal)
+    * [Method 6: SACP (Self-Adaptive Conformal)](#method-6-sacp-self-adaptive-conformal)
+5. [🚀 Getting Started](#-getting-started)
+6. [📚 Resources & References](#-resources--references)
+
+---
+
+## 📌 Project Overview
+
+This framework addresses the critical need for reliability in machine learning models deployed for Earth Observation and spatial analysis. By integrating multiple UQ paradigms, it allows researchers to:
+
+* **Identify Out-of-Distribution (OOD) Pixels**: Detect areas where the model is likely to fail.
+* **Calibrate Probabilistic Outputs**: Ensure that a 90% confidence score actually corresponds to 90% accuracy.
+* **Generate Valid Prediction Sets**: Use Conformal Prediction to produce sets of classes that contain the true label with a user-specified probability (e.g., 95%).
+* **Analyze Spatial Uncertainty**: Visualize uncertainty maps across entire scenes (Hyperspectral/Multispectral).
+
+**Key Features:**
+* **Deep Architectures**: AlexNet CNN, GFNet (Global Filter Network), and ViT-UNet (Vision Transformer).
+* **Modular Design**: Each method is self-contained with its own training logic and result visualization.
+* **Remote Sensing Ready**: Built-in support for multispectral data structures.
+
+---
+
+## 📂 Repository Structure
+
+The project is organized into a modular architecture optimized for portability and experimental reproducibility:
+
+```text
+.
+├── baseline/      # 📂 Standard UQ (MC Dropout, Temp Scaling)
+├── credit/        # 📂 CREDIT: Calibration-aware training
+├── dapm/          # 📂 DAPM: Deep Adaptive Predictive Modeling
+├── data/          # 📊 Raw Datasets (data.csv, multispectral/)
+├── ensemble/      # 📂 CreDE: Credal Deep Ensembles
+├── multicp/       # 📂 MultiCP: Multi-head Conformal Prediction
+├── sacp/          # 📂 SACP: Self-Adaptive Conformal Prediction
+├── examples/      # 📁 Example Dataset Suites (untouched)
+└── README.md      # 📑 Documentation
+```
+
+---
+
+## 📊 Dataset & Usage
+
+**This is a Template Pipeline.**
+
+To use this repository with your own classification data:
+
+1. **Prepare Data**: Ensure your features and labels are in `.csv` or `.npy` format.
+2. **Path Configuration**:
+    * Place your data in the `data/` directory.
+    * Notebooks use relative paths (e.g., `../data/data.csv`) for compatibility with Google Colab and local environments.
+3. **Model Selection**: Choose from AlexNet, GFNet, or ViT-UNet by modifying the configuration in the respective notebooks.
+
+---
+
+## 🛠️ Workflow & Methodology
+
+---
+
+### Method 1: Baseline Uncertainty
+**Location**: `baseline/`
+Establishes the performance and uncertainty floor using standard Bayesian approximations.
+* **Techniques**: Monte Carlo Dropout, Temperature Scaling.
+* **Models**: AlexNet, GFNet, ViT-UNet.
+
+### Method 2: CREDIT
+**Location**: `credit/`
+Confidence-Calibrated Robustness for Deep Image Classification.
+* **Focus**: Improving the alignment between model confidence and actual performance.
+* **Output**: Calibrated spatial uncertainty maps.
+
+### Method 3: DAPM
+**Location**: `dapm/`
+Deep Adaptive Predictive Modeling for classification under distribution shift.
+* **Architecture**: Includes Encoder, Diffusion, and Multi-head decoders.
+* **Result**: High-resolution p-value distributions and uncertainty masks.
+
+### Method 4: Ensemble (CreDE)
+**Location**: `ensemble/`
+Credal Deep Ensembles (CreDE) for robust uncertainty.
+* **Process**: Training multiple model instances to capture epistemic uncertainty.
+* **Metrics**: Credal entropy and variance-based measures.
+
+### Method 5: MultiCP
+**Location**: `multicp/`
+Multi-head Conformal Prediction.
+* **Goal**: Distribution-free uncertainty sets with finite-sample validity.
+* **Output**: Performance measures across different significance levels ($\alpha$).
+
+### Method 6: SACP
+**Location**: `sacp/`
+Self-Adaptive Conformal Prediction.
+* **Advantage**: Online calibration and adaptation across varying spatial windows (ws=3, 5, 7, 9).
+* **Summary**: Combined per-class coverage reports for all models.
+
+---
+
+## 🚀 Getting Started (Colab-First)
+
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/DaneshSelwal/Classification_Uncertainty_Quantification_Analysis
+   ```
+2. **Upload to Google Drive**:
+   Upload the repository folder to your `MyDrive/` directory.
+3. **Run in Colab**:
+   Navigate to any phase (e.g., `baseline/Model_training.ipynb`) and open with Google Colab.
+   * Notebooks are pre-configured to mount `/content/drive`.
+4. **Execution Order**:
+   **Data Prep** $\rightarrow$ **Baseline Training** $\rightarrow$ **Advanced UQ Methods** $\rightarrow$ **Visualization**.
+
+---
+
+## 📚 Resources & References
+
+This project leverages state-of-the-art research in Uncertainty Quantification and Remote Sensing.
+
+### 📖 Research Papers
+
+* **Conformal Prediction Tutorial**: Angelopoulos, A. N., & Bates, S. (2021). *A Gentle Introduction to Conformal Prediction and Distribution-Free Uncertainty Quantification*. [ArXiv:2107.07511](https://arxiv.org/abs/2107.07511)
+* **Adaptive Conformal Prediction**: Gibbs, I., & Candes, E. (2021). *Adaptive conformal inference under distribution shift*. [ArXiv:2106.01682](https://arxiv.org/abs/2106.01682)
+* **Non-Exchangeable CP**: Barber, R. F., et al. (2023). *Conformal prediction beyond exchangeability*. [ArXiv:2202.13415](https://arxiv.org/abs/2202.13415)
+* **Adaptive Coverage Policies (ACP)**: [ArXiv:2510.04318](https://arxiv.org/pdf/2510.04318)
+* **Classification Calibration**: *On Calibration of Modern Neural Networks*. [ICML 2017](https://arxiv.org/abs/1706.04599)
+* **Deep Ensembles**: Lakshminarayanan, B., et al. (2017). *Simple and Scalable Predictive Uncertainty Estimation using Deep Ensembles*. [NeurIPS 2017](https://arxiv.org/abs/1612.01474)
+
+### 🛠️ Libraries & Frameworks
+
+* **MAPIE**: Model Agnostic Prediction Interval Estimator. [GitHub](https://github.com/scikit-learn-contrib/MAPIE)
+* **PUNCC**: Predictive UNCertainty Calibration and Conformalization. [GitHub](https://github.com/deel-ai/puncc)
+* **SACP (Self-Adaptive CP)**: [GitHub](https://github.com/J4ckLiu/SACP)
+* **HCM (Hyperspherical Confidence Mapping)**: [GitHub](https://github.com/Abandoned-Puppy/HCM)
+* **ACP (Adaptive Coverage Policies)**: [GitHub](https://github.com/GauthierE/adaptive-coverage-policies)
+* **Optuna**: Bayesian Hyperparameter Optimization. [Website](https://optuna.org/)
+
+---
+_This repository is developed under the guidance of Dr. Mahesh Pal._

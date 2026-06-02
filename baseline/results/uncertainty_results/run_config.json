@@ -1,0 +1,20 @@
+{
+  "seed": 42,
+  "data_file": "/content/drive/My Drive/Classification/data/data.csv",
+  "label_file": "/content/drive/My Drive/Classification/data/ref.csv",
+  "model_dir": "/content/drive/My Drive/Classification/baseline/models",
+  "output_dir": "/content/drive/My Drive/Classification/baseline/results/uncertainty_results",
+  "results_dir": "/content/drive/My Drive/Classification/baseline/results",
+  "h": 330,
+  "w": 307,
+  "b": 6,
+  "patch_size": 9,
+  "train_percent": 0.75,
+  "calib_fraction_of_test": 0.5,
+  "alpha": 0.05,
+  "raps_lam": 0.01,
+  "raps_k_reg": 1,
+  "n_clusters": 4,
+  "batch_size": 128,
+  "timestamp_utc": "2026-05-27T17:36:35.339062+00:00"
+}
