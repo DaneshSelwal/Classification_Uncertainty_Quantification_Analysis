@@ -46,19 +46,20 @@ This framework addresses the critical need for reliability in machine learning m
 
 ## 📂 Repository Structure
 
-The project is organized into a modular architecture optimized for portability and experimental reproducibility:
+The project is organized into a modular architecture optimized for portability and experimental reproducibility. The main source code is organized within the `Classification/` directory:
 
 ```text
 .
-├── baseline/      # 📂 Standard UQ (MC Dropout, Temp Scaling)
-├── credit/        # 📂 CREDIT: Calibration-aware training
-├── dapm/          # 📂 DAPM: Deep Adaptive Predictive Modeling
-├── data/          # 📊 Raw Datasets (data.csv, multispectral/)
-├── ensemble/      # 📂 CreDE: Credal Deep Ensembles
-├── multicp/       # 📂 MultiCP: Multi-head Conformal Prediction
-├── sacp/          # 📂 SACP: Self-Adaptive Conformal Prediction
-├── examples/      # 📁 Example Dataset Suites (untouched)
-└── README.md      # 📑 Documentation
+├── Classification/    # 📂 Main Project Folder (Upload this to MyDrive/)
+│   ├── baseline/      # 📂 Standard UQ (MC Dropout, Temp Scaling)
+│   ├── credit/        # 📂 CREDIT: Calibration-aware training
+│   ├── dapm/          # 📂 DAPM: Deep Adaptive Predictive Modeling
+│   ├── data/          # 📊 Raw Datasets (data.csv, multispectral/)
+│   ├── ensemble/      # 📂 CreDE: Credal Deep Ensembles
+│   ├── multicp/       # 📂 MultiCP: Multi-head Conformal Prediction
+│   └── sacp/          # 📂 SACP: Self-Adaptive Conformal Prediction
+├── examples/          # 📁 Example Dataset Suites (untouched)
+└── README.md          # 📑 Documentation
 ```
 
 ---
@@ -71,7 +72,7 @@ To use this repository with your own classification data:
 
 1. **Prepare Data**: Ensure your features and labels are in `.csv` or `.npy` format.
 2. **Path Configuration**:
-    * Place your data in the `data/` directory.
+    * Place your data in the `Classification/data/` directory.
     * Notebooks use relative paths (e.g., `../data/data.csv`) for compatibility with Google Colab and local environments.
 3. **Model Selection**: Choose from AlexNet, GFNet, or ViT-UNet by modifying the configuration in the respective notebooks.
 
@@ -82,37 +83,37 @@ To use this repository with your own classification data:
 ---
 
 ### Method 1: Baseline Uncertainty
-**Location**: `baseline/`
+**Location**: `Classification/baseline`
 Establishes the performance and uncertainty floor using standard Bayesian approximations.
 * **Techniques**: Monte Carlo Dropout, Temperature Scaling.
 * **Models**: AlexNet, GFNet, ViT-UNet.
 
 ### Method 2: CREDIT
-**Location**: `credit/`
+**Location**: `Classification/credit`
 Confidence-Calibrated Robustness for Deep Image Classification.
 * **Focus**: Improving the alignment between model confidence and actual performance.
 * **Output**: Calibrated spatial uncertainty maps.
 
 ### Method 3: DAPM
-**Location**: `dapm/`
+**Location**: `Classification/dapm`
 Deep Adaptive Predictive Modeling for classification under distribution shift.
 * **Architecture**: Includes Encoder, Diffusion, and Multi-head decoders.
 * **Result**: High-resolution p-value distributions and uncertainty masks.
 
 ### Method 4: Ensemble (CreDE)
-**Location**: `ensemble/`
+**Location**: `Classification/ensemble`
 Credal Deep Ensembles (CreDE) for robust uncertainty.
 * **Process**: Training multiple model instances to capture epistemic uncertainty.
 * **Metrics**: Credal entropy and variance-based measures.
 
 ### Method 5: MultiCP
-**Location**: `multicp/`
+**Location**: `Classification/multicp`
 Multi-head Conformal Prediction.
 * **Goal**: Distribution-free uncertainty sets with finite-sample validity.
 * **Output**: Performance measures across different significance levels ($\alpha$).
 
 ### Method 6: SACP
-**Location**: `sacp/`
+**Location**: `Classification/sacp`
 Self-Adaptive Conformal Prediction.
 * **Advantage**: Online calibration and adaptation across varying spatial windows (ws=3, 5, 7, 9).
 * **Summary**: Combined per-class coverage reports for all models.
@@ -126,10 +127,10 @@ Self-Adaptive Conformal Prediction.
    git clone https://github.com/DaneshSelwal/Classification_Uncertainty_Quantification_Analysis
    ```
 2. **Upload to Google Drive**:
-   Upload the repository folder to your `MyDrive/` directory.
+   Upload the `Classification/` folder to your `MyDrive/` directory.
 3. **Run in Colab**:
    Navigate to any phase (e.g., `baseline/Model_training.ipynb`) and open with Google Colab.
-   * Notebooks are pre-configured to mount `/content/drive`.
+   * Notebooks are pre-configured to mount `/content/drive` and find data in `/content/drive/MyDrive/Classification/data/`.
 4. **Execution Order**:
    **Data Prep** $\rightarrow$ **Baseline Training** $\rightarrow$ **Advanced UQ Methods** $\rightarrow$ **Visualization**.
 
@@ -137,25 +138,21 @@ Self-Adaptive Conformal Prediction.
 
 ## 📚 Resources & References
 
-This project leverages state-of-the-art research in Uncertainty Quantification and Remote Sensing.
+This project leverages state-of-the-art research in Uncertainty Quantification and Remote Sensing. Below are the key resources and research papers utilized in this pipeline:
 
 ### 📖 Research Papers
 
-* **Conformal Prediction Tutorial**: Angelopoulos, A. N., & Bates, S. (2021). *A Gentle Introduction to Conformal Prediction and Distribution-Free Uncertainty Quantification*. [ArXiv:2107.07511](https://arxiv.org/abs/2107.07511)
-* **Adaptive Conformal Prediction**: Gibbs, I., & Candes, E. (2021). *Adaptive conformal inference under distribution shift*. [ArXiv:2106.01682](https://arxiv.org/abs/2106.01682)
-* **Non-Exchangeable CP**: Barber, R. F., et al. (2023). *Conformal prediction beyond exchangeability*. [ArXiv:2202.13415](https://arxiv.org/abs/2202.13415)
-* **Adaptive Coverage Policies (ACP)**: [ArXiv:2510.04318](https://arxiv.org/pdf/2510.04318)
-* **Classification Calibration**: *On Calibration of Modern Neural Networks*. [ICML 2017](https://arxiv.org/abs/1706.04599)
+* **Weighted Aggregation of Conformity Scores**: *Weighted Aggregation of Conformity Scores for Classification*. [ArXiv:2407.10230](https://arxiv.org/abs/2407.10230)
+* **Uncertainty Sets for Image Classifiers**: *Uncertainty Sets for Image Classifiers using Conformal Prediction*. [ArXiv:2009.14193](https://arxiv.org/abs/2009.14193)
+* **Conformal Prediction via Label Ranking**: *Conformal Prediction for Deep Classifier via Label Ranking*. [ArXiv:2310.06430](https://arxiv.org/abs/2310.06430)
+* **Credal Ensemble Distillation**: *Credal Ensemble Distillation for Uncertainty Quantification*. [ArXiv:2511.13766](https://arxiv.org/abs/2511.13766)
+* **Calibration of Modern Neural Networks**: *On Calibration of Modern Neural Networks*. [ICML 2017](https://arxiv.org/abs/1706.04599)
 * **Deep Ensembles**: Lakshminarayanan, B., et al. (2017). *Simple and Scalable Predictive Uncertainty Estimation using Deep Ensembles*. [NeurIPS 2017](https://arxiv.org/abs/1612.01474)
 
 ### 🛠️ Libraries & Frameworks
 
-* **MAPIE**: Model Agnostic Prediction Interval Estimator. [GitHub](https://github.com/scikit-learn-contrib/MAPIE)
-* **PUNCC**: Predictive UNCertainty Calibration and Conformalization. [GitHub](https://github.com/deel-ai/puncc)
 * **SACP (Self-Adaptive CP)**: [GitHub](https://github.com/J4ckLiu/SACP)
-* **HCM (Hyperspherical Confidence Mapping)**: [GitHub](https://github.com/Abandoned-Puppy/HCM)
-* **ACP (Adaptive Coverage Policies)**: [GitHub](https://github.com/GauthierE/adaptive-coverage-policies)
-* **Optuna**: Bayesian Hyperparameter Optimization. [Website](https://optuna.org/)
+* **TensorFlow / Keras**: Deep learning frameworks utilized for modeling architectures like AlexNet, GFNet, and ViT-UNet.
 
 ---
 _This repository is developed under the guidance of Dr. Mahesh Pal._
