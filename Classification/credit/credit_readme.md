@@ -139,7 +139,7 @@ $$
 3. **Build CREDIT student:** Instantiate the base network, extract the penultimate feature layer, attach softmax (AU) and sigmoid (EU) heads.
 4. **Compile:** Use KL divergence for the AU head and MSE for the EU head, weighted $1{:}0.5$.
 5. **Train for $T$ epochs:** On $(x, (\mathbf{p}^*, \Delta\mathbf{p}))$ pairs with best-checkpoint saving on validation loss.
-6. **Evaluate:** Load best weights; predict $(\hat{\mathbf{p}}^*, \widehat{\Delta\mathbf{p}})$; compute AU, EU, TU per test pixel; compute classification metrics from $\argmax \hat{\mathbf{p}}^*$.
+6. **Evaluate:** Load best weights; predict $(\hat{\mathbf{p}}^*, \widehat{\Delta\mathbf{p}})$; compute AU, EU, TU per test pixel; compute classification metrics from $\arg\max \hat{\mathbf{p}}^*$.
 7. **Spatial mapping:** Extract a patch for every pixel in the full scene; run student inference; threshold AU, EU, TU maps to produce certain/uncertain spatial masks.
 
 ---

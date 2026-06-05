@@ -57,7 +57,7 @@ $$p^{*(c)} = \frac{p_{\min}^{(c)}}{\sum_{c'} p_{\min}^{(c')} + \varepsilon}$$
 - $\varepsilon = 10^{-12}$ — numerical stability constant
 - $p^{*(c)}$ — normalised lower-bound probability for class $c$
 
-**What this means:** $\mathbf{p}^*$ is the most conservative (least confident) proper probability distribution consistent with the ensemble. It represents the cautious inner-bound prediction. The argmax of $\mathbf{p}^*$ is used as the final predicted class label.
+**What this means:** $\mathbf{p}^*$ is the most conservative (least confident) proper probability distribution consistent with the ensemble. It represents the cautious inner-bound prediction. The $\arg\max$ of $\mathbf{p}^*$ is used as the final predicted class label.
 
 ### 2.4 Uncertainty Decomposition
 
