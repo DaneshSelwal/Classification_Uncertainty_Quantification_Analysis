@@ -47,15 +47,15 @@ $$p_{\min}^{(c)} = \min_{m=1}^{M} \hat{p}_m^{(c)}, \qquad p_{\max}^{(c)} = \max_
 
 **What this means:** The credal set is the convex hull of all member distributions. The interval $[p_{\min}^{(c)},\, p_{\max}^{(c)}]$ captures how much the ensemble "knows it doesn't know" about class $c$.
 
-### 2.3 Normalised Lower Credal Probabilities ($p^*$)
+### 2.3 Normalized Lower Credal Probabilities ($p^*$)
 
-The lower-bound vector $\mathbf{p}_{\min}$ may not sum to one, so it is normalised to form the *credal representative*:
+The lower-bound vector $\mathbf{p}_{\min}$ may not sum to one, so it is normalized to form the *credal representative*:
 
 $$p^{*(c)} = \frac{p_{\min}^{(c)}}{\sum_{c'} p_{\min}^{(c')} + \varepsilon}$$
 
 **Where:**
 - $\varepsilon = 10^{-12}$ — numerical stability constant
-- $p^{*(c)}$ — normalised lower-bound probability for class $c$
+- $p^{*(c)}$ — normalized lower-bound probability for class $c$
 
 **What this means:** $\mathbf{p}^*$ is the most conservative (least confident) proper probability distribution consistent with the ensemble. It represents the cautious inner-bound prediction. The $\arg\max$ of $\mathbf{p}^*$ is used as the final predicted class label.
 
@@ -63,7 +63,7 @@ $$p^{*(c)} = \frac{p_{\min}^{(c)}}{\sum_{c'} p_{\min}^{(c')} + \varepsilon}$$
 
 Three scalar uncertainty measures are derived from the credal bounds:
 
-**Aleatoric Uncertainty (AU)** — entropy of the normalised lower credal distribution:
+**Aleatoric Uncertainty (AU)** — entropy of the normalized lower credal distribution:
 
 $$\text{AU}(\mathbf{x}) = -\sum_{c=1}^{C} p^{*(c)} \log p^{*(c)}$$
 
@@ -191,8 +191,8 @@ for i in range(1, M + 1):
     # compile, fit, checkpoint ...
 ```
 
-**What this does:** Trains five fully independent copies of the chosen architecture, each with a different global seed. Each member gets its own weight initialisation and data-shuffling trajectory.  
-**Why:** Independence is the key property of deep ensembles. Members that start from different random initialisations converge to different loss-landscape basins, producing functionally diverse predictions. This diversity is what makes their disagreement a meaningful signal for epistemic uncertainty. `clear_session()` between members prevents any weight state leaking from one run to the next.
+**What this does:** Trains five fully independent copies of the chosen architecture, each with a different global seed. Each member gets its own weight initialization and data-shuffling trajectory.  
+**Why:** Independence is the key property of deep ensembles. Members that start from different random initializations converge to different loss-landscape basins, producing functionally diverse predictions. This diversity is what makes their disagreement a meaningful signal for epistemic uncertainty. `clear_session()` between members prevents any weight state leaking from one run to the next.
 
 ### 4.5 Credal Bound Computation
 

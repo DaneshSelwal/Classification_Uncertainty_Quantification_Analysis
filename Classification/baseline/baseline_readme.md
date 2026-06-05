@@ -117,7 +117,7 @@ $$s_i^{RAPS} = \sum_{j=1}^{r_i} \hat{p}_{\pi_j}(x_i) + \lambda \cdot \max(r_i - 
 - $\pi_1, \pi_2, \ldots$ — classes sorted in descending probability order
 - $r_i$ — the rank of the true label $y_i$ in this sorted order
 - $\lambda$ — regularisation strength (here $\lambda = 0.01$)
-- $k_{reg}$ — regularisation onset rank (here $k_{reg} = 1$)
+- $k_{reg}$ — regularization onset rank (here $k_{reg} = 1$)
 
 At test time, the prediction set is built by adding classes in probability-descending order until the cumulative sum plus penalty would exceed $\hat{q}$:
 
@@ -160,7 +160,7 @@ def load_multispectral_6band(data_path, label_path, h, w, b):
     return x_norm, y
 ```
 
-**What this does:** Reads the 6-band multispectral image from CSV, reshapes it to a (330, 307, 6) spatial cube, and normalises each spectral band independently to [0, 1].
+**What this does:** Reads the 6-band multispectral image from CSV, reshapes it to a (330, 307, 6) spatial cube, and normalizes each spectral band independently to [0, 1].
 
 **Why:** Band-wise normalisation prevents bands with larger physical magnitudes from dominating the model's feature space.
 

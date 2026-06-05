@@ -1,6 +1,6 @@
 # CREDIT (Credal Ensemble Distillation): Theory & Implementation Summary
 
-> **One-line description:** CREDIT distils a deep ensemble of classifiers into a single dual-head student that predicts class-wise probability *intervals* — a credal set — enabling simultaneous, inference-efficient quantification of aleatoric and epistemic uncertainty.
+> **One-line description:** CREDIT distills a deep ensemble of classifiers into a single dual-head student that predicts class-wise probability *intervals* — a credal set — enabling simultaneous, inference-efficient quantification of aleatoric and epistemic uncertainty.
 
 ---
 
@@ -12,7 +12,7 @@ A standard deep neural network outputs a single probability vector $\hat{p} \in 
 
 ### Why Deep Ensembles Help (and Where They Fall Short)
 
-Deep ensembles (DEs) address this by training $M$ independent networks from different random initialisations. Because each member reaches a distinct loss basin, the spread of their predictions reflects epistemic disagreement. Averaging the ensemble outputs recovers a well-calibrated point estimate; the inter-member variance signals EU. The critical limitation is cost: running $M$ networks at inference time multiplies latency and memory by $M$, which is prohibitive for large-scale or edge-deployed models.
+Deep ensembles (DEs) address this by training $M$ independent networks from different random initializations. Because each member reaches a distinct loss basin, the spread of their predictions reflects epistemic disagreement. Averaging the ensemble outputs recovers a well-calibrated point estimate; the inter-member variance signals EU. The critical limitation is cost: running $M$ networks at inference time multiplies latency and memory by $M$, which is prohibitive for large-scale or edge-deployed models.
 
 Standard ensemble distillation compresses the $M$ models into a single student that approximates the ensemble *mean*, but in doing so, it collapses the epistemic spread back into a single distribution — losing the very information that made the ensemble valuable for uncertainty quantification.
 
@@ -52,14 +52,14 @@ $$
 
 From these bounds, two distillation targets are derived.
 
-**Aleatoric target — Normalised lower bound (intersection probability):**
+**Aleatoric target — Normalized lower bound (intersection probability):**
 
 $$
 p^*_k(x) = \frac{\underline{p}_k(x)}{\sum_{j=1}^{C} \underline{p}_j(x) + \epsilon}
 $$
 
 **Where:**
-- $p^*_k$ — the normalised per-class minimum, forming a valid probability vector on $\Delta^{C-1}$
+- $p^*_k$ — the normalized per-class minimum, forming a valid probability vector on $\Delta^{C-1}$
 - $\epsilon = 10^{-12}$ — numerical stability constant
 
 **What this means:** $\mathbf{p}^*(x)$ is the point in the credal set that every ensemble member agrees is *at least this probable* for each class. It is the conservative, consensus-based probability estimate and serves as the aleatoric proxy: it is stable (low EU) when all members agree, and shifts with true data ambiguity (high AU).
@@ -134,7 +134,7 @@ $$
 
 **Output:** Trained CREDIT student with AU and EU heads; per-pixel uncertainty maps
 
-1. **Generate soft targets:** For each teacher $f^{(m)}$, run inference over $\mathcal{D}_\mathrm{train}$ to obtain $\mathbf{p}^{(m)}$. Compute $\underline{\mathbf{p}}$, $\overline{\mathbf{p}}$, then derive $\mathbf{p}^*$ (normalised lower bound) and $\Delta\mathbf{p}$ (interval widths).
+1. **Generate soft targets:** For each teacher $f^{(m)}$, run inference over $\mathcal{D}_\mathrm{train}$ to obtain $\mathbf{p}^{(m)}$. Compute $\underline{\mathbf{p}}$, $\overline{\mathbf{p}}$, then derive $\mathbf{p}^*$ (normalized lower bound) and $\Delta\mathbf{p}$ (interval widths).
 2. **Repeat for test set:** Generate $\mathbf{p}^*_\mathrm{test}$ and $\Delta\mathbf{p}_\mathrm{test}$ for validation monitoring.
 3. **Build CREDIT student:** Instantiate the base network, extract the penultimate feature layer, attach softmax (AU) and sigmoid (EU) heads.
 4. **Compile:** Use KL divergence for the AU head and MSE for the EU head, weighted $1{:}0.5$.
@@ -168,9 +168,9 @@ def generate_credit_targets(ensemble_paths, x_data, batch_size=128):
     return p_star_true, delta_p_true
 ```
 
-**What this does:** Loads each teacher model sequentially (to avoid holding all $M$ models in GPU memory simultaneously), stacks their predictions along axis 0 to form a tensor of shape $(M, N, C)$, then computes element-wise minimum and maximum across the $M$ axis to obtain the lower and upper bounds per class. $\Delta\mathbf{p}$ is the raw spread; $\mathbf{p}^*$ is the normalised lower bound.
+**What this does:** Loads each teacher model sequentially (to avoid holding all $M$ models in GPU memory simultaneously), stacks their predictions along axis 0 to form a tensor of shape $(M, N, C)$, then computes element-wise minimum and maximum across the $M$ axis to obtain the lower and upper bounds per class. $\Delta\mathbf{p}$ is the raw spread; $\mathbf{p}^*$ is the normalized lower bound.
 
-**Why:** Clearing the session after each teacher load keeps memory bounded regardless of ensemble size. The normalisation of $\mathbf{p}^*$ is essential to produce a valid probability distribution from the raw (unnormalised) per-class minima.
+**Why:** Clearing the session after each teacher load keeps memory bounded regardless of ensemble size. The normalization of $\mathbf{p}^*$ is essential to produce a valid probability distribution from the raw (unnormalized) per-class minima.
 
 ### 4.2 CREDIT Student Construction (`build_credit_student`)
 

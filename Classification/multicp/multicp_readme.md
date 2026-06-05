@@ -43,7 +43,7 @@ $$s^{\text{RAPS}}_k(x, y) = \sum_{j=1}^{\ell} \hat{\pi}_k(x)_{\pi_j} + \lambda\,
 **Where:**
 - $\hat{\pi}_k(x)_{\pi_j}$ — the $j$-th largest softmax probability from head $k$
 - $\ell$ — the rank position of label $y$ in the sorted probability list
-- $\lambda, k_{\text{reg}}$ — regularisation hyperparameters (penalty applied beyond rank $k_{\text{reg}}$)
+- $\lambda, k_{\text{reg}}$ — regularization hyperparameters (penalty applied beyond rank $k_{\text{reg}}$)
 - $(\cdot)^+$ — positive part operator
 
 **What this means:** RAPS accumulates probability mass down to the true label, then penalises labels ranked far from the top. This shrinks prediction sets by discouraging the inclusion of low-probability tail classes.

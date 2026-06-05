@@ -111,7 +111,7 @@ This is a finite-sample, distribution-free guarantee—it holds for every compli
 
 **Output:** Prediction sets $\hat{C}(x)$ for each evaluation pixel; threshold $\hat{q}$; empirical coverage.
 
-1. Run $\hat{f}$ on all calibration and evaluation patches; normalise softmax outputs.
+1. Run $\hat{f}$ on all calibration and evaluation patches; normalize softmax outputs.
 2. Compute the full $C$-dimensional APS score matrix for every calibration and evaluation pixel using a fixed random seed.
 3. Populate the spatial score map $\mathbf{M} \in \mathbb{R}^{H \times W \times C}$ by placing each pixel's score vector at its grid position.
 4. Repeat $k$ times: replace $\mathbf{M}$ with one pass of spatial smoothing using window $W_s$ and weight $\lambda$.

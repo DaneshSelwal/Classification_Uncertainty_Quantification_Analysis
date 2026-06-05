@@ -24,7 +24,7 @@ The two uploaded notebooks implement this end-to-end: `Model_training_dapm_full.
 
 Let $\mathcal{D}_s = \{(x_i^s, y_i^s)\}_{i=1}^{N_s}$ be labelled source patches and $\mathcal{D}_t = \{x_j^t\}_{j=1}^{N_t}$ be unlabelled target patches. A frozen backbone $\phi(\cdot)$ maps each $9 \times 9 \times 6$ patch to a feature vector $f \in \mathbb{R}^d$. The goal is to learn a distribution over class labels $y \in \{0, \ldots, C-1\}$ for any input, sharing a stochastic latent space $z \in \mathbb{R}^{d_z}$ across both domains ($d_z = 64$).
 
-### 2.2 VAE Encoder and Reparameterisation
+### 2.2 VAE Encoder and Reparameterization
 
 The encoder maps a feature vector to a distribution in latent space:
 
@@ -35,7 +35,7 @@ $$z = z_\mu + \exp\!\left(\tfrac{1}{2}\,z_{\log\sigma^2}\right) \cdot \varepsilo
 **Where:**
 - $z_\mu \in \mathbb{R}^{d_z}$ — posterior mean
 - $z_{\log\sigma^2} \in \mathbb{R}^{d_z}$ — log-variance of the posterior
-- $\varepsilon$ — standard Gaussian noise (reparameterisation enables backpropagation through sampling)
+- $\varepsilon$ — standard Gaussian noise (reparameterization enables backpropagation through sampling)
 
 ### 2.3 KL Divergence Loss
 
