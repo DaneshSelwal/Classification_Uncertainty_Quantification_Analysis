@@ -23,6 +23,7 @@ Beyond traditional point-wise accuracy, this framework implements state-of-the-a
     * [Method 4: Ensemble (CreDE)](#method-4-ensemble-crede)
     * [Method 5: MultiCP (Multi-head Conformal)](#method-5-multicp-multi-head-conformal)
     * [Method 6: SACP (Self-Adaptive Conformal)](#method-6-sacp-self-adaptive-conformal)
+    * [Method 7: SCMCP (Spatial MultiCP)](#method-7-scmcp-spatial-multicp)
 5. [🚀 Getting Started](#-getting-started)
 6. [📚 Resources & References](#-resources--references)
 
@@ -39,7 +40,7 @@ This framework addresses the critical need for reliability in machine learning m
 
 **Key Features:**
 * **Deep Architectures**: AlexNet CNN, GFNet (Global Filter Network), and ViT-UNet (Vision Transformer).
-* **Modular Design**: Each method is self-contained with its own training logic and result visualization.
+* **Modular Design**: Each method is self-contained with its own training logic, detailed theory/summary logs in `.md` format, and result visualization.
 * **Remote Sensing Ready**: Built-in support for multispectral data structures.
 
 ---
@@ -57,6 +58,7 @@ The project is organized into a modular architecture optimized for portability a
 │   ├── data/          # 📊 Raw Datasets (data.csv, multispectral/)
 │   ├── ensemble/      # 📂 CreDE: Credal Deep Ensembles
 │   ├── multicp/       # 📂 MultiCP: Multi-head Conformal Prediction
+│   ├── multicp_sacp/  # 📂 SCMCP: Spatial MultiCP (New)
 │   └── sacp/          # 📂 SACP: Self-Adaptive Conformal Prediction
 ├── examples/          # 📁 Example Dataset Suites (untouched)
 └── README.md          # 📑 Documentation
@@ -79,6 +81,8 @@ To use this repository with your own classification data:
 ---
 
 ## 🛠️ Workflow & Methodology
+
+> **Note**: Each method subfolder in `Classification/` includes a comprehensive `.md` file detailing the mathematical framework, implementation logic, and experimental logs.
 
 ---
 
@@ -117,6 +121,12 @@ Multi-head Conformal Prediction.
 Self-Adaptive Conformal Prediction.
 * **Advantage**: Online calibration and adaptation across varying spatial windows (ws=3, 5, 7, 9).
 * **Summary**: Combined per-class coverage reports for all models.
+
+### Method 7: SCMCP (Spatial MultiCP)
+**Location**: `Classification/multicp_sacp`
+Spatial Multi-Head Conformal Prediction.
+* **Core**: Combines spatial probability smoothing with multi-head conformal intersection.
+* **Feature**: Produces tight, spatially-coherent uncertainty regions by intersecting calibrated sets from $K$ heads after local smoothing.
 
 ---
 
