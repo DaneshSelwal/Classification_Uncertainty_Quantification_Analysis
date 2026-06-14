@@ -10,11 +10,11 @@ Standard deep classifiers produce a single point-estimate prediction per input. 
 
 DAPM addresses this by jointly modelling two kinds of uncertainty. **Data-level uncertainty** captures variability in *how* an input is encoded: a VAE encoder maps each input to a Gaussian distribution in latent space, so nearby-boundary samples produce spread-out latent distributions. **Prediction-level uncertainty** captures variability in the output: instead of a deterministic classifier head, DAPM trains a conditional Denoising Diffusion Probabilistic Model (DDPM) that operates in the *label simplex* — running a reverse diffusion chain from noise to a plausible class-probability vector, conditioned on the latent code and soft classifier guidance.
 
-At inference time, drawing $N$ independent samples from both sources of randomness (the latent posterior and the diffusion chain) yields an empirical distribution of prediction vectors for each pixel. A Welch two-sample t-test then compares the top-1 and top-2 class probability streams across those $N$ draws: if they are statistically indistinguishable (large p-value), the pixel is *uncertain*; if clearly separated (small p-value), it is *certain*.
+At inference time, drawing N independent samples from both sources of randomness (the latent posterior and the diffusion chain) yields an empirical distribution of prediction vectors for each pixel. A Welch two-sample t-test then compares the top-1 and top-2 class probability streams across those N draws: if they are statistically indistinguishable (large p-value), the pixel is *uncertain*; if clearly separated (small p-value), it is *certain*.
 
 The system is trained in two sequential stages. Stage 1 jointly trains the VAE encoder, source and target decoders, a softmax classifier, and a domain discriminator whose gradients are reversed to push source and target latent distributions into alignment. Stage 2 freezes those components and trains the conditional diffusion model to predict the noise added to label vectors, using real labels for source pixels and the classifier's soft predictions as pseudo-labels for target pixels.
 
-The two uploaded notebooks implement this end-to-end: `Model_training_dapm_full.ipynb` covers Stages 1 and 2 for three backbone architectures (AlexNet\_CNN, GFNet, ViT\_UNet) on a 6-band multispectral remote-sensing image; `Model_uncertainty_dapm_full.ipynb` loads the saved weights and runs the full-scene stochastic inference and uncertainty mapping pipeline.
+The two uploaded notebooks implement this end-to-end: `Model_training_dapm_full.ipynb` covers Stages 1 and 2 for three backbone architectures (AlexNet_CNN, GFNet, ViT_UNet) on a 6-band multispectral remote-sensing image; `Model_uncertainty_dapm_full.ipynb` loads the saved weights and runs the full-scene stochastic inference and uncertainty mapping pipeline.
 
 ---
 
@@ -22,102 +22,148 @@ The two uploaded notebooks implement this end-to-end: `Model_training_dapm_full.
 
 ### 2.1 Problem Setup
 
-Let $\mathcal{D}_s = \{(x_i^s, y_i^s)\}_{i=1}^{N_s}$ be labelled source patches and $\mathcal{D}_t = \{x_j^t\}_{j=1}^{N_t}$ be unlabelled target patches. A frozen backbone $\phi(\cdot)$ maps each $9 \times 9 \times 6$ patch to a feature vector $f \in \mathbb{R}^d$. The goal is to learn a distribution over class labels $y \in \{0, \ldots, C-1\}$ for any input, sharing a stochastic latent space $z \in \mathbb{R}^{d_z}$ across both domains ($d_z = 64$).
+Let `D_s = {(x_i^s, y_i^s)}` be labelled source patches and `D_t = {x_j^t}` be unlabelled target patches. A frozen backbone `φ(·)` maps each 9×9×6 patch to a feature vector `f ∈ ℝ^d`. The goal is to learn a distribution over class labels `y ∈ {0, …, C−1}` for any input, sharing a stochastic latent space `z ∈ ℝ^{d_z}` across both domains (d_z = 64).
 
 ### 2.2 VAE Encoder and Reparameterization
 
 The encoder maps a feature vector to a distribution in latent space:
 
-$$z_\mu,\, z_{\log\sigma^2} = \text{Encoder}(f)$$
+```
+z_μ, z_logσ² = Encoder(f)
 
-$$z = z_\mu + \exp\!\left(\tfrac{1}{2}\,z_{\log\sigma^2}\right) \cdot \varepsilon, \quad \varepsilon \sim \mathcal{N}(\mathbf{0}, I)$$
+z = z_μ + exp(½ · z_logσ²) · ε,    ε ~ N(0, I)
+```
 
-**Where:**
-- $z_\mu \in \mathbb{R}^{d_z}$ — posterior mean
-- $z_{\log\sigma^2} \in \mathbb{R}^{d_z}$ — log-variance of the posterior
-- $\varepsilon$ — standard Gaussian noise (reparameterization enables backpropagation through sampling)
+| Symbol | Meaning |
+|--------|---------|
+| `z_μ ∈ ℝ^{d_z}` | Posterior mean |
+| `z_logσ² ∈ ℝ^{d_z}` | Log-variance of the posterior |
+| `ε` | Standard Gaussian noise (reparameterization enables backpropagation through sampling) |
 
 ### 2.3 KL Divergence Loss
 
 The posterior is regularised towards a standard Gaussian prior:
 
-$$\mathcal{L}_{\text{KL}} = -\frac{1}{2} \mathbb{E}\!\left[\sum_{j=1}^{d_z} \left(1 + z_{\log\sigma^2,j} - z_{\mu,j}^2 - \exp(z_{\log\sigma^2,j})\right)\right]$$
+```
+L_KL = −½ · E[ Σ_{j=1}^{d_z} ( 1 + z_logσ²_j − z_μ_j² − exp(z_logσ²_j) ) ]
+```
 
 ### 2.4 Reconstruction Loss
 
-Separate decoders $\text{Dec}_s$ and $\text{Dec}_t$ reconstruct the original backbone feature from the latent sample, allowing domain-specific reconstruction while the encoder learns a shared space:
+Separate decoders `Dec_s` and `Dec_t` reconstruct the original backbone feature from the latent sample, allowing domain-specific reconstruction while the encoder learns a shared space:
 
-$$\mathcal{L}_{\text{recon}}(f, \hat{f}) = \mathbb{E}\!\left[\,\|f - \hat{f}\|^2\right]$$
+```
+L_recon(f, f̂) = E[ ‖f − f̂‖² ]
+```
 
 ### 2.5 Gradient Reversal Layer and Domain Adversarial Loss
 
-A domain discriminator $D$ classifies whether $z$ came from the source or target. During the backward pass through the encoder, gradients are reversed by a factor $-\lambda_{\text{GRL}}$:
+A domain discriminator `D` classifies whether `z` came from the source or target. During the backward pass through the encoder, gradients are reversed by a factor `−λ_GRL`:
 
-$$\frac{\partial \mathcal{L}_{\text{domain}}}{\partial z}\bigg|_{\text{encoder}} = -\lambda_{\text{GRL}} \cdot \frac{\partial \mathcal{L}_{\text{domain}}}{\partial z}$$
+```
+∂L_domain/∂z |_encoder  =  −λ_GRL · ∂L_domain/∂z
 
-$$\mathcal{L}_{\text{domain}} = \text{BCE}(\mathbf{0},\, D(z_s)) + \text{BCE}(\mathbf{1},\, D(z_t))$$
+L_domain = BCE(0, D(z_s))  +  BCE(1, D(z_t))
+```
 
 **What this means:** The GRL forces the encoder to fool the discriminator by making source and target latents indistinguishable — domain alignment via adversarial training, without alternating optimisation steps.
 
 ### 2.6 Stage 1 Total Loss
 
-$$\mathcal{L}_1 = \lambda_{\text{src}}\,\mathcal{L}_{\text{recon}}^s + \lambda_{\text{tgt}}\,\mathcal{L}_{\text{recon}}^t + \lambda_{\text{KL}}\,(\mathcal{L}_{\text{KL}}^s + \mathcal{L}_{\text{KL}}^t) + \lambda_{\text{CE}}\,\mathcal{L}_{\text{CE}} + \lambda_{\text{dom}}\,\mathcal{L}_{\text{domain}}$$
+```
+L_1 = λ_src · L_recon^s  +  λ_tgt · L_recon^t
+    + λ_KL · ( L_KL^s + L_KL^t )
+    + λ_CE · L_CE
+    + λ_dom · L_domain
+```
 
-Default weights: $\lambda_{\text{src}} = \lambda_{\text{tgt}} = 1.0$, $\lambda_{\text{KL}} = 0.01$, $\lambda_{\text{CE}} = 1.0$, $\lambda_{\text{dom}} = 0.2$.
+Default weights: `λ_src = λ_tgt = 1.0`, `λ_KL = 0.01`, `λ_CE = 1.0`, `λ_dom = 0.2`.
 
 ### 2.7 Forward Diffusion Process (Stage 2)
 
-The diffusion model operates over label vectors $y_0 \in \Delta^{C-1}$ (one-hot encodings). A linear beta schedule defines the forward noising process:
+The diffusion model operates over label vectors `y_0 ∈ Δ^{C-1}` (one-hot encodings). A linear beta schedule defines the forward noising process:
 
-$$\beta_t = \beta_{\text{start}} + \frac{t-1}{T-1}(\beta_{\text{end}} - \beta_{\text{start}}), \qquad \bar{\alpha}_t = \prod_{s=1}^{t}(1 - \beta_s)$$
+```
+β_t = β_start + (t−1)/(T−1) · (β_end − β_start)
 
-The closed-form single-step sample at any timestep $t$ is:
+ᾱ_t = Π_{s=1}^{t} (1 − β_s)
+```
 
-$$q(y_t \mid y_0): \quad y_t = \sqrt{\bar{\alpha}_t}\,y_0 + \sqrt{1-\bar{\alpha}_t}\,\varepsilon, \quad \varepsilon \sim \mathcal{N}(\mathbf{0}, I)$$
+The closed-form single-step sample at any timestep t is:
 
-**Where:** $T=100$, $\beta_{\text{start}} = 10^{-4}$, $\beta_{\text{end}} = 2 \times 10^{-2}$. At $t=0$ the label is clean; at $t=T$ it is approximately pure Gaussian noise.
+```
+q(y_t | y_0):   y_t = √ᾱ_t · y_0 + √(1−ᾱ_t) · ε,    ε ~ N(0, I)
+```
+
+| Symbol | Value / Meaning |
+|--------|----------------|
+| `T` | 100 diffusion steps |
+| `β_start` | 1e-4 |
+| `β_end` | 2e-2 |
+| `t = 0` | Clean label |
+| `t = T` | Approximately pure Gaussian noise |
 
 ### 2.8 Conditional Diffusion Denoiser
 
-A neural network $\epsilon_\theta$ is trained to predict the noise $\varepsilon$ added at timestep $t$, conditioned on the latent code $z$, noisy label $y_t$, soft guidance $g$, and a learned timestep embedding:
+A neural network `ε_θ` is trained to predict the noise `ε` added at timestep t, conditioned on the latent code z, noisy label `y_t`, soft guidance g, and a learned timestep embedding:
 
-$$\mathcal{L}_{\text{diff}} = \mathbb{E}_{y_0,\, t,\, \varepsilon}\!\left[\,\bigl\|\varepsilon - \epsilon_\theta(z,\, y_t,\, g,\, t)\bigr\|^2\right]$$
+```
+L_diff = E_{y_0, t, ε} [ ‖ε − ε_θ(z, y_t, g, t)‖² ]
+```
 
 For unlabelled target pixels, the classifier's soft predictions serve as pseudo-labels:
 
-$$\mathcal{L}_2 = \mathcal{L}_{\text{diff}}^s + \lambda_{\text{tgt\_diff}}\,\mathcal{L}_{\text{diff}}^t, \qquad \lambda_{\text{tgt\_diff}} = 0.5$$
+```
+L_2 = L_diff^s  +  λ_tgt_diff · L_diff^t,    λ_tgt_diff = 0.5
+```
 
 ### 2.9 Stochastic Inference via Multiple Diffusion Draws
 
-At inference, for each input pixel, $N=30$ independent latent codes are sampled from the encoder posterior:
+At inference, for each input pixel, N = 30 independent latent codes are sampled from the encoder posterior:
 
-$$z^{(k)} = z_\mu + \exp\!\left(\tfrac{1}{2} z_{\log\sigma^2}\right) \cdot \varepsilon^{(k)}, \quad k = 1, \ldots, N$$
+```
+z^(k) = z_μ + exp(½ · z_logσ²) · ε^(k),    k = 1, …, N
+```
 
-For each $z^{(k)}$, the full reverse diffusion chain runs from $y_T \sim \mathcal{N}(\mathbf{0}, I)$:
+For each `z^(k)`, the full reverse diffusion chain runs from `y_T ~ N(0, I)`:
 
-$$y_{t-1} = \frac{1}{\sqrt{\alpha_t}}\!\left(y_t - \frac{1-\alpha_t}{\sqrt{1-\bar\alpha_t}}\,\epsilon_\theta(z^{(k)}, y_t, g, t)\right) + \sqrt{\beta_t}\,\eta_t, \quad \eta_t \sim \mathcal{N}(\mathbf{0}, I)$$
+```
+y_{t-1} = (1/√α_t) · ( y_t − (1−α_t)/√(1−ᾱ_t) · ε_θ(z^(k), y_t, g, t) )
+         + √β_t · η_t,    η_t ~ N(0, I)
+```
 
-The stochastic term is dropped at the final step ($t=1$). Each completed chain yields a softmax-normalised probability vector $\hat{p}^{(k)} = \text{softmax}(y_0^{(k)})$, giving an empirical distribution $\{\hat{p}^{(k)}\}_{k=1}^N$ per pixel.
+The stochastic term is dropped at the final step (t = 1). Each completed chain yields a softmax-normalised probability vector `p̂^(k) = softmax(y_0^(k))`, giving an empirical distribution `{p̂^(k)}_{k=1}^N` per pixel.
 
 ### 2.10 Uncertainty Estimation via Welch t-Test
 
-From the $N$ probability vectors, identify the mean top-1 and top-2 class indices:
+From the N probability vectors, identify the mean top-1 and top-2 class indices:
 
-$$c_1 = \arg\max_c \bar{p}_c, \qquad c_2 = \arg\max_{c \neq c_1} \bar{p}_c, \qquad \bar{p}_c = \frac{1}{N}\sum_k \hat{p}^{(k)}_c$$
+```
+c_1 = argmax_c  p̄_c
+c_2 = argmax_{c ≠ c_1}  p̄_c
+p̄_c = (1/N) · Σ_k  p̂_c^(k)
+```
 
 Extract two groups of scalar samples:
 
-$$G_1 = \bigl\{\hat{p}^{(k)}_{c_1}\bigr\}_{k=1}^N, \qquad G_2 = \bigl\{\hat{p}^{(k)}_{c_2}\bigr\}_{k=1}^N$$
+```
+G_1 = { p̂_{c_1}^(k) }_{k=1}^N        (N top-1 probabilities)
+G_2 = { p̂_{c_2}^(k) }_{k=1}^N        (N top-2 probabilities)
+```
 
 Apply the Welch two-sample t-test (unequal variance):
 
-$$t = \frac{\bar{G}_1 - \bar{G}_2}{\sqrt{s_1^2/N\, +\, s_2^2/N}}$$
+```
+t = ( Ḡ_1 − Ḡ_2 ) / √( s_1²/N + s_2²/N )
+```
 
 A pixel is marked **uncertain** when:
 
-$$p\text{-value}(t) > \tau, \qquad \tau = 0.05$$
+```
+p-value(t) > τ,    τ = 0.05
+```
 
-**What this means:** A large p-value indicates the top-1 and top-2 class probability distributions are statistically indistinguishable across the $N$ draws — the model is genuinely unsure which class is correct. This is more powerful than single-prediction entropy or margin because it reasons about the full distribution of $N$ stochastic draws, capturing both latent and diffusion stochasticity.
+**What this means:** A large p-value indicates the top-1 and top-2 class probability distributions are statistically indistinguishable across the N draws — the model is genuinely unsure which class is correct. This is more powerful than single-prediction entropy or margin because it reasons about the full distribution of N stochastic draws, capturing both latent and diffusion stochasticity.
 
 ---
 
@@ -125,31 +171,31 @@ $$p\text{-value}(t) > \tau, \qquad \tau = 0.05$$
 
 ### Stage 1 — VAE + Domain Adversarial Training (20 epochs)
 
-**Input:** Source patches $(x_s, y_s)$, target patches $x_t$, frozen backbone $\phi$
+**Input:** Source patches `(x_s, y_s)`, target patches `x_t`, frozen backbone `φ`
 
-1. Compute backbone features: $f_s = \phi(x_s)$, $f_t = \phi(x_t)$
-2. Encode to stochastic latents: $(z_\mu^s, z_{\log\sigma^2}^s, z^s) = \text{Encoder}(f_s)$ and similarly for target
-3. Reconstruct features: $\hat{f}_s = \text{Dec}_s(z^s)$, $\hat{f}_t = \text{Dec}_t(z^t)$
-4. Compute source class predictions: $\hat{p}_s = \text{Classifier}(z^s)$
-5. Compute domain predictions via discriminator (GRL reverses gradients to encoder): $D(z^s)$, $D(z^t)$
-6. Compute $\mathcal{L}_1$ and update all Stage 1 weights via Adam
+1. Compute backbone features: `f_s = φ(x_s)`, `f_t = φ(x_t)`
+2. Encode to stochastic latents: `(z_μ^s, z_logσ²^s, z^s) = Encoder(f_s)` and similarly for target
+3. Reconstruct features: `f̂_s = Dec_s(z^s)`, `f̂_t = Dec_t(z^t)`
+4. Compute source class predictions: `p̂_s = Classifier(z^s)`
+5. Compute domain predictions via discriminator (GRL reverses gradients to encoder): `D(z^s)`, `D(z^t)`
+6. Compute `L_1` and update all Stage 1 weights via Adam
 
 ### Stage 2 — Conditional Diffusion Training (20 epochs)
 
 7. Freeze encoder and classifier from Stage 1
-8. Construct one-hot source labels $y_0^s$; use $\text{stop\_gradient}(\text{Classifier}(z_\mu^t))$ as $y_0^t$
-9. Sample random timestep $t \in \{1,\ldots,T\}$; apply forward diffusion to get $y_t$, $\varepsilon$
-10. Predict noise: $\hat\varepsilon = \epsilon_\theta(z, y_t, g, t)$
-11. Compute $\mathcal{L}_2$ and update diffusion model via Adam
+8. Construct one-hot source labels `y_0^s`; use `stop_gradient(Classifier(z_μ^t))` as `y_0^t`
+9. Sample random timestep `t ∈ {1, …, T}`; apply forward diffusion to get `y_t`, `ε`
+10. Predict noise: `ε̂ = ε_θ(z, y_t, g, t)`
+11. Compute `L_2` and update diffusion model via Adam
 
 ### Inference — Stochastic Uncertainty Mapping
 
-12. Process all $H \times W$ pixels in chunks of 1000
-13. For each chunk: encode once, tile $N=30$ times, sample $N$ latent codes
-14. Run full reverse diffusion chain ($T=100$ steps) for all $N \cdot n$ samples in one batched call
-15. Softmax outputs → empirical distribution $\{\hat{p}^{(k)}\}$ per pixel
+12. Process all H×W pixels in chunks of 1000
+13. For each chunk: encode once, tile N = 30 times, sample N latent codes
+14. Run full reverse diffusion chain (T = 100 steps) for all N·n samples in one batched call
+15. Softmax outputs → empirical distribution `{p̂^(k)}` per pixel
 16. Welch t-test on top-1 vs top-2 groups → p-value and uncertainty flag per pixel
-17. Reshape results to $(H, W)$ maps and export
+17. Reshape results to (H, W) maps and export
 
 ---
 
@@ -174,7 +220,9 @@ class GradientReversal(layers.Layer):
             return v, grad
         return _flip_gradients(x)
 ```
-**What this does:** `Sampling` implements the reparameterisation trick as a Keras layer, allowing gradients to flow through the sampling operation. `GradientReversal` uses `tf.custom_gradient` to negate gradients in-graph during backpropagation.  
+
+**What this does:** `Sampling` implements the reparameterisation trick as a Keras layer, allowing gradients to flow through the sampling operation. `GradientReversal` uses `tf.custom_gradient` to negate gradients in-graph during backpropagation.
+
 **Why:** Both must be custom Keras layers to serialise correctly when saving weights, and to integrate cleanly into a single `GradientTape` training step.
 
 ### 4.2 DAPM Encoder
@@ -189,8 +237,10 @@ def build_dapm_encoder(feature_dim, latent_dim=64, hidden_dim=256):
     z        = Sampling()([z_mu, z_logvar])
     return keras.Model(inp, [z_mu, z_logvar, z])
 ```
-**What this does:** Two-hidden-layer MLP outputting posterior mean, log-variance, and a reparameterised sample.  
-**Why:** All three outputs are returned so the training loop can use $z_\mu$ for classifier guidance (lower variance) while using the stochastic $z$ for reconstruction and adversarial losses.
+
+**What this does:** Two-hidden-layer MLP outputting posterior mean, log-variance, and a reparameterised sample.
+
+**Why:** All three outputs are returned so the training loop can use `z_μ` for classifier guidance (lower variance) while using the stochastic `z` for reconstruction and adversarial losses.
 
 ### 4.3 Diffusion Model Builder
 
@@ -208,7 +258,9 @@ def build_dapm_diffusion(latent_dim, num_classes, T=100, t_embed_dim=32, hidden_
     return keras.Model([z_in, y_t_in, f_in, t_in],
                        layers.Dense(num_classes)(x))
 ```
-**What this does:** Four-input network that concatenates the latent code, noisy label, classifier guidance, and a learned timestep embedding before two dense layers and a linear output.  
+
+**What this does:** Four-input network that concatenates the latent code, noisy label, classifier guidance, and a learned timestep embedding before two dense layers and a linear output.
+
 **Why:** The timestep is embedded (not passed as a raw scalar) so the network can learn smooth, timestep-specific denoising behaviour. Classifier guidance injects the model's current best label estimate as a conditioning signal.
 
 ### 4.4 Forward Diffusion and Beta Schedule
@@ -225,8 +277,10 @@ def q_sample(y0, t_idx, alpha_bars):
     eps   = tf.random.normal(tf.shape(y0))
     return tf.sqrt(a_bar) * y0 + tf.sqrt(1.0 - a_bar) * eps, eps
 ```
-**What this does:** Pre-computes the full noise schedule, then applies the closed-form $q(y_t | y_0)$ formula to corrupt any label vector at any timestep in a single operation.  
-**Why:** The closed form avoids iterating through $t$ sequential steps during training, enabling efficient random timestep sampling across the full schedule every batch.
+
+**What this does:** Pre-computes the full noise schedule, then applies the closed-form `q(y_t | y_0)` formula to corrupt any label vector at any timestep in a single operation.
+
+**Why:** The closed form avoids iterating through t sequential steps during training, enabling efficient random timestep sampling across the full schedule every batch.
 
 ### 4.5 Stage 1 Training Step
 
@@ -244,7 +298,9 @@ with tf.GradientTape() as tape:
 grads = tape.gradient(loss, stage1_vars)
 opt.apply_gradients(zip(grads, stage1_vars))
 ```
-**What this does:** A single joint gradient update over all Stage 1 parameters within one `GradientTape` context.  
+
+**What this does:** A single joint gradient update over all Stage 1 parameters within one `GradientTape` context.
+
 **Why:** The GRL inside the discriminator means the domain loss, when backpropagated, pushes the encoder to confuse the discriminator (domain alignment), while the discriminator's own weights are updated normally.
 
 ### 4.6 Stage 2 Training Step
@@ -257,7 +313,9 @@ y_t, eps = q_sample(y0_src, t, alpha_bars)
 eps_pred = diffusion([z_src, y_t, y_guidance_src, t])
 loss = tf.reduce_mean(tf.reduce_sum(tf.square(eps - eps_pred), axis=-1))
 ```
-**What this does:** Samples a random timestep, corrupts the label vector, predicts the noise, and minimises MSE between true and predicted noise — the simplified DDPM objective.  
+
+**What this does:** Samples a random timestep, corrupts the label vector, predicts the noise, and minimises MSE between true and predicted noise — the simplified DDPM objective.
+
 **Why:** `tf.stop_gradient` on both guidance and pseudo-labels prevents gradients from flowing back into the frozen classifier during Stage 2.
 
 ### 4.7 Reverse Diffusion (Inference)
@@ -278,10 +336,12 @@ def reverse_diffusion(bundle, z_np, guidance_np):
             y = y + sqrt(beta) * tf.random.normal(tf.shape(y))
     return softmax_np(y.numpy())
 ```
-**What this does:** Runs the full 100-step reverse DDPM chain from Gaussian noise to a label distribution, with the inner step compiled by `@tf.function` for speed.  
+
+**What this does:** Runs the full 100-step reverse DDPM chain from Gaussian noise to a label distribution, with the inner step compiled by `@tf.function` for speed.
+
 **Why:** XLA compilation of the single step reduces Python overhead dramatically when looped 100 times. The final step is deterministic (no noise term) to produce a clean output.
 
-### 4.8 Batched Tiling for $N$ Samples
+### 4.8 Batched Tiling for N Samples
 
 ```python
 z_mu_tiled = np.tile(z_mu_np, (n_samples, 1))   # shape: (N*n, d_z)
@@ -290,8 +350,10 @@ z_all      = z_mu_tiled + std_tiled * np.random.normal(size=z_mu_tiled.shape)
 probs_flat = reverse_diffusion(bundle, z_all, guidance_tiled)
 probs      = probs_flat.reshape(n_samples, n_points, nc)
 ```
-**What this does:** Encodes the chunk once, tiles the latent statistics $N$ times, draws $N$ different noise vectors, and runs one large reverse diffusion call to get all $N \times n$ probability vectors at once.  
-**Why:** GPU throughput is far better with one large batch than $N$ sequential small batches.
+
+**What this does:** Encodes the chunk once, tiles the latent statistics N times, draws N different noise vectors, and runs one large reverse diffusion call to get all N×n probability vectors at once.
+
+**Why:** GPU throughput is far better with one large batch than N sequential small batches.
 
 ### 4.9 Welch t-Test Uncertainty Estimator
 
@@ -303,55 +365,82 @@ for i in range(n_points):
     _, pval = ttest_ind(g1, g2, equal_var=False)
     uncertain_mask[i] = bool(pval > p_thresh)
 ```
-**What this does:** For each pixel, compares the $N$ top-1 and top-2 probability streams via Welch's t-test and flags the pixel uncertain when the two distributions are not statistically separated.  
-**Why:** Welch's variant (unequal variance) is appropriate here because the top-1 distribution is typically tighter than the top-2 distribution. Using all $N$ draws rather than a single prediction makes the test sensitive to genuine distributional ambiguity, not just softmax sharpness.
+
+**What this does:** For each pixel, compares the N top-1 and top-2 probability streams via Welch's t-test and flags the pixel uncertain when the two distributions are not statistically separated.
+
+**Why:** Welch's variant (unequal variance) is appropriate here because the top-1 distribution is typically tighter than the top-2 distribution. Using all N draws rather than a single prediction makes the test sensitive to genuine distributional ambiguity, not just softmax sharpness.
 
 ---
 
 ## 5. Worked Numerical Example
 
-**Setup:** $C = 3$ classes, $d_z = 4$, $T = 5$ diffusion steps, $N = 5$ inference draws.
+**Setup:** C = 3 classes, d_z = 4, T = 5 diffusion steps, N = 5 inference draws.
 
 ### Training: Forward Diffusion
 
-Beta schedule: $\beta = [0.1, 0.2, 0.3, 0.4, 0.5]$, $\alpha = [0.9, 0.8, 0.7, 0.6, 0.5]$, $\bar\alpha = [0.90, 0.72, 0.50, 0.30, 0.15]$.
+Beta schedule:
 
-Source label for class 0: $y_0 = [1, 0, 0]$. At timestep $t = 3$, $\bar\alpha_3 = 0.50$:  
-Sample noise $\varepsilon = [-0.5, 0.9, -0.4]$.  
-$y_3 = \sqrt{0.50} \cdot [1,0,0] + \sqrt{0.50} \cdot [-0.5, 0.9, -0.4] = [0.71 - 0.35,\ 0 + 0.64,\ 0 - 0.28] = [0.36, 0.64, -0.28]$
+```
+β     = [0.10, 0.20, 0.30, 0.40, 0.50]
+α     = [0.90, 0.80, 0.70, 0.60, 0.50]
+ᾱ     = [0.90, 0.72, 0.50, 0.30, 0.15]
+```
 
-The diffusion network predicts $\hat\varepsilon = [-0.48, 0.88, -0.39]$.  
-$\mathcal{L} = (-0.5+0.48)^2 + (0.9-0.88)^2 + (-0.4+0.39)^2 = 0.0004 + 0.0004 + 0.0001 = 0.0009$
+Source label for class 0: `y_0 = [1, 0, 0]`. At timestep t = 3, `ᾱ_3 = 0.50`:
+
+```
+ε     = [−0.50,  0.90, −0.40]
+
+y_3   = √0.50 · [1, 0, 0]  +  √0.50 · [−0.50, 0.90, −0.40]
+      = [0.71 − 0.35,  0 + 0.64,  0 − 0.28]
+      = [0.36,  0.64,  −0.28]
+```
+
+The diffusion network predicts `ε̂ = [−0.48, 0.88, −0.39]`. The training loss is:
+
+```
+L = (−0.50 − (−0.48))²  +  (0.90 − 0.88)²  +  (−0.40 − (−0.39))²
+  = 0.0004  +  0.0004  +  0.0001
+  = 0.0009
+```
 
 ### Inference: Uncertainty Test
 
-After $N = 5$ complete reverse diffusion draws for two pixels:
+After N = 5 complete reverse diffusion draws for two pixels:
 
 **Certain pixel** (true label: class 0):
 
-| Draw | $\hat p_0$ | $\hat p_1$ | $\hat p_2$ |
-|------|-----------|-----------|-----------|
+| Draw | p̂_0 | p̂_1 | p̂_2 |
+|:----:|:----:|:----:|:----:|
 | 1 | 0.72 | 0.20 | 0.08 |
 | 2 | 0.68 | 0.25 | 0.07 |
 | 3 | 0.74 | 0.18 | 0.08 |
 | 4 | 0.70 | 0.22 | 0.08 |
 | 5 | 0.66 | 0.27 | 0.07 |
 
-$G_1 = [0.72, 0.68, 0.74, 0.70, 0.66]$, $G_2 = [0.20, 0.25, 0.18, 0.22, 0.27]$.  
-$t \approx 23.8$, p-value $\ll 0.001 < 0.05$ → **CERTAIN (Class 0)**
+```
+G_1 = [0.72, 0.68, 0.74, 0.70, 0.66]    (top-1 class 0)
+G_2 = [0.20, 0.25, 0.18, 0.22, 0.27]    (top-2 class 1)
+
+t ≈ 23.8,   p-value ≪ 0.001  <  0.05   →   CERTAIN (Class 0)
+```
 
 **Uncertain pixel** (near class boundary):
 
-| Draw | $\hat p_0$ | $\hat p_1$ | $\hat p_2$ |
-|------|-----------|-----------|-----------|
+| Draw | p̂_0 | p̂_1 | p̂_2 |
+|:----:|:----:|:----:|:----:|
 | 1 | 0.48 | 0.42 | 0.10 |
 | 2 | 0.45 | 0.46 | 0.09 |
 | 3 | 0.52 | 0.38 | 0.10 |
 | 4 | 0.44 | 0.47 | 0.09 |
 | 5 | 0.50 | 0.41 | 0.09 |
 
-$G_1 = [0.48, 0.45, 0.52, 0.44, 0.50]$, $G_2 = [0.42, 0.46, 0.38, 0.47, 0.41]$.  
-$t \approx 2.4$, p-value $\approx 0.06 > 0.05$ → **UNCERTAIN**
+```
+G_1 = [0.48, 0.45, 0.52, 0.44, 0.50]    (top-1 class 0)
+G_2 = [0.42, 0.46, 0.38, 0.47, 0.41]    (top-2 class 1)
+
+t ≈ 2.4,   p-value ≈ 0.06  >  0.05   →   UNCERTAIN
+```
 
 The t-test correctly identifies the second pixel as ambiguous even though its argmax is still class 0 — a margin of 0.05 between top-1 and top-2 is flagged, while a margin of 0.48 is not.
 
@@ -359,9 +448,9 @@ The t-test correctly identifies the second pixel as ambiguous even though its ar
 
 ## 6. References
 
-[1] Zhekai Du and Jingjing Li. "Diffusion-Based Probabilistic Uncertainty Estimation for Active Domain Adaptation." *Advances in Neural Information Processing Systems (NeurIPS) 36*, 2023. [https://proceedings.neurips.cc/paper_files/paper/2023/hash/374050dc3f211267bd6bf0ea24eae184-Abstract-Conference.html](https://proceedings.neurips.cc/paper_files/paper/2023/hash/374050dc3f211267bd6bf0ea24eae184-Abstract-Conference.html)
+[1] Zhekai Du and Jingjing Li. "Diffusion-Based Probabilistic Uncertainty Estimation for Active Domain Adaptation." *Advances in Neural Information Processing Systems (NeurIPS) 36*, 2023. [Link](https://proceedings.neurips.cc/paper_files/paper/2023/hash/374050dc3f211267bd6bf0ea24eae184-Abstract-Conference.html)
 
-[2] Jonathan Ho, Ajay Jain, and Pieter Abbeel. "Denoising Diffusion Probabilistic Models." *NeurIPS 33*, 2020. [https://arxiv.org/abs/2006.11239](https://arxiv.org/abs/2006.11239)
+[2] Jonathan Ho, Ajay Jain, and Pieter Abbeel. "Denoising Diffusion Probabilistic Models." *NeurIPS 33*, 2020. [arXiv:2006.11239](https://arxiv.org/abs/2006.11239)
 
 [3] Yaroslav Ganin and Victor Lempitsky. "Unsupervised Domain Adaptation by Backpropagation." *ICML*, 2015. *(Foundational work on gradient reversal for domain-adversarial training.)*
 
