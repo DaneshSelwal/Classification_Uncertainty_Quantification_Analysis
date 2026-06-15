@@ -1,4 +1,4 @@
-# 🚀 Advanced Classification Uncertainty Quantification: Remote Sensing & Hyperspectral Analysis
+# Advanced Classification Uncertainty Quantification: Remote Sensing & Hyperspectral Analysis
 
 [![Python](https://img.shields.io/badge/Python-3.9%2B-blue?style=for-the-badge&logo=python&logoColor=white)](https://img.shields.io/badge/Python-3.9%2B-blue?style=for-the-badge&logo=python&logoColor=white)
 [![TensorFlow](https://img.shields.io/badge/TensorFlow-2.10%2B-orange?style=for-the-badge&logo=tensorflow&logoColor=white)](https://img.shields.io/badge/TensorFlow-2.10%2B-orange?style=for-the-badge&logo=tensorflow&logoColor=white)
