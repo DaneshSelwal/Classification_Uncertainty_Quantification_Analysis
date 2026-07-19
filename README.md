@@ -24,6 +24,10 @@ Beyond traditional point-wise accuracy, this framework implements state-of-the-a
     * [Method 5: MultiCP (Multi-head Conformal)](#method-5-multicp-multi-head-conformal)
     * [Method 6: SACP (Self-Adaptive Conformal)](#method-6-sacp-self-adaptive-conformal)
     * [Method 7: SCMCP (Spatial MultiCP)](#method-7-scmcp-spatial-multicp)
+    * [Method 8: Focal Loss & CB Focal Loss](#method-8-focal-loss--cb-focal-loss)
+    * [Method 9: EDL (Evidential Deep Learning)](#method-9-edl-evidential-deep-learning)
+    * [Method 10: CDL (Credal Deep Learning)](#method-10-cdl-credal-deep-learning)
+    * [Method 11: MambaHSI](#method-11-mambahsi)
 5. [🚀 Getting Started](#-getting-started)
 6. [📚 Resources & References](#-resources--references)
 
@@ -53,10 +57,16 @@ The project is organized into a modular architecture optimized for portability a
 .
 ├── Classification/    # 📂 Main Project Folder (Upload this to MyDrive/)
 │   ├── baseline/      # 📂 Standard UQ (MC Dropout, Temp Scaling)
+│   ├── cb_focal_loss/ # 📂 Class-Balanced Focal Loss
+│   ├── cdl/           # 📂 CDL: Credal Deep Learning
 │   ├── credit/        # 📂 CREDIT: Calibration-aware training
 │   ├── dapm/          # 📂 DAPM: Deep Adaptive Predictive Modeling
 │   ├── data/          # 📊 Raw Datasets (data.csv, multispectral/)
+│   ├── edl/           # 📂 EDL: Evidential Deep Learning
+│   ├── edl_v2/        # 📂 EDL_v2: Improved Evidential Deep Learning
 │   ├── ensemble/      # 📂 CreDE: Credal Deep Ensembles
+│   ├── focal_loss/    # 📂 Focal Loss
+│   ├── mambahsi/      # 📂 MambaHSI Architecture for classification
 │   ├── multicp/       # 📂 MultiCP: Multi-head Conformal Prediction
 │   ├── multicp_sacp/  # 📂 SCMCP: Spatial MultiCP (New)
 │   └── sacp/          # 📂 SACP: Self-Adaptive Conformal Prediction
@@ -127,6 +137,25 @@ Self-Adaptive Conformal Prediction.
 Spatial Multi-Head Conformal Prediction.
 * **Core**: Combines spatial probability smoothing with multi-head conformal intersection.
 * **Feature**: Produces tight, spatially-coherent uncertainty regions by intersecting calibrated sets from $K$ heads after local smoothing.
+
+### Method 8: Focal Loss & CB Focal Loss
+**Location**: `Classification/focal_loss` & `Classification/cb_focal_loss`
+* **Focus**: Addressing class imbalance using standard and Class-Balanced Focal Loss.
+* **Output**: Improved minority class prediction with respective uncertainty estimates.
+
+### Method 9: EDL (Evidential Deep Learning)
+**Location**: `Classification/edl` & `Classification/edl_v2`
+* **Core**: Uses Subjective Logic to place a Dirichlet distribution over class probabilities.
+* **Goal**: Directly quantifies epistemic and aleatoric uncertainty without sampling.
+
+### Method 10: CDL (Credal Deep Learning)
+**Location**: `Classification/cdl`
+* **Goal**: Robust uncertainty quantification using imprecise probabilities and credal sets.
+
+### Method 11: MambaHSI
+**Location**: `Classification/mambahsi`
+* **Architecture**: State-of-the-art Mamba state-space models adapted for Hyperspectral Imagery (HSI).
+* **Focus**: Efficient long-range spatial-spectral dependencies modeling.
 
 ---
 
