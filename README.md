@@ -57,19 +57,24 @@ The project is organized into a modular architecture optimized for portability a
 .
 ├── Classification/    # 📂 Main Project Folder (Upload this to MyDrive/)
 │   ├── baseline/      # 📂 Standard UQ (MC Dropout, Temp Scaling)
-│   ├── cb_focal_loss/ # 📂 Class-Balanced Focal Loss
-│   ├── cdl/           # 📂 CDL: Credal Deep Learning
 │   ├── credit/        # 📂 CREDIT: Calibration-aware training
 │   ├── dapm/          # 📂 DAPM: Deep Adaptive Predictive Modeling
 │   ├── data/          # 📊 Raw Datasets (data.csv, multispectral/)
-│   ├── edl/           # 📂 EDL: Evidential Deep Learning
-│   ├── edl_v2/        # 📂 EDL_v2: Improved Evidential Deep Learning
+│   ├── dofa/          # 📂 DOFA: Dynamic Wavelength Tokenization (New)
 │   ├── ensemble/      # 📂 CreDE: Credal Deep Ensembles
-│   ├── focal_loss/    # 📂 Focal Loss
 │   ├── mambahsi/      # 📂 MambaHSI Architecture for classification
 │   ├── multicp/       # 📂 MultiCP: Multi-head Conformal Prediction
 │   ├── multicp_sacp/  # 📂 SCMCP: Spatial MultiCP (New)
-│   └── sacp/          # 📂 SACP: Self-Adaptive Conformal Prediction
+│   ├── sacp/          # 📂 SACP: Self-Adaptive Conformal Prediction
+│   └── trials/        # 🧪 Experimental Methods
+│       ├── cb_focal_loss/
+│       ├── cdl/
+│       ├── conformal_reg/
+│       ├── edl/
+│       ├── edl_v2/
+│       └── focal_loss/
+├── bin/               # 🗑️ Archived Reports and Temp Files
+├── markdowns/         # 📑 Markdown conversions of all notebooks
 ├── examples/          # 📁 Example Dataset Suites (untouched)
 └── README.md          # 📑 Documentation
 ```
@@ -139,23 +144,31 @@ Spatial Multi-Head Conformal Prediction.
 * **Feature**: Produces tight, spatially-coherent uncertainty regions by intersecting calibrated sets from $K$ heads after local smoothing.
 
 ### Method 8: Focal Loss & CB Focal Loss
-**Location**: `Classification/focal_loss` & `Classification/cb_focal_loss`
+**Location**: `Classification/trials/focal_loss` & `Classification/trials/cb_focal_loss`
 * **Focus**: Addressing class imbalance using standard and Class-Balanced Focal Loss.
 * **Output**: Improved minority class prediction with respective uncertainty estimates.
 
 ### Method 9: EDL (Evidential Deep Learning)
-**Location**: `Classification/edl` & `Classification/edl_v2`
+**Location**: `Classification/trials/edl` & `Classification/trials/edl_v2`
 * **Core**: Uses Subjective Logic to place a Dirichlet distribution over class probabilities.
 * **Goal**: Directly quantifies epistemic and aleatoric uncertainty without sampling.
 
 ### Method 10: CDL (Credal Deep Learning)
-**Location**: `Classification/cdl`
+**Location**: `Classification/trials/cdl`
 * **Goal**: Robust uncertainty quantification using imprecise probabilities and credal sets.
 
 ### Method 11: MambaHSI
 **Location**: `Classification/mambahsi`
 * **Architecture**: State-of-the-art Mamba state-space models adapted for Hyperspectral Imagery (HSI).
 * **Focus**: Efficient long-range spatial-spectral dependencies modeling.
+
+---
+
+### Method 12: DOFA
+**Location**: `Classification/dofa`
+Dynamic Wavelength Tokenization.
+* **Architecture**: DOFA Spectral and DOFA Hiera Fusion for robust multispectral tokenization.
+* **Focus**: Analyzing prediction stability across continuous spectral channels.
 
 ---
 
