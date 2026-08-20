@@ -2,7 +2,7 @@
 
 ## Classification Uncertainty Quantification Analysis
 
-> A comprehensive, modular deep-learning framework for quantifying predictive uncertainty in pixel-level multispectral remote-sensing classification, implementing seven state-of-the-art uncertainty quantification paradigms across three neural network architectures.
+> A comprehensive, modular deep-learning framework for quantifying predictive uncertainty in pixel-level multispectral remote-sensing classification, implementing twelve state-of-the-art uncertainty quantification paradigms across three neural network architectures.
 
 ---
 
@@ -22,11 +22,16 @@
 9. [Method 5 — MultiCP (Multi-Head Conformal Prediction)](#9-method-5--multicp-multi-head-conformal-prediction)
 10. [Method 6 — SACP (Self-Adaptive Conformal Prediction)](#10-method-6--sacp-self-adaptive-conformal-prediction)
 11. [Method 7 — SCMCP (Spatial Multi-Head Conformal Prediction)](#11-method-7--scmcp-spatial-multi-head-conformal-prediction)
-12. [Comparative Summary of All Methods](#12-comparative-summary-of-all-methods)
-13. [Evaluation Metrics & Calibration](#13-evaluation-metrics--calibration)
-14. [Master Hyperparameter Reference](#14-master-hyperparameter-reference)
-15. [Examples Directory](#15-examples-directory)
-16. [References](#16-references)
+12. [Method 8 — Focal Loss & CB Focal Loss](#12-method-8--focal-loss--cb-focal-loss)
+13. [Method 9 — EDL & EDL_v2 (Evidential Deep Learning)](#13-method-9--edl--edl_v2)
+14. [Method 10 — CDL (Credal Deep Learning)](#14-method-10--cdl-credal-deep-learning)
+15. [Method 11 — MambaHSI](#15-method-11--mambahsi)
+16. [Method 12 — DOFA (Dynamic Wavelength Tokenization)](#16-method-12--dofa-dynamic-wavelength-tokenization)
+17. [Comparative Summary of All Methods](#17-comparative-summary-of-all-methods)
+18. [Evaluation Metrics & Calibration](#13-evaluation-metrics--calibration)
+19. [Master Hyperparameter Reference](#14-master-hyperparameter-reference)
+20. [Examples Directory](#15-examples-directory)
+21. [References](#16-references)
 
 ---
 
@@ -764,7 +769,47 @@ $$\mathcal{C}_{SCMCP}(x_i) = \bigcap_{k=1}^{K} \mathcal{C}^{(k)}(x_i) = \{c \in 
 
 ---
 
-## 12. Comparative Summary of All Methods
+## 12. Method 8 — Focal Loss & CB Focal Loss
+
+**Directory:** `Classification/trials/focal_loss/` & `Classification/trials/cb_focal_loss/`
+
+Focuses on resolving class imbalance via standard Focal Loss and Class-Balanced Focal Loss. Enhances the predictive confidence for minority classes and adjusts the margin of prediction sets appropriately.
+
+---
+
+## 13. Method 9 — EDL & EDL_v2
+
+**Directory:** `Classification/trials/edl/` & `Classification/trials/edl_v2/`
+
+Implements Evidential Deep Learning based on Subjective Logic. Replaces softmax with a Dirichlet distribution output to quantify epistemic and aleatoric uncertainty without the need for sampling or ensembling.
+
+---
+
+## 14. Method 10 — CDL (Credal Deep Learning)
+
+**Directory:** `Classification/trials/cdl/`
+
+Extends evidential principles using imprecise probabilities and credal sets. Captures severe uncertainty and conflicting evidence by tracking the bounds of allowable probability distributions.
+
+---
+
+## 15. Method 11 — MambaHSI
+
+**Directory:** `Classification/mambahsi/`
+
+Adapts the state-of-the-art Mamba State-Space Model architecture for Hyperspectral Image classification. Offers linear scaling for long-range spatial-spectral sequences, solving the quadratic bottleneck of Vision Transformers.
+
+---
+
+## 16. Method 12 — DOFA (Dynamic Wavelength Tokenization)
+
+**Directory:** `Classification/dofa/`
+
+Dynamic Wavelength Tokenization framework incorporating DOFA Spectral and DOFA Hiera Fusion approaches. Designed to handle varying continuous spectral channels across multi-sensor remote sensing payloads, ensuring highly stable token generation.
+
+---
+
+## 17. Comparative Summary of All Methods
 
 | # | Method | UQ Paradigm | Heads | Spatial? | Key Output | Compute Cost |
 |---|--------|-------------|-------|----------|------------|-------------|
@@ -787,7 +832,7 @@ $$\mathcal{C}_{SCMCP}(x_i) = \bigcap_{k=1}^{K} \mathcal{C}^{(k)}(x_i) = \{c \in 
 
 ---
 
-## 13. Evaluation Metrics & Calibration
+## 18. Evaluation Metrics & Calibration
 
 ### Classification Metrics
 
@@ -824,7 +869,7 @@ $$\text{NLL} = -\frac{1}{N}\sum_{i=1}^{N}\log p_i(y_i|x_i)$$
 
 ---
 
-## 14. Master Hyperparameter Reference
+## 19. Master Hyperparameter Reference
 
 ### Training Hyperparameters
 
@@ -881,7 +926,7 @@ $$\text{NLL} = -\frac{1}{N}\sum_{i=1}^{N}\log p_i(y_i|x_i)$$
 
 ---
 
-## 15. Examples Directory
+## 20. Examples Directory
 
 The `examples/` directory contains **10 pre-configured dataset suites**, each mirroring the full `Classification/` directory structure (baseline, credit, dapm, ensemble, multi_cp, sacp, data). These serve as ready-to-use templates for different remote sensing datasets:
 
@@ -902,7 +947,7 @@ Each suite has its own `data/` subdirectory and method-specific notebooks pre-co
 
 ---
 
-## 16. References
+## 21. References
 
 ### Research Papers
 
