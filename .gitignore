@@ -14,3 +14,4 @@ examples/*/data/
 # Notebook checkpoints
 .ipynb_checkpoints/
 **/.ipynb_checkpoints/
+*.zip
