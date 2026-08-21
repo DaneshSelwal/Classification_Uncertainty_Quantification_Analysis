@@ -4,7 +4,7 @@ with open("DETAILED_DOCUMENTATION.md", "r") as f:
     content = f.read()
 
 # 1. Update intro paragraph
-content = content.replace("seven state-of-the-art", "twelve state-of-the-art")
+content = content.replace("seven state-of-the-art", "fourteen state-of-the-art")
 
 # 2. Add to TOC
 new_toc = """11. [Method 7 — SCMCP (Spatial Multi-Head Conformal Prediction)](#11-method-7--scmcp-spatial-multi-head-conformal-prediction)
@@ -13,17 +13,24 @@ new_toc = """11. [Method 7 — SCMCP (Spatial Multi-Head Conformal Prediction)](
 14. [Method 10 — CDL (Credal Deep Learning)](#14-method-10--cdl-credal-deep-learning)
 15. [Method 11 — MambaHSI](#15-method-11--mambahsi)
 16. [Method 12 — DOFA (Dynamic Wavelength Tokenization)](#16-method-12--dofa-dynamic-wavelength-tokenization)
-17. [Comparative Summary of All Methods](#17-comparative-summary-of-all-methods)"""
+17. [Method 13 — GeoRSCLIP (Geospatial Foundation Model)](#17-method-13--georsclip-geospatial-foundation-model)
+18. [Method 14 — SpatialGCN (Spatial Graph Convolution)](#18-method-14--spatialgcn-spatial-graph-convolution)
+19. [Comparative Summary of All Methods](#19-comparative-summary-of-all-methods)"""
 
 content = re.sub(r'11\. \[Method 7.*?12\. \[Comparative Summary of All Methods\]\(#12-comparative-summary-of-all-methods\)', new_toc, content, flags=re.DOTALL)
+content = re.sub(r'11\. \[Method 7.*?17\. \[Comparative Summary of All Methods\]\(#17-comparative-summary-of-all-methods\)', new_toc, content, flags=re.DOTALL) # Handling if it was already partially updated
 
 # Adjust subsequent TOC numbers
-content = content.replace("13. [Evaluation", "18. [Evaluation")
-content = content.replace("14. [Master", "19. [Master")
-content = content.replace("15. [Examples", "20. [Examples")
-content = content.replace("16. [References", "21. [References")
+content = content.replace("13. [Evaluation", "20. [Evaluation")
+content = content.replace("14. [Master", "21. [Master")
+content = content.replace("15. [Examples", "22. [Examples")
+content = content.replace("16. [References", "23. [References")
+content = content.replace("18. [Evaluation", "20. [Evaluation") # Handling if partially updated
+content = content.replace("19. [Master", "21. [Master") # Handling if partially updated
+content = content.replace("20. [Examples", "22. [Examples") # Handling if partially updated
+content = content.replace("21. [References", "23. [References") # Handling if partially updated
 
-# 3. Add Methods 8-12 sections
+# 3. Add Methods 8-14 sections
 new_methods = """## 12. Method 8 — Focal Loss & CB Focal Loss
 
 **Directory:** `Classification/trials/focal_loss/` & `Classification/trials/cb_focal_loss/`
@@ -64,9 +71,26 @@ Dynamic Wavelength Tokenization framework incorporating DOFA Spectral and DOFA H
 
 ---
 
-## 17. Comparative Summary of All Methods"""
+## 17. Method 13 — GeoRSCLIP (Geospatial Foundation Model)
+
+**Directory:** `Classification/georsclip/`
+
+Geospatial Vision-Language Foundation Model. Implements text-head fine-tuning on robust GeoRSCLIP representations, leveraging multimodal pre-training for state-of-the-art remote sensing classification.
+
+---
+
+## 18. Method 14 — SpatialGCN (Spatial Graph Convolution)
+
+**Directory:** `Classification/spatialgcn/`
+
+Spatial Graph Convolutional Networks. Utilizes GCN processing directly on spatial grid topologies to capture complex local and global spatial dependencies inherent in hyperspectral imagery classification maps.
+
+---
+
+## 19. Comparative Summary of All Methods"""
 
 content = content.replace("## 12. Comparative Summary of All Methods", new_methods)
+content = content.replace("## 17. Comparative Summary of All Methods", new_methods) # Handling if partially updated
 
 # Update structural mentions
 content = content.replace("## 13. Evaluation Metrics", "## 18. Evaluation Metrics")
