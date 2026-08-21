@@ -18,3 +18,4 @@ examples/*/data/
 bin/
 markdowns/
 *.docx
+.DS_Store
