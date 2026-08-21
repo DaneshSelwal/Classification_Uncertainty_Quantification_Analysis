@@ -2,7 +2,7 @@
 
 ## Classification Uncertainty Quantification Analysis
 
-> A comprehensive, modular deep-learning framework for quantifying predictive uncertainty in pixel-level multispectral remote-sensing classification, implementing twelve state-of-the-art uncertainty quantification paradigms across three neural network architectures.
+> A comprehensive, modular deep-learning framework for quantifying predictive uncertainty in pixel-level multispectral remote-sensing classification, implementing fourteen state-of-the-art uncertainty quantification paradigms across three neural network architectures.
 
 ---
 
@@ -27,11 +27,13 @@
 14. [Method 10 — CDL (Credal Deep Learning)](#14-method-10--cdl-credal-deep-learning)
 15. [Method 11 — MambaHSI](#15-method-11--mambahsi)
 16. [Method 12 — DOFA (Dynamic Wavelength Tokenization)](#16-method-12--dofa-dynamic-wavelength-tokenization)
-17. [Comparative Summary of All Methods](#17-comparative-summary-of-all-methods)
-18. [Evaluation Metrics & Calibration](#13-evaluation-metrics--calibration)
-19. [Master Hyperparameter Reference](#14-master-hyperparameter-reference)
-20. [Examples Directory](#15-examples-directory)
-21. [References](#16-references)
+17. [Method 13 — GeoRSCLIP (Geospatial Foundation Model)](#17-method-13--georsclip-geospatial-foundation-model)
+18. [Method 14 — SpatialGCN (Spatial Graph Convolution)](#18-method-14--spatialgcn-spatial-graph-convolution)
+19. [Comparative Summary of All Methods](#19-comparative-summary-of-all-methods)
+20. [Evaluation Metrics & Calibration](#13-evaluation-metrics--calibration)
+21. [Master Hyperparameter Reference](#14-master-hyperparameter-reference)
+22. [Examples Directory](#15-examples-directory)
+23. [References](#16-references)
 
 ---
 
@@ -809,7 +811,23 @@ Dynamic Wavelength Tokenization framework incorporating DOFA Spectral and DOFA H
 
 ---
 
-## 17. Comparative Summary of All Methods
+## 17. Method 13 — GeoRSCLIP (Geospatial Foundation Model)
+
+**Directory:** `Classification/georsclip/`
+
+Fine-tunes the GeoRSCLIP vision-language foundation model using a text-head adaptation. Leverages extensive multimodal remote sensing pre-training to boost feature discrimination.
+
+---
+
+## 18. Method 14 — SpatialGCN (Spatial Graph Convolution)
+
+**Directory:** `Classification/spatialgcn/`
+
+Employs Spatial Graph Convolutional Networks (SpatialGCN) to model complex pixel-wise dependencies, significantly enhancing local spatial coherence in the classification outputs.
+
+---
+
+## 19. Comparative Summary of All Methods
 
 | # | Method | UQ Paradigm | Heads | Spatial? | Key Output | Compute Cost |
 |---|--------|-------------|-------|----------|------------|-------------|
@@ -832,7 +850,7 @@ Dynamic Wavelength Tokenization framework incorporating DOFA Spectral and DOFA H
 
 ---
 
-## 18. Evaluation Metrics & Calibration
+## 20. Evaluation Metrics & Calibration
 
 ### Classification Metrics
 
@@ -869,7 +887,7 @@ $$\text{NLL} = -\frac{1}{N}\sum_{i=1}^{N}\log p_i(y_i|x_i)$$
 
 ---
 
-## 19. Master Hyperparameter Reference
+## 21. Master Hyperparameter Reference
 
 ### Training Hyperparameters
 
@@ -926,7 +944,7 @@ $$\text{NLL} = -\frac{1}{N}\sum_{i=1}^{N}\log p_i(y_i|x_i)$$
 
 ---
 
-## 20. Examples Directory
+## 22. Examples Directory
 
 The `examples/` directory contains **10 pre-configured dataset suites**, each mirroring the full `Classification/` directory structure (baseline, credit, dapm, ensemble, multi_cp, sacp, data). These serve as ready-to-use templates for different remote sensing datasets:
 
@@ -947,7 +965,7 @@ Each suite has its own `data/` subdirectory and method-specific notebooks pre-co
 
 ---
 
-## 21. References
+## 23. References
 
 ### Research Papers
 

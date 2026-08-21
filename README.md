@@ -60,12 +60,14 @@ The project is organized into a modular architecture optimized for portability a
 │   ├── credit/        # 📂 CREDIT: Calibration-aware training
 │   ├── dapm/          # 📂 DAPM: Deep Adaptive Predictive Modeling
 │   ├── data/          # 📊 Raw Datasets (data.csv, multispectral/)
-│   ├── dofa/          # 📂 DOFA: Dynamic Wavelength Tokenization (New)
+│   ├── dofa/          # 📂 DOFA: Dynamic Wavelength Tokenization
 │   ├── ensemble/      # 📂 CreDE: Credal Deep Ensembles
+│   ├── georsclip/     # 📂 GeoRSCLIP: Geospatial Vision-Language Foundation Model (New)
 │   ├── mambahsi/      # 📂 MambaHSI Architecture for classification
 │   ├── multicp/       # 📂 MultiCP: Multi-head Conformal Prediction
-│   ├── multicp_sacp/  # 📂 SCMCP: Spatial MultiCP (New)
+│   ├── multicp_sacp/  # 📂 SCMCP: Spatial MultiCP
 │   ├── sacp/          # 📂 SACP: Self-Adaptive Conformal Prediction
+│   ├── spatialgcn/    # 📂 SpatialGCN: Spatial Graph Convolutional Networks (New)
 │   └── trials/        # 🧪 Experimental Methods
 │       ├── cb_focal_loss/
 │       ├── cdl/
@@ -169,6 +171,20 @@ Spatial Multi-Head Conformal Prediction.
 Dynamic Wavelength Tokenization.
 * **Architecture**: DOFA Spectral and DOFA Hiera Fusion for robust multispectral tokenization.
 * **Focus**: Analyzing prediction stability across continuous spectral channels.
+
+---
+
+### Method 13: GeoRSCLIP
+**Location**: `Classification/georsclip`
+Geospatial Vision-Language Foundation Model.
+* **Architecture**: Text-head fine-tuning on GeoRSCLIP representations.
+* **Focus**: Leveraging multimodal pre-training for remote sensing tasks.
+
+### Method 14: SpatialGCN
+**Location**: `Classification/spatialgcn`
+Spatial Graph Convolutional Networks.
+* **Architecture**: GCN processing on spatial grid topologies.
+* **Focus**: Capturing complex spatial dependencies in classification maps.
 
 ---
 
