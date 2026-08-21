@@ -75,8 +75,6 @@ The project is organized into a modular architecture optimized for portability a
 │       ├── edl/
 │       ├── edl_v2/
 │       └── focal_loss/
-├── bin/               # 🗑️ Archived Reports and Temp Files
-├── markdowns/         # 📑 Markdown conversions of all notebooks
 ├── examples/          # 📁 Example Dataset Suites (untouched)
 └── README.md          # 📑 Documentation
 ```
