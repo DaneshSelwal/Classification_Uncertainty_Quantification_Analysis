@@ -1,0 +1,2 @@
+model,capacity_tag,test_accuracy,kappa,macro_f1,weighted_f1,val_nll,test_nll,val_brier,test_brier,test_ece_15bin,epochs_configured,epochs_ran,train_time_sec,best_model_path,final_model_path
+SpatialGCN,spatialgcn_arch,0.845707656612529,0.7883381612009297,0.78252759553921,0.8430142367938096,0.46631072468627505,0.4534011134201118,0.23207152227695638,0.22420432928865855,0.05974163025133571,100,100,82.78541381599996,/content/drive/My Drive/Classification/spatialgcn/models/SpatialGCN_best.keras,/content/drive/My Drive/Classification/spatialgcn/models/SpatialGCN_final.keras
