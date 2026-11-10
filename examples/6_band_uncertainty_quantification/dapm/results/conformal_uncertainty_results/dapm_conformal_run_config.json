@@ -1,0 +1,22 @@
+{
+  "seed": 42,
+  "data_file": "/content/drive/My Drive/Classification/data/data.csv",
+  "label_file": "/content/drive/My Drive/Classification/data/ref.csv",
+  "model_dir": "/content/drive/My Drive/Classification/baseline/models",
+  "dapm_dir": "/content/drive/My Drive/Classification/dapm/models/dapm_full_artifacts",
+  "output_dir": "/content/drive/My Drive/Classification/dapm/results/conformal_uncertainty_results",
+  "results_dir": "/content/drive/My Drive/Classification/dapm/results",
+  "h": 330,
+  "w": 307,
+  "b": 6,
+  "patch_size": 9,
+  "train_percent": 0.75,
+  "calib_fraction_of_test": 0.5,
+  "alpha": 0.05,
+  "raps_lam": 0.01,
+  "raps_k_reg": 1,
+  "n_clusters": 4,
+  "batch_size": 128,
+  "probability_source": "DAPM encoder(z_mu) -> classifier (no diffusion sampling)",
+  "timestamp_utc": "2026-07-01T07:24:15.316582+00:00"
+}

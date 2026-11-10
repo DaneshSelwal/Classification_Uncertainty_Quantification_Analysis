@@ -75,9 +75,40 @@ The project is organized into a modular architecture optimized for portability a
 │       ├── edl/
 │       ├── edl_v2/
 │       └── focal_loss/
-├── examples/          # 📁 Example Dataset Suites (untouched)
+├── examples/          # 📁 Dataset Suites (Indian Pines, Pavia Uni, DIAS, 6-Band, Hisar-3, Hissar-25)
+│   ├── indian_pines_uncertainty_quantification/
+│   ├── pavia_university_uncertainty_quantification/
+│   ├── dias_uncertainty_quantification/
+│   ├── 6_band_uncertainty_quantification/
+│   ├── hisar_3mts_uncertainty_quantification/
+│   └── hissar_25_uncertainty_quantification/
+├── scripts/           # 🧪 Automated verification and synchronization tools
+├── kaggle_name_mapping.json # 🗂️ Obfuscation mapping for remote execution
 └── README.md          # 📑 Documentation
 ```
+
+---
+
+## 🌐 Dataset Suites & Uncertainty Quantification Benchmarks
+
+Each dataset suite in `examples/<dataset_suite>/` contains full standalone Jupyter notebooks, run configurations, evaluation logs, and visualization reports. Large trained model weights (`.keras`) are decoupled and hosted on Hugging Face Hub to keep the git repository lightweight and fast.
+
+| Dataset Suite | Scene Dimensions | Bands | Classes | Primary Backbones | UQ Methods Evaluated | Hugging Face Model Repository |
+|---|---|---|---|---|---|---|
+| **Indian Pines** | $145 \times 145$ | 220 | 16 | AlexNet, GFNet, ViT-UNet | Split-CP, Multi-CP, SACP, SCMCP, CREDIT, CreDE, DAPM | [`Classification-IndianPines-Models`](https://huggingface.co/DaneshSelwal/Classification-IndianPines-Models) |
+| **Pavia University** | $610 \times 340$ | 103 | 9 | AlexNet, GFNet, ViT-UNet | Split-CP, Multi-CP, SACP, SCMCP, CREDIT, CreDE, DAPM | [`Classification-PaviaUniversity-Models`](https://huggingface.co/DaneshSelwal/Classification-PaviaUniversity-Models) |
+| **DIAS (65-Band)** | $512 \times 512$ | 65 | 11 | AlexNet, GFNet, ViT-UNet | Split-CP, Multi-CP, SACP, SCMCP, CREDIT, CreDE, DAPM | [`Classification-DIAS-65Bands`](https://huggingface.co/DaneshSelwal/Classification-DIAS-65Bands) |
+| **6-Band Multispectral** | $330 \times 307$ | 6 | 6 | AlexNet, GFNet, ViT-UNet | Split-CP, Multi-CP, SACP, SCMCP, CREDIT, CreDE, DAPM | [`Classification-6Bands-Models`](https://huggingface.co/DaneshSelwal/Classification-6Bands-Models) |
+| **Hisar-3** | $1733 \times 2647$ | 4 | 8 | AlexNet, GFNet, ViT-UNet | Split-CP, Multi-CP, SACP, SCMCP, CREDIT, CreDE, DAPM | [`Classification-Hisar3-Models`](https://huggingface.co/DaneshSelwal/Classification-Hisar3-Models) |
+| **Hissar-25** | $722 \times 1014$ | 4 | 8 | AlexNet, GFNet, ViT-UNet | Split-CP, Multi-CP, SACP, SCMCP, CREDIT, CreDE, DAPM | [`Classification-Hissar25-Models`](https://huggingface.co/DaneshSelwal/Classification-Hissar25-Models) |
+
+### Pipeline Architecture
+1. **Scene Ingestion & Geometry Normalization**: Robust percentile scaling `[2.0, 98.0]` per spectral band.
+2. **Patch Extraction**: $9 \times 9 \times B$ spatial-spectral patches with background zero-exclusion.
+3. **Deep Backbones**: Lightweight AlexNet CNN, Global Filter Network (GFNet) frequency domain mixer, and Vision Transformer UNet (ViT-UNet).
+4. **Statistical Uncertainty**: Conformal Prediction guarantees marginal and class-conditional coverage ($1 - \alpha$), Spatial-Aware CP ensures contiguous certainty maps, and Credal Deep Ensembles capture epistemic ambiguity.
+5. **Evaluation Metrics**: Overall Accuracy (OA), Average Accuracy (AA), Cohen's Kappa ($\kappa$), Expected Calibration Error (ECE), Negative Log-Likelihood (NLL), Brier score, Prediction Set Efficiency, and Empirical Coverage.
+
 
 ---
 

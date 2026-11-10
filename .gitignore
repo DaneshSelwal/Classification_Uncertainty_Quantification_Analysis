@@ -1,6 +1,12 @@
-# Ignore large model artifact directories
+# Ignore large model artifact directories and model weights
 **/models/
 **/models/**
+*.keras
+*.h5
+*.tar.gz
+*.zip
+*.tar
+*.gz
 
 # Ignore local tools and original data
 tools/
@@ -11,11 +17,23 @@ legacy_and_temp_files/
 classification_uncertainty_quantification/data/
 examples/*/data/
 
-# Notebook checkpoints
+# Notebook checkpoints and caches
 .ipynb_checkpoints/
 **/.ipynb_checkpoints/
-*.zip
+__pycache__/
+*.py[cod]
 bin/
 markdowns/
 *.docx
 .DS_Store
+
+# Kaggle staging, environment, and credentials protection
+kaggle_staging/
+**/kaggle_staging/
+.env
+*.env
+.env.*
+*token*
+*.token
+*.key
+tokens/

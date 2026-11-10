@@ -1,0 +1,112 @@
+{
+  "project": "Classification and Uncertainty Quantification Pipeline (Indian Pines, Pavia Uni, Hisar-3, Hissar-25)",
+  "timestamp": "2026-11-09",
+  "kernels": {
+    "ip-uncertainty-k01": {
+      "local_notebook": "examples/indian_pines_uncertainty_quantification/Model_training.ipynb",
+      "obfuscated_file": "k001.ipynb",
+      "staging_dir": "kaggle_staging/ip-uncertainty-k01",
+      "kaggle_id": "daneshselwal/ip-uncertainty-k01",
+      "dataset_source": "daneshselwal/ip-dataset-k01"
+    },
+    "pavia-uncertainty-k02": {
+      "local_notebook": "examples/pavia_university_uncertainty_quantification/Model_training.ipynb",
+      "obfuscated_file": "k002.ipynb",
+      "staging_dir": "kaggle_staging/pavia-uncertainty-k02",
+      "kaggle_id": "daneshselwal/pavia-uncertainty-k02",
+      "dataset_source": "daneshselwal/pavia-dataset-k02"
+    },
+    "hisar3-uncertainty-k03": {
+      "local_notebook": "examples/hisar_3mts_uncertainty_quantification/Model_training.ipynb",
+      "obfuscated_file": "k003.ipynb",
+      "staging_dir": "kaggle_staging/hisar3-uncertainty-k03",
+      "kaggle_id": "daneshselwal/hisar3-uncertainty-k03",
+      "dataset_source": "daneshselwal/hisar3-dataset-k03"
+    },
+    "hissar25-uncertainty-k04": {
+      "local_notebook": "examples/hissar_25_uncertainty_quantification/Model_training.ipynb",
+      "obfuscated_file": "k004.ipynb",
+      "staging_dir": "kaggle_staging/hissar25-uncertainty-k04",
+      "kaggle_id": "daneshselwal/hissar25-uncertainty-k04",
+      "dataset_source": "daneshselwal/hissar25-dataset-k04"
+    }
+  },
+  "datasets": {
+    "ip-dataset-k01": {
+      "kaggle_id": "daneshselwal/ip-dataset-k01",
+      "files": {
+        "k001.mat": "examples/indian_pines_uncertainty_quantification/data/Indian_pines.mat",
+        "k002.mat": "examples/indian_pines_uncertainty_quantification/data/Indian_pines_gt.mat"
+      },
+      "file_hashes": {
+        "k001.mat": {
+          "path": "examples/indian_pines_uncertainty_quantification/data/Indian_pines.mat",
+          "sha256": "fd6498950de76fb68680e335d30dae63f2337be8ba4b3ab8aa8dbb7b36cff273",
+          "size": 6296374
+        },
+        "k002.mat": {
+          "path": "examples/indian_pines_uncertainty_quantification/data/Indian_pines_gt.mat",
+          "sha256": "65c4687a8ab04f6da4789799bc3bc4f6e88bccac3ed6a2e6ae367e5e6b9e429c",
+          "size": 1125
+        }
+      }
+    },
+    "pavia-dataset-k02": {
+      "kaggle_id": "daneshselwal/pavia-dataset-k02",
+      "files": {
+        "k001.mat": "examples/pavia_university_uncertainty_quantification/data/paviauni.mat",
+        "k002.mat": "examples/pavia_university_uncertainty_quantification/data/paviauni_gt.mat"
+      },
+      "file_hashes": {
+        "k001.mat": {
+          "path": "examples/pavia_university_uncertainty_quantification/data/paviauni.mat",
+          "sha256": "28447fa87f7a5797845e9a189c0da85e23b1d06a4ba7361e5ff44efbf834d2fb",
+          "size": 34806917
+        },
+        "k002.mat": {
+          "path": "examples/pavia_university_uncertainty_quantification/data/paviauni_gt.mat",
+          "sha256": "23f6a426928f9b32984adffe659e29f554f9fb6c93b5a107528d308d5087a829",
+          "size": 11005
+        }
+      }
+    },
+    "hisar3-dataset-k03": {
+      "kaggle_id": "daneshselwal/hisar3-dataset-k03",
+      "files": {
+        "k001.tif": "examples/hisar_3mts_uncertainty_quantification/data/Hisar3.tif",
+        "k002.tif": "examples/hisar_3mts_uncertainty_quantification/data/Clsimg3.tif"
+      },
+      "file_hashes": {
+        "k001.tif": {
+          "path": "examples/hisar_3mts_uncertainty_quantification/data/Hisar3.tif",
+          "sha256": "21f27e74bb5745ca636970543a23e982615fdbf26462a45d1f8f3ab698d8393c",
+          "size": 36698008
+        },
+        "k002.tif": {
+          "path": "examples/hisar_3mts_uncertainty_quantification/data/Clsimg3.tif",
+          "sha256": "0572c048b69ae23bdc3f021324d47241f5c78d57dc58936c5331f4b3e9812986",
+          "size": 4587251
+        }
+      }
+    },
+    "hissar25-dataset-k04": {
+      "kaggle_id": "daneshselwal/hissar25-dataset-k04",
+      "files": {
+        "k001.mat": "examples/hissar_25_uncertainty_quantification/data/datas.mat",
+        "k002.csv": "examples/hissar_25_uncertainty_quantification/data/fullgt.csv"
+      },
+      "file_hashes": {
+        "k001.mat": {
+          "path": "examples/hissar_25_uncertainty_quantification/data/datas.mat",
+          "sha256": "d60e047fca8a737e6e2c089d02f656d715991f6edeab8429bf2588d6ee1a2ea4",
+          "size": 10630459
+        },
+        "k002.csv": {
+          "path": "examples/hissar_25_uncertainty_quantification/data/fullgt.csv",
+          "sha256": "0f9bfe1ad3da678bd8c742cf664bcbc3e76ccc326a91cd49bb61ac9b63abdb37",
+          "size": 1464218
+        }
+      }
+    }
+  }
+}

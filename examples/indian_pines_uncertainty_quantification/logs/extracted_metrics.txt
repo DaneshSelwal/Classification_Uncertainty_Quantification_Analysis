@@ -1,0 +1,2 @@
+,{"stream_name":"stdout","time":1039.550274189,"data":"[METRIC_REPORT] Model: AlexNet_CNN | OA: 0.9645 | AA: 0.9663 | Kappa: 0.9595 | ECE: 0.0398 | NLL: 0.1517 | Brier: 0.0753 | SplitCP_Cov: 0.9536 | SplitCP_Size: 0.98 | MultiCP_Cov: 0.9641 | MultiCP_Size: 1.03\n"}
+,{"stream_name":"stdout","time":1039.550279567,"data":"[METRIC_REPORT] Model: GFNet | OA: 0.9945 | AA: 0.9912 | Kappa: 0.9938 | ECE: 0.0113 | NLL: 0.0335 | Brier: 0.0110 | SplitCP_Cov: 0.9618 | SplitCP_Size: 0.96 | MultiCP_Cov: 0.9629 | MultiCP_Size: 0.96\n"}
