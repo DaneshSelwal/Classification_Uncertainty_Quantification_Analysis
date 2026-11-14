@@ -82,7 +82,14 @@ The project is organized into a modular architecture optimized for portability a
 │   ├── 6_band_uncertainty_quantification/
 │   ├── hisar_3mts_uncertainty_quantification/
 │   └── hissar_25_uncertainty_quantification/
-├── scripts/           # 🧪 Automated verification and synchronization tools
+├── kaggle_staging/    # 🚀 Automated Kaggle GPU/CPU runner staging & packaging
+│   ├── create_staged_runners.py # Builds all 8 unified GPU (k11-k14) & CPU (k15-k18) runners
+│   ├── verify_staging.py        # Verifies 193 staging, packaging & security checks
+│   ├── ip-suite-runner-k11/     # ... through hissar25-suite-runner-k14/ (GPU runners)
+│   └── ip-cpu-runner-k15/       # ... through hissar25-cpu-runner-k18/ (CPU runners)
+├── scripts/           # 🧪 Automated verification, symbol-repair, and synchronization tools
+│   ├── fix_all_missing_symbols.py # Cross-suite AST symbol completeness & import fixer
+│   └── verify_suites.py         # 224-check notebook schema, AST & regression verifier
 ├── kaggle_name_mapping.json # 🗂️ Obfuscation mapping for remote execution
 └── README.md          # 📑 Documentation
 ```
@@ -101,6 +108,44 @@ Each dataset suite in `examples/<dataset_suite>/` contains full standalone Jupyt
 | **6-Band Multispectral** | $330 \times 307$ | 6 | 6 | AlexNet, GFNet, ViT-UNet | Split-CP, Multi-CP, SACP, SCMCP, CREDIT, CreDE, DAPM | [`Classification-6Bands-Models`](https://huggingface.co/DaneshSelwal/Classification-6Bands-Models) |
 | **Hisar-3** | $1733 \times 2647$ | 4 | 8 | AlexNet, GFNet, ViT-UNet | Split-CP, Multi-CP, SACP, SCMCP, CREDIT, CreDE, DAPM | [`Classification-Hisar3-Models`](https://huggingface.co/DaneshSelwal/Classification-Hisar3-Models) |
 | **Hissar-25** | $722 \times 1014$ | 4 | 8 | AlexNet, GFNet, ViT-UNet | Split-CP, Multi-CP, SACP, SCMCP, CREDIT, CreDE, DAPM | [`Classification-Hissar25-Models`](https://huggingface.co/DaneshSelwal/Classification-Hissar25-Models) |
+
+### 🚀 Kaggle Execution Runners, Datasets & Model Repositories
+
+Each of the four active benchmark suites is paired with a Kaggle dataset, an 11-stage GPU runner, a 10-stage CPU UQ/distillation runner (reusing pre-trained backbones and ensemble members from Hugging Face), and a public Hugging Face Hub model repository.
+
+| Suite | Local Directory | Kaggle Dataset | GPU Runner (11 Stages) | CPU Runner (10 Stages) | Hugging Face Model Repo | Pre-Trained Weights on HF |
+|---|---|---|---|---|---|---|
+| **Indian Pines** | [`indian_pines_uncertainty_quantification/`](examples/indian_pines_uncertainty_quantification/) | [`daneshselwal/ip-dataset-k01`](https://www.kaggle.com/datasets/daneshselwal/ip-dataset-k01) | [`daneshselwal/ip-suite-runner-k11`](https://www.kaggle.com/code/daneshselwal/ip-suite-runner-k11) | [`daneshselwal/ip-cpu-runner-k15`](https://www.kaggle.com/code/daneshselwal/ip-cpu-runner-k15) | [`Classification-IndianPines-Models`](https://huggingface.co/DaneshSelwal/Classification-IndianPines-Models) | 6 backbones + 15 ensembles |
+| **Pavia University** | [`pavia_university_uncertainty_quantification/`](examples/pavia_university_uncertainty_quantification/) | [`daneshselwal/pavia-dataset-k02`](https://www.kaggle.com/datasets/daneshselwal/pavia-dataset-k02) | [`daneshselwal/pavia-suite-runner-k12`](https://www.kaggle.com/code/daneshselwal/pavia-suite-runner-k12) | [`daneshselwal/pavia-cpu-runner-k16`](https://www.kaggle.com/code/daneshselwal/pavia-cpu-runner-k16) | [`Classification-PaviaUniversity-Models`](https://huggingface.co/DaneshSelwal/Classification-PaviaUniversity-Models) | 6 backbones + 15 ensembles |
+| **Hisar-3** | [`hisar_3mts_uncertainty_quantification/`](examples/hisar_3mts_uncertainty_quantification/) | [`daneshselwal/hisar3-dataset-k03`](https://www.kaggle.com/datasets/daneshselwal/hisar3-dataset-k03) | [`daneshselwal/hisar3-suite-runner-k13`](https://www.kaggle.com/code/daneshselwal/hisar3-suite-runner-k13) | [`daneshselwal/hisar3-cpu-runner-k17`](https://www.kaggle.com/code/daneshselwal/hisar3-cpu-runner-k17) | [`Classification-Hisar3-Models`](https://huggingface.co/DaneshSelwal/Classification-Hisar3-Models) | 6 backbones |
+| **Hissar-25** | [`hissar_25_uncertainty_quantification/`](examples/hissar_25_uncertainty_quantification/) | [`daneshselwal/hissar25-dataset-k04`](https://www.kaggle.com/datasets/daneshselwal/hissar25-dataset-k04) | [`daneshselwal/hissar25-suite-runner-k14`](https://www.kaggle.com/code/daneshselwal/hissar25-suite-runner-k14) | [`daneshselwal/hissar25-cpu-runner-k18`](https://www.kaggle.com/code/daneshselwal/hissar25-cpu-runner-k18) | [`Classification-Hissar25-Models`](https://huggingface.co/DaneshSelwal/Classification-Hissar25-Models) | 6 backbones |
+
+### 📋 11-Stage Uncertainty Quantification Pipeline (Per Suite)
+
+Baseline backbone weights (`AlexNet_CNN`, `GFNet`, `ViT_UNet`) trained by [`baseline/model_training.ipynb`](examples/indian_pines_uncertainty_quantification/baseline/model_training.ipynb) are hosted on Hugging Face Hub and automatically pulled at runner startup, followed by the 11 downstream stages executed via Papermill (CPU runners `k15`–`k18` skip Stage 3 and pull `models/ensembles/*.keras` from Hugging Face):
+
+| Stage | Notebook Path (relative to suite dir) | Role & Method | Runner Scope |
+|---|---|---|---|
+| **0 (Pretrained)** | `baseline/model_training.ipynb` | Train & export `AlexNet_CNN`, `GFNet`, `ViT_UNet` backbones (hosted on HF) | Pre-staged on HF |
+| **1** | `baseline/model_uncertainty_comparison.ipynb` | Baseline Conformal Prediction comparison (`SplitCP`, `CcCP`, `RC3P`, `ClCP`, `RAPS`) | GPU & CPU |
+| **2** | `sacp/model_sacp_comparison.ipynb` | Spatial-Aware Conformal Prediction (`SACP`) evaluation | GPU & CPU |
+| **3** | `ensemble/model_training_ensembles.ipynb` | Deep Credal Ensemble training ($M=5$ per backbone; reuses HF weights if present) | GPU only |
+| **4** | `credit/model_training_credit.ipynb` | CREDIT distillation training and credal uncertainty evaluation | GPU & CPU |
+| **5** | `ensemble/model_uncertainty_credal_ensemble.ipynb` | CreDE credal ensemble uncertainty quantification | GPU & CPU |
+| **6** | `multi_cp/model_training_multihead.ipynb` | Multi-head backbone training for Multi-CP | GPU & CPU |
+| **7** | `multi_cp/model_uncertainty_multicp.ipynb` | Multi-Head Conformal Prediction (`Multi-CP`) evaluation | GPU & CPU |
+| **8** | `dapm/model_training_dapm_full.ipynb` | Dynamic Adaptive Prediction Mapping (`DAPM`) training | GPU & CPU |
+| **9** | `dapm/model_uncertainty_dapm_full.ipynb` | `DAPM` domain-adaptive uncertainty quantification | GPU & CPU |
+| **10** | `dapm/Model_uncertainty_dapm_cp.ipynb` | `DAPM` Conformal Prediction evaluation | GPU & CPU |
+| **11** | `multicp_sacp/Model_uncertainty_multicp_sacp.ipynb` | Spatial MultiCP (`SCMCP`) evaluation | GPU & CPU |
+
+#### Staging & Verification Commands
+
+```bash
+python scripts/verify_suites.py          # Runs 224 structural, AST & regression checks across all 4 suites
+python kaggle_staging/create_staged_runners.py  # Rebuilds all 8 Kaggle GPU/CPU runner notebooks
+python kaggle_staging/verify_staging.py  # Runs 193 staging, packaging & token-hygiene checks
+```
 
 ### Pipeline Architecture
 1. **Scene Ingestion & Geometry Normalization**: Robust percentile scaling `[2.0, 98.0]` per spectral band.

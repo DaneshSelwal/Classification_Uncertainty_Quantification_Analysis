@@ -23,6 +23,7 @@ Pass condition: Exit code 0 with all checks green.
 
 import ast
 import json
+import os
 import sys
 from pathlib import Path
 import numpy as np
@@ -37,6 +38,8 @@ class SuiteVerifier:
         self.active_suites = [
             "indian_pines_uncertainty_quantification",
             "pavia_university_uncertainty_quantification",
+            "hisar_3mts_uncertainty_quantification",
+            "hissar_25_uncertainty_quantification",
             "dias_uncertainty_quantification",
             "6_band_uncertainty_quantification",
         ]
@@ -64,8 +67,11 @@ class SuiteVerifier:
         self.verify_notebook_json_and_ast()
         self.verify_indian_pines_suite()
         self.verify_pavia_university_suite()
+        self.verify_hisar_3mts_suite()
+        self.verify_hissar_25_suite()
         self.verify_completed_benchmarks()
         self.verify_conformal_and_model_methods()
+        self.verify_subfolder_notebooks_and_symbols()
 
         print("\n" + "=" * 80)
         print(f"VERIFICATION SUMMARY: {self.passed_checks} PASSED, {self.failed_checks} FAILED")
@@ -74,11 +80,29 @@ class SuiteVerifier:
 
     def verify_storage_decoupling(self):
         print("\n[Tier 1] Verifying Artifact Decoupling & Storage Guard...")
-        keras_files = list(self.repo_root.glob("**/*.keras"))
+        repo_keras = list(self.repo_root.glob("**/*.keras")) + list(self.repo_root.glob("**/*.h5"))
         self.check(
-            len(keras_files) == 0,
-            "Zero local .keras model weights stored in repo (weights decoupled to Hugging Face)",
-            f"Found {len(keras_files)} .keras files: {keras_files[:3]}"
+            len(repo_keras) == 0,
+            "Zero local model weights stored in repo (weights decoupled to Hugging Face)",
+            f"Found {len(repo_keras)} weight files in repo: {repo_keras[:3]}"
+        )
+
+        # System temporary storage guard
+        tmp_weights = []
+        weight_exts = {".keras", ".h5", ".hdf5", ".pt", ".pth", ".ckpt"}
+        for tmp_path in [Path("/tmp"), Path("/private/tmp")]:
+            if not tmp_path.exists():
+                continue
+            for root, dirs, files in os.walk(tmp_path):
+                for f in files:
+                    if Path(f).suffix.lower() in weight_exts:
+                        p = Path(root) / f
+                        if str(p) not in tmp_weights:
+                            tmp_weights.append(str(p))
+        self.check(
+            len(tmp_weights) == 0,
+            "Zero local model weights present in /tmp or /private/tmp",
+            f"Found {len(tmp_weights)} weight files in /tmp: {tmp_weights[:3]}"
         )
 
     def verify_notebook_json_and_ast(self):
@@ -237,8 +261,100 @@ class SuiteVerifier:
         self.check("paviaU_gt" in nb_code and "LABEL_KEY" in nb_code, "Pavia University Model_training specifies LABEL_KEY='paviaU_gt'")
         self.check("PATCH_SIZE  = 9" in nb_code or "PATCH_SIZE = 9" in nb_code, "Pavia University Model_training specifies PATCH_SIZE = 9")
 
+    def verify_hisar_3mts_suite(self):
+        print("\n[Tier 5] Verifying Hisar-3 Multispectral Suite (1733x2647x4, K=8)...")
+        suite_dir = self.examples_dir / "hisar_3mts_uncertainty_quantification"
+        data_dir = suite_dir / "data"
+
+        for nb_name in [
+            "Model_training.ipynb",
+            "Model_uncertainty_comparison.ipynb",
+            "Model_training_credit.ipynb",
+            "Model_uncertainty_CreDE.ipynb",
+        ]:
+            nb_file = suite_dir / nb_name
+            self.check(nb_file.exists(), f"Hisar-3 canonical notebook exists: {nb_name}")
+
+        data_tif = data_dir / "Hisar3.tif"
+        label_tif = data_dir / "Clsimg3.tif"
+        self.check(data_tif.exists(), "Hisar-3 data file exists: Hisar3.tif")
+        self.check(label_tif.exists(), "Hisar-3 label file exists: Clsimg3.tif")
+
+        raw_x = np.fromfile(str(data_tif), dtype=np.uint16).reshape((4, 1733, 2647))
+        x_h3 = np.moveaxis(raw_x, 0, -1).astype(np.float32)
+        y_h3 = np.fromfile(str(label_tif), dtype=np.uint8).reshape((1733, 2647)).astype(np.int32)
+
+        self.check(
+            x_h3.shape == (1733, 2647, 4),
+            f"Hisar-3 cube shape matches specification: (1733, 2647, 4) [Actual: {x_h3.shape}]"
+        )
+        self.check(
+            y_h3.shape == (1733, 2647),
+            f"Hisar-3 label shape matches specification: (1733, 2647) [Actual: {y_h3.shape}]"
+        )
+
+        active_classes = np.unique(y_h3[y_h3 > 0])
+        self.check(
+            len(active_classes) == 8,
+            f"Hisar-3 has exactly 8 active classes (background 0 excluded) [Actual: {len(active_classes)}]"
+        )
+
+        with open(suite_dir / "Model_training.ipynb", "r") as f:
+            nb = json.load(f)
+        nb_code = "\n".join("".join(c.get("source", [])) for c in nb["cells"] if c.get("cell_type") == "code")
+
+        self.check("Hisar3.tif" in nb_code and "Clsimg3.tif" in nb_code, "Hisar-3 Model_training specifies Hisar3.tif and Clsimg3.tif")
+        self.check("PATCH_SIZE" in nb_code and "9" in nb_code, "Hisar-3 Model_training specifies PATCH_SIZE = 9")
+
+    def verify_hissar_25_suite(self):
+        print("\n[Tier 6] Verifying Hissar-25 Multispectral Suite (722x1014x4, K=8)...")
+        suite_dir = self.examples_dir / "hissar_25_uncertainty_quantification"
+        data_dir = suite_dir / "data"
+
+        for nb_name in [
+            "Model_training.ipynb",
+            "Model_uncertainty_comparison.ipynb",
+            "Model_training_credit.ipynb",
+            "Model_uncertainty_CreDE.ipynb",
+        ]:
+            nb_file = suite_dir / nb_name
+            self.check(nb_file.exists(), f"Hissar-25 canonical notebook exists: {nb_name}")
+
+        data_mat_file = data_dir / "datas.mat"
+        label_csv_file = data_dir / "fullgt.csv"
+        self.check(data_mat_file.exists(), "Hissar-25 data file exists: datas.mat")
+        self.check(label_csv_file.exists(), "Hissar-25 label file exists: fullgt.csv")
+
+        data_mat = sio.loadmat(data_mat_file)
+        self.check("datas" in data_mat, "datas.mat contains key 'datas'")
+
+        x_h25 = data_mat["datas"].astype(np.float32).reshape((722, 1014, 4))
+        y_h25 = pd.read_csv(label_csv_file).to_numpy(dtype=np.int32).reshape((722, 1014))
+
+        self.check(
+            x_h25.shape == (722, 1014, 4),
+            f"Hissar-25 cube shape matches specification: (722, 1014, 4) [Actual: {x_h25.shape}]"
+        )
+        self.check(
+            y_h25.shape == (722, 1014),
+            f"Hissar-25 label shape matches specification: (722, 1014) [Actual: {y_h25.shape}]"
+        )
+
+        active_classes = np.unique(y_h25[y_h25 > 0])
+        self.check(
+            len(active_classes) == 8,
+            f"Hissar-25 has exactly 8 active classes (background 0 excluded) [Actual: {len(active_classes)}]"
+        )
+
+        with open(suite_dir / "Model_training.ipynb", "r") as f:
+            nb = json.load(f)
+        nb_code = "\n".join("".join(c.get("source", [])) for c in nb["cells"] if c.get("cell_type") == "code")
+
+        self.check("datas.mat" in nb_code and "fullgt.csv" in nb_code, "Hissar-25 Model_training specifies datas.mat and fullgt.csv")
+        self.check("PATCH_SIZE" in nb_code and "9" in nb_code, "Hissar-25 Model_training specifies PATCH_SIZE = 9")
+
     def verify_completed_benchmarks(self):
-        print("\n[Tier 5] Verifying Completed Benchmarks Staging (DIAS 65-band & 6-band)...")
+        print("\n[Tier 7] Verifying Completed Benchmarks Staging (DIAS 65-band & 6-band)...")
         # DIAS 65-band
         dias_dir = self.examples_dir / "dias_uncertainty_quantification"
         for nb_name in [
@@ -266,8 +382,13 @@ class SuiteVerifier:
         self.check(df_6_data.shape == (101310, 6), f"6-band data table verified: (101310, 6) -> (330, 307, 6)")
 
     def verify_conformal_and_model_methods(self):
-        print("\n[Tier 6] Verifying Conformal Prediction & Model Methods in Suites...")
-        for suite in ["indian_pines_uncertainty_quantification", "pavia_university_uncertainty_quantification"]:
+        print("\n[Tier 8] Verifying Conformal Prediction & Model Methods in Suites...")
+        for suite in [
+            "indian_pines_uncertainty_quantification",
+            "pavia_university_uncertainty_quantification",
+            "hisar_3mts_uncertainty_quantification",
+            "hissar_25_uncertainty_quantification",
+        ]:
             uq_nb = self.examples_dir / suite / "Model_uncertainty_comparison.ipynb"
             with open(uq_nb, "r", encoding="utf-8") as f:
                 content = f.read()
@@ -314,6 +435,70 @@ class SuiteVerifier:
             self.check(
                 "evaluate_homogeneous_ensemble" in crede_content,
                 f"{suite} implements CreDE ensemble uncertainty quantification"
+            )
+
+    def verify_subfolder_notebooks_and_symbols(self):
+        print("\n[Tier 9] Verifying Subfolder Notebooks & Symbol Bindings...")
+        target_suites = [
+            "indian_pines_uncertainty_quantification",
+            "pavia_university_uncertainty_quantification",
+            "hisar_3mts_uncertainty_quantification",
+            "hissar_25_uncertainty_quantification",
+        ]
+        for suite in target_suites:
+            s_dir = self.examples_dir / suite
+
+            # 1. multi_cp/model_uncertainty_multicp.ipynb
+            nb_mcp = json.load(open(s_dir / "multi_cp" / "model_uncertainty_multicp.ipynb"))
+            c10_src = "".join(nb_mcp["cells"][10]["source"])
+            self.check(
+                "NUM_CLASSES = num_classes" in c10_src and "CLASS_COLORS = get_class_colors(NUM_CLASSES)" in c10_src,
+                f"{suite} multi_cp assigns NUM_CLASSES and CLASS_COLORS dynamically"
+            )
+
+            # 2. dapm/Model_uncertainty_dapm_cp.ipynb
+            nb_dapm_cp = json.load(open(s_dir / "dapm" / "Model_uncertainty_dapm_cp.ipynb"))
+            c9_src = "".join(nb_dapm_cp["cells"][9]["source"])
+            c11_src = "".join(nb_dapm_cp["cells"][11]["source"])
+            self.check(
+                "def split_calib_eval(" in c9_src,
+                f"{suite} dapm_cp defines split_calib_eval"
+            )
+            self.check(
+                "X_all, y_all, coords_all = extract_labeled_patches(" in c11_src,
+                f"{suite} dapm_cp correctly unpacks 3 variables from extract_labeled_patches"
+            )
+
+            # 3. multicp_sacp/Model_uncertainty_multicp_sacp.ipynb
+            nb_sacp = json.load(open(s_dir / "multicp_sacp" / "Model_uncertainty_multicp_sacp.ipynb"))
+            c22_src = "".join(nb_sacp["cells"][22]["source"])
+            self.check(
+                "def split_calib_eval_with_coords(" in c22_src,
+                f"{suite} multicp_sacp defines split_calib_eval_with_coords"
+            )
+
+            # 4. dapm/model_uncertainty_dapm_full.ipynb
+            nb_dapm_full = json.load(open(s_dir / "dapm" / "model_uncertainty_dapm_full.ipynb"))
+            c7_src = "".join(nb_dapm_full["cells"][7]["source"])
+            self.check(
+                "def extract_patches_from_coords(" in c7_src,
+                f"{suite} dapm_full UQ defines extract_patches_from_coords"
+            )
+
+            # 5. dapm/model_training_dapm_full.ipynb
+            nb_dapm_tr = json.load(open(s_dir / "dapm" / "model_training_dapm_full.ipynb"))
+            c3_src = "".join(nb_dapm_tr["cells"][3]["source"])
+            self.check(
+                "def get_display_cmap(" in c3_src and "def get_scene_rgb(" in c3_src and "def get_class_colors(" in c3_src,
+                f"{suite} dapm_full training defines visualisation palette helpers"
+            )
+
+            # 6. ensemble/model_training_ensembles.ipynb
+            nb_ens = json.load(open(s_dir / "ensemble" / "model_training_ensembles.ipynb"))
+            c56_src = "".join(nb_ens["cells"][56]["source"])
+            self.check(
+                "try:" in c56_src and "save_images_to_excel(" in c56_src,
+                f"{suite} ensemble training wraps save_images_to_excel in try-except guard"
             )
 
 

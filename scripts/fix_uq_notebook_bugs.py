@@ -3,8 +3,10 @@
 Each fix inserts a definition cell immediately BEFORE the first cell that uses the symbol,
 located by a unique anchor substring (robust across the structurally-identical dataset clones).
 Idempotent: skips a notebook if the fix marker is already present.
+Also integrates the secondary bug fixes across the 4 dataset suites.
 """
 import json, sys, glob, os, re
+from pathlib import Path
 
 MARK = "# [auto-fix: hoisted definition so it exists before first use]"
 
@@ -52,14 +54,9 @@ def replace_in_cells(nb, old, new):
 
 # (relative path, anchor substring, definition source, label)
 FIXES = [
- ('sacp/model_sacp_comparison.ipynb',
-  'extract_labeled_patches_with_coords(x_img',
-  'x_img, y_img, H, W, B = load_scene_from_mat(DATA_FILE, LABEL_FILE, DATA_KEY, LABEL_KEY)\n'
-  'print("Scene loaded:", x_img.shape, "labels:", y_img.shape)\n',
-  'x_img'),
  ('credit/model_training_credit.ipynb',
   'test_size=VAL_SPLIT_FROM_TRAIN',
-  'VAL_SPLIT_FROM_TRAIN = 0.20\n',
+  'VAL_SPLIT_FROM_TRAIN = 0.20\nALEXNET_LEGACY_TRAIN_PERCENT = 0.20\nALEXNET_LEGACY_SPLIT_SEED = 42\n',
   'VAL_SPLIT_FROM_TRAIN'),
  ('multi_cp/model_training_multihead.ipynb',
   'load_scene_from_mat(DATA_FILE, LABEL_FILE)',
@@ -67,7 +64,7 @@ FIXES = [
   'PERCENTILE_CLIP'),
  ('dapm/model_training_dapm_full.ipynb',
   'MAX_TARGET_UNLABELED',
-  'MAX_TARGET_UNLABELED = 20000\n',
+  'MAX_TARGET_UNLABELED = 20000\nTARGET_VAL_FRACTION = 0.10\n',
   'MAX_TARGET_UNLABELED'),
  ('dapm/model_uncertainty_dapm_full.ipynb',
   'MODEL_NAME_MAP.get(',
@@ -81,30 +78,44 @@ FIXES = [
   'CREDE_OUT_DIR'),
  ('multicp_sacp/Model_uncertainty_multicp_sacp.ipynb',
   'train_size=TRAIN_PERCENT',
-  'TRAIN_PERCENT = 0.75\n',
+  'TRAIN_PERCENT = 0.75\nCALIB_FRACTION_OF_TEST = 0.50\n',
   'TRAIN_PERCENT'),
 ]
 
-base_dir = sys.argv[1]
-summary={}
-for ds in DATASETS:
-    print(f"\n===== {ds} =====")
-    # 1) constant/data hoist fixes
-    for rel, anchor, defsrc, label in FIXES:
-        path=os.path.join(base_dir,ds,rel)
-        if not os.path.exists(path):
-            print(f"  {rel:52s} MISSING FILE"); continue
-        nb=load(path)
-        status=insert_before_anchor(nb,anchor,defsrc,label)
-        if status.startswith('inserted'): save(path,nb)
-        print(f"  {rel:52s} {label:22s} {status}")
-    # 2) baseline/comparison model-path fix
-    bpath=os.path.join(base_dir,ds,'baseline/model_uncertainty_comparison.ipynb')
-    if os.path.exists(bpath):
-        nb=load(bpath)
-        old='local_model_dirs = [Path("models"), Path("results/models"), Path("../models")]'
-        new='local_model_dirs = [Path("/kaggle/working/models"), Path("models"), Path("results/models"), Path("../models")]'
-        n=replace_in_cells(nb,old,new)
-        if n: save(bpath,nb)
-        print(f"  baseline/model_uncertainty_comparison.ipynb         model-path fix: {n} cell(s)")
-print("\nDONE")
+def main():
+    base_dir = sys.argv[1] if len(sys.argv) > 1 else str(Path(__file__).resolve().parent.parent / "examples")
+    for ds in DATASETS:
+        print(f"\n===== {ds} =====")
+        # 1) constant/data hoist fixes
+        for rel, anchor, defsrc, label in FIXES:
+            path=os.path.join(base_dir,ds,rel)
+            if not os.path.exists(path):
+                print(f"  {rel:52s} MISSING FILE"); continue
+            nb=load(path)
+            status=insert_before_anchor(nb,anchor,defsrc,label)
+            if status.startswith('inserted'): save(path,nb)
+            print(f"  {rel:52s} {label:22s} {status}")
+        # 2) baseline/comparison model-path fix
+        bpath=os.path.join(base_dir,ds,'baseline/model_uncertainty_comparison.ipynb')
+        if os.path.exists(bpath):
+            nb=load(bpath)
+            old='local_model_dirs = [Path("models"), Path("results/models"), Path("../models")]'
+            new='local_model_dirs = [Path("/kaggle/working/models"), Path("models"), Path("results/models"), Path("../models")]'
+            n=replace_in_cells(nb,old,new)
+            if n: save(bpath,nb)
+            print(f"  baseline/model_uncertainty_comparison.ipynb         model-path fix: {n} cell(s)")
+
+    # 3) Apply secondary bug fixes
+    scripts_dir = Path(__file__).resolve().parent
+    sec_script = scripts_dir / "apply_secondary_bug_fixes.py"
+    if sec_script.exists():
+        import subprocess
+        res = subprocess.run([sys.executable, str(sec_script)], capture_output=True, text=True)
+        print(res.stdout)
+        if res.returncode != 0:
+            print("ERROR in apply_secondary_bug_fixes.py:", res.stderr)
+
+    print("\nDONE")
+
+if __name__ == "__main__":
+    main()
