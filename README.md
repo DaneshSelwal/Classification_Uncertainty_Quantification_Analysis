@@ -120,6 +120,41 @@ Each of the four active benchmark suites is paired with a Kaggle dataset, an 11-
 | **Hisar-3** | [`hisar_3mts_uncertainty_quantification/`](examples/hisar_3mts_uncertainty_quantification/) | [`daneshselwal/hisar3-dataset-k03`](https://www.kaggle.com/datasets/daneshselwal/hisar3-dataset-k03) | [`daneshselwal/hisar3-suite-runner-k13`](https://www.kaggle.com/code/daneshselwal/hisar3-suite-runner-k13) | [`daneshselwal/hisar3-cpu-runner-k17`](https://www.kaggle.com/code/daneshselwal/hisar3-cpu-runner-k17) | [`Classification-Hisar3-Models`](https://huggingface.co/DaneshSelwal/Classification-Hisar3-Models) | 6 backbones |
 | **Hissar-25** | [`hissar_25_uncertainty_quantification/`](examples/hissar_25_uncertainty_quantification/) | [`daneshselwal/hissar25-dataset-k04`](https://www.kaggle.com/datasets/daneshselwal/hissar25-dataset-k04) | [`daneshselwal/hissar25-suite-runner-k14`](https://www.kaggle.com/code/daneshselwal/hissar25-suite-runner-k14) | [`daneshselwal/hissar25-cpu-runner-k18`](https://www.kaggle.com/code/daneshselwal/hissar25-cpu-runner-k18) | [`Classification-Hissar25-Models`](https://huggingface.co/DaneshSelwal/Classification-Hissar25-Models) | 6 backbones |
 
+### 📊 Dataset-Wise Notebook Execution Progress (4 Suites × 12 Stages = 48 Notebooks)
+
+```text
+Codebase & AST Verification   [████████████████████] 100%  (48 / 48 notebooks verified — 224/224 suite + 193/193 staging)
+Backbone & Ensemble Weights   [█████████████████░░░]  85%  (71 / 84 .keras models trained; 54 / 84 hosted on HF Hub)
+End-to-End Stage Completion   [█████░░░░░░░░░░░░░░░]  25%  (12 / 48 stages done; 36 / 48 active across Kaggle GPU & CPU)
+```
+
+| Dataset Suite | Execution Progress | Done / Total | GPU Runner | CPU Runner | Model Checkpoints (Backbones + Ensembles) |
+|---|---|---|---|---|---|
+| **Indian Pines** | `███████░░░░░░░░░░░░░` **33%** | `4 / 12` Done, `8` Active | [`k11`](https://www.kaggle.com/code/daneshselwal/ip-suite-runner-k11) (`QUEUED` v3) | [`k15`](https://www.kaggle.com/code/daneshselwal/ip-cpu-runner-k15) (`RUNNING` v4) | `21 / 21` on HF (`6` backbones + `15` ensembles) |
+| **Pavia University** | `█████░░░░░░░░░░░░░░░` **25%** | `3 / 12` Done, `9` Active | [`k12`](https://www.kaggle.com/code/daneshselwal/pavia-suite-runner-k12) (`RUNNING`) | [`k16`](https://www.kaggle.com/code/daneshselwal/pavia-cpu-runner-k16) (`RUNNING` v4) | `21 / 21` on HF (`6` backbones + `15` ensembles) |
+| **Hisar-3** | `███░░░░░░░░░░░░░░░░░` **17%** | `2 / 12` Done, `10` Active | [`k13`](https://www.kaggle.com/code/daneshselwal/hisar3-suite-runner-k13) (`CANCEL_ACK`, `2/15` ens) | [`k17`](https://www.kaggle.com/code/daneshselwal/hisar3-cpu-runner-k17) (`RUNNING` v3) | `6 / 21` on HF (`6` backbones + `2` ens in `k13`) |
+| **Hissar-25** | `█████░░░░░░░░░░░░░░░` **25%** | `3 / 12` Done, `9` Active | [`k14`](https://www.kaggle.com/code/daneshselwal/hissar25-suite-runner-k14) (`COMPLETE`, `15/15` ens) | [`k18`](https://www.kaggle.com/code/daneshselwal/hissar25-cpu-runner-k18) (`RUNNING` v3) | `6 / 21` on HF (+ `15 / 15` ens in `k14` output) |
+
+<details>
+<summary>View 12-Stage × 4-Dataset Notebook Status Matrix (click to expand)</summary>
+
+| Stage | Notebook | Indian Pines | Pavia University | Hisar-3 | Hissar-25 |
+|---|---|---|---|---|---|
+| **0** | `baseline/model_training.ipynb` | ✅ Done | ✅ Done | ✅ Done | ✅ Done |
+| **1** | `baseline/model_uncertainty_comparison.ipynb` | ✅ Done | ✅ Done | ✅ Done | ✅ Done |
+| **2** | `sacp/model_sacp_comparison.ipynb` | 🔄 Running | 🔄 Running | 🔄 Running | 🔄 Running |
+| **3** | `ensemble/model_training_ensembles.ipynb` | ✅ Done | ✅ Done | ⏳ Queued (`2/15`) | ✅ Done (`15/15` in `k14`) |
+| **4** | `credit/model_training_credit.ipynb` | 🔄 Running | 🔄 Running | 🔄 Running | 🔄 Running |
+| **5** | `ensemble/model_uncertainty_credal_ensemble.ipynb` | ✅ Done | 🔄 Running | 🔄 Running | 🔄 Running |
+| **6** | `multi_cp/model_training_multihead.ipynb` | 🔄 Running | 🔄 Running | 🔄 Running | 🔄 Running |
+| **7** | `multi_cp/model_uncertainty_multicp.ipynb` | 🔄 Running | 🔄 Running | 🔄 Running | 🔄 Running |
+| **8** | `dapm/model_training_dapm_full.ipynb` | 🔄 Running | 🔄 Running | 🔄 Running | 🔄 Running |
+| **9** | `dapm/model_uncertainty_dapm_full.ipynb` | 🔄 Running | 🔄 Running | 🔄 Running | 🔄 Running |
+| **10** | `dapm/Model_uncertainty_dapm_cp.ipynb` | 🔄 Running | 🔄 Running | 🔄 Running | 🔄 Running |
+| **11** | `multicp_sacp/Model_uncertainty_multicp_sacp.ipynb` | 🔄 Running | 🔄 Running | 🔄 Running | 🔄 Running |
+
+</details>
+
 ### 📋 11-Stage Uncertainty Quantification Pipeline (Per Suite)
 
 Baseline backbone weights (`AlexNet_CNN`, `GFNet`, `ViT_UNet`) trained by [`baseline/model_training.ipynb`](examples/indian_pines_uncertainty_quantification/baseline/model_training.ipynb) are hosted on Hugging Face Hub and automatically pulled at runner startup, followed by the 11 downstream stages executed via Papermill (CPU runners `k15`–`k18` skip Stage 3 and pull `models/ensembles/*.keras` from Hugging Face):
