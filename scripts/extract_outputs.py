@@ -501,7 +501,7 @@ def main():
 
     if args.decouple_hisar3:
         stream_decouple_hisar3(api)
-        if args.status_only:
+        if args.status_only or "--suite" not in sys.argv:
             return
 
     suite_arg = None if args.suite == "all" else args.suite
