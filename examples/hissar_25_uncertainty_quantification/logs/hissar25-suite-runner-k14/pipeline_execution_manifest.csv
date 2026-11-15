@@ -1,0 +1,39 @@
+notebook,description,status,duration_s,error
+baseline/model_uncertainty_comparison.ipynb,"Baseline Conformal Prediction Comparison (SplitCP, CcCP, RC3P, ClCP, RAPS)",FAILED,13.2,"
+---------------------------------------------------------------------------
+Exception encountered at ""In [4]"":
+--------------------------------------"
+sacp/model_sacp_comparison.ipynb,Spatial-Aware Conformal Prediction (SACP) Evaluation,FAILED,18.0,"
+---------------------------------------------------------------------------
+Exception encountered at ""In [7]"":
+--------------------------------------"
+credit/model_training_credit.ipynb,CREDIT Distillation Training and Credal Uncertainty Evaluation,SUCCESS,11.0,
+ensemble/model_training_ensembles.ipynb,Deep Credal Ensemble Training,SUCCESS,35900.6,
+ensemble/model_uncertainty_credal_ensemble.ipynb,CreDE Credal Ensemble Uncertainty Quantification,FAILED,14.0,"
+---------------------------------------------------------------------------
+Exception encountered at ""In [6]"":
+--------------------------------------"
+multi_cp/model_training_multihead.ipynb,Multi-Head Architecture Training,FAILED,16.0,"
+---------------------------------------------------------------------------
+Exception encountered at ""In [3]"":
+--------------------------------------"
+multi_cp/model_uncertainty_multicp.ipynb,Multi-Head Conformal Prediction (Multi-CP) Evaluation,FAILED,14.0,"
+---------------------------------------------------------------------------
+Exception encountered at ""In [16]"":
+-------------------------------------"
+dapm/model_training_dapm_full.ipynb,Dynamic Adaptive Prediction Mapping (DAPM) Training,FAILED,9.0,"
+---------------------------------------------------------------------------
+Exception encountered at ""In [5]"":
+--------------------------------------"
+dapm/model_uncertainty_dapm_full.ipynb,DAPM Domain-Adaptive Uncertainty Quantification,FAILED,10.0,"
+---------------------------------------------------------------------------
+Exception encountered at ""In [13]"":
+-------------------------------------"
+dapm/Model_uncertainty_dapm_cp.ipynb,DAPM Conformal Prediction Evaluation,FAILED,9.0,"
+---------------------------------------------------------------------------
+Exception encountered at ""In [4]"":
+--------------------------------------"
+multicp_sacp/Model_uncertainty_multicp_sacp.ipynb,Spatial MultiCP (SCMCP) Evaluation,FAILED,10.0,"
+---------------------------------------------------------------------------
+Exception encountered at ""In [10]"":
+-------------------------------------"

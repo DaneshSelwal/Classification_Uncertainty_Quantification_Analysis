@@ -1,0 +1,20 @@
+{
+  "seed": 42,
+  "data_file": "/kaggle/input/datasets/daneshselwal/hissar25-dataset-k04/k001.mat",
+  "label_file": "/kaggle/input/datasets/daneshselwal/hissar25-dataset-k04/k002.csv",
+  "model_dir": "/kaggle/working/models",
+  "output_dir": "/kaggle/working/results/uncertainty_results",
+  "results_dir": "/kaggle/working/results/uncertainty_results",
+  "h": 722,
+  "w": 1014,
+  "b": 4,
+  "patch_size": 9,
+  "train_percent": 0.75,
+  "calib_fraction_of_test": 0.5,
+  "alpha": 0.05,
+  "raps_lam": 0.01,
+  "raps_k_reg": 1,
+  "n_clusters": 4,
+  "batch_size": 128,
+  "timestamp_utc": "2026-11-14T14:28:29.241060+00:00"
+}
