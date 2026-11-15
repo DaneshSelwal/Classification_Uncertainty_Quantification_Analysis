@@ -31,6 +31,7 @@ from pathlib import Path
 from typing import Dict, List, Optional, Set, Tuple
 
 import openpyxl
+from huggingface_hub import HfApi
 from kaggle.api.kaggle_api_extended import KaggleApi
 from kagglesdk.kernels.types.kernels_api_service import ApiListKernelSessionOutputRequest
 
@@ -104,6 +105,9 @@ def list_kernel_files(api: KaggleApi, slug: str) -> List:
 
 def should_skip_name(name: str) -> bool:
     """Filter out forbidden directories, fullgt.csv, model weights, and unsupported files."""
+    path_parts = set(Path(name).parts)
+    if any(bad in path_parts for bad in {".cache", "Multi-CP", ".git", "catboost_info", "__pycache__"}):
+        return True
     if name.startswith(BAD_PREFIXES):
         return True
     base = Path(name).name.lower()
@@ -116,6 +120,87 @@ def should_skip_name(name: str) -> bool:
     if ext in {".keras", ".h5", ".hdf5", ".ckpt", ".pt", ".pth", ".safetensors"}:
         return True
     return False
+
+
+def get_hf_token() -> Optional[str]:
+    """Retrieve Hugging Face API token from environment, cache, or Kaggle secrets."""
+    token = os.environ.get("HF_TOKEN")
+    if token and token.strip():
+        return token.strip()
+    cache_token = Path.home() / ".cache/huggingface/token"
+    if cache_token.exists():
+        val = cache_token.read_text().strip()
+        if val:
+            return val
+    try:
+        from kaggle_secrets import UserSecretsClient
+        return UserSecretsClient().get_secret("HF_TOKEN")
+    except Exception:
+        pass
+    return None
+
+
+def stream_decouple_hisar3(api: Optional[KaggleApi] = None) -> bool:
+    """Stream-decouple all 15 ensemble weights from hisar3-suite-runner-k13 to HF Hub in-memory (0 disk writes)."""
+    hf_token = get_hf_token()
+    if not hf_token:
+        print("  [ERROR] Cannot decouple Hisar-3 weights: HF_TOKEN not found.", file=sys.stderr)
+        return False
+
+    hf_api = HfApi(token=hf_token)
+    repo_id = "DaneshSelwal/Classification-Hisar3-Models"
+    slug = "hisar3-suite-runner-k13"
+
+    if api is None:
+        api = KaggleApi()
+        api.authenticate()
+
+    print("\n" + "=" * 80)
+    print(f"  STREAMING WEIGHT DECOUPLING: {slug} -> HF Hub ({repo_id})")
+    print("=" * 80)
+
+    try:
+        status_obj = api.kernels_status("daneshselwal/" + slug)
+        status_str = getattr(status_obj, "status", str(status_obj))
+    except Exception as exc:
+        print(f"  [ERROR] Failed to query status for {slug}: {exc}", file=sys.stderr)
+        return False
+
+    print(f"  Runner status: {status_str}")
+    if "COMPLETE" not in str(status_str).upper():
+        print(f"  Runner {slug} is not COMPLETE yet (current status: {status_str}). Ensembles cannot be decoupled until execution finishes.")
+        return False
+
+    files = list_kernel_files(api, slug)
+    ensemble_files = [
+        f for f in files
+        if f.file_name.startswith("models/ensembles/") and f.file_name.endswith(".keras")
+    ]
+    print(f"  Discovered {len(ensemble_files)} ensemble model weights in session output.")
+    if not ensemble_files:
+        print(f"  [WARN] No models/ensembles/*.keras found in {slug} session output.")
+        return False
+
+    uploaded = 0
+    for f in sorted(ensemble_files, key=lambda x: x.file_name):
+        print(f"  -> Streaming {f.file_name} directly to HF Hub ({repo_id})...")
+        req_dl = urllib.request.Request(f.url, headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req_dl, timeout=120) as r:
+            data = r.read()
+
+        hf_api.upload_file(
+            path_or_fileobj=io.BytesIO(data),
+            path_in_repo=f.file_name,
+            repo_id=repo_id,
+            repo_type="model",
+            commit_message=f"Decouple {f.file_name} from {slug}",
+        )
+        print(f"     [SUCCESS] Decoupled {f.file_name} ({len(data):,} bytes) to HF Hub.")
+        del data  # Keep heap bounded to ~260MB, zero disk persistence
+        uploaded += 1
+
+    print(f"  Decoupling complete: {uploaded}/{len(ensemble_files)} ensembles uploaded to {repo_id}.\n")
+    return True
 
 
 def is_valid_payload(ext: str, data: bytes) -> Tuple[bool, str]:
@@ -321,6 +406,10 @@ def check_and_extract(
             print(f"  • {slug:25s} [{hw:3s} | {role:7s}]: status={status_str} | session_files={len(files)}")
 
             if files and not status_only:
+                # If hisar3-suite-runner-k13 is COMPLETE, stream-decouple its ensemble weights to HF Hub
+                if slug == "hisar3-suite-runner-k13" and "COMPLETE" in str(status_str).upper():
+                    stream_decouple_hisar3(api)
+
                 jobs = plan_downloads_for_runner(slug, suite_dir, files, dry_run=dry_run)
                 all_jobs.extend(jobs)
                 print(f"    -> Planned {len(jobs)} valid download jobs from {slug}")
@@ -400,10 +489,20 @@ def main():
         default=12,
         help="Number of concurrent download threads (default: 12)",
     )
+    parser.add_argument(
+        "--decouple-hisar3",
+        action="store_true",
+        help="Stream-decouple Hisar-3 ensemble model weights directly to Hugging Face Hub in-memory",
+    )
     args = parser.parse_args()
 
     api = KaggleApi()
     api.authenticate()
+
+    if args.decouple_hisar3:
+        stream_decouple_hisar3(api)
+        if args.status_only:
+            return
 
     suite_arg = None if args.suite == "all" else args.suite
     check_and_extract(
