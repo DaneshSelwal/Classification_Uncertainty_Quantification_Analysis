@@ -125,13 +125,13 @@ Each of the four active benchmark suites is paired with a Kaggle dataset, an 11-
 ```text
 Codebase & AST Verification   [████████████████████] 100%  (48 / 48 notebooks verified — 224/224 suite + 193/193 staging)
 Backbone & Ensemble Weights   [█████████████████░░░]  85%  (69 / 84 .keras models hosted on HF Hub; 15 ensembles in-flight in k13)
-End-to-End Stage Completion   [███████████░░░░░░░░░]  56%  (27 / 48 stages done; 21 / 48 active across Kaggle GPU & CPU)
+End-to-End Stage Completion   [█████████████░░░░░░░]  65%  (31 / 48 stages done; 17 / 48 active across Kaggle GPU & CPU)
 ```
 
 | Dataset Suite | Execution Progress | Done / Total | GPU Runner | CPU Runner | Model Checkpoints (Backbones + Ensembles) |
 |---|---|---|---|---|---|
 | **Indian Pines** | `████████████████████` **100%** | `12 / 12` Done, `0` Active | [`k11`](https://www.kaggle.com/code/daneshselwal/ip-suite-runner-k11) (`COMPLETE` v3 — 12/12!) | [`k15`](https://www.kaggle.com/code/daneshselwal/ip-cpu-runner-k15) (`CANCEL_ACK` / superseded) | `21 / 21` on HF + `CREDIT`, `MultiHead`, `DAPM` trained |
-| **Pavia University** | `█████████████░░░░░░░` **67%** | `8 / 12` Done, `4` Active | [`k12`](https://www.kaggle.com/code/daneshselwal/pavia-suite-runner-k12) (`RUNNING` v3 — Stage 8 DAPM) | [`k16`](https://www.kaggle.com/code/daneshselwal/pavia-cpu-runner-k16) (`RUNNING` v5 — orphaned/superseded) | `21 / 21` on HF (`6` backbones + `15` ensembles) |
+| **Pavia University** | `████████████████████` **100%** | `12 / 12` Done, `0` Active | [`k12`](https://www.kaggle.com/code/daneshselwal/pavia-suite-runner-k12) (`COMPLETE` v3 — 12/12!) | [`k16`](https://www.kaggle.com/code/daneshselwal/pavia-cpu-runner-k16) (`RUNNING` v5 — superseded by `k12`) | `21 / 21` on HF (`6` backbones + `15` ensembles) |
 | **Hissar-25** | `███████░░░░░░░░░░░░░` **33%** | `4 / 12` Done, `8` Active | [`k14`](https://www.kaggle.com/code/daneshselwal/hissar25-suite-runner-k14) (`COMPLETE` v1 — Stage 3 & 4) | [`k18`](https://www.kaggle.com/code/daneshselwal/hissar25-cpu-runner-k18) (`RUNNING` v4 — orphaned/superseded) | `21 / 21` on HF (`6` backbones + `15` ensembles decoupled) |
 | **Hisar-3** | `█████░░░░░░░░░░░░░░░` **25%** | `3 / 12` Done, `9` Active | [`k13`](https://www.kaggle.com/code/daneshselwal/hisar3-suite-runner-k13) (`RUNNING` v2 — Stage 3 Ensembles) | [`k17`](https://www.kaggle.com/code/daneshselwal/hisar3-cpu-runner-k17) (`RUNNING` v4 — orphaned/superseded) | `6 / 21` on HF (`6` backbones; ensembles in-flight in `k13`) |
 
@@ -147,11 +147,11 @@ End-to-End Stage Completion   [███████████░░░░░�
 | **4** | `credit/model_training_credit.ipynb` | ✅ Done | ✅ Done | 🔄 Running | ✅ Done (`k14`) |
 | **5** | `ensemble/model_uncertainty_credal_ensemble.ipynb` | ✅ Done | ✅ Done | 🔄 Running | 🔄 Running |
 | **6** | `multi_cp/model_training_multihead.ipynb` | ✅ Done | ✅ Done | 🔄 Running | 🔄 Running |
-| **7** | `multi_cp/model_uncertainty_multicp.ipynb` | ✅ Done | ✅ Done (`k12`) | 🔄 Running | 🔄 Running |
-| **8** | `dapm/model_training_dapm_full.ipynb` | ✅ Done | 🔄 Running (`k12`) | 🔄 Running | 🔄 Running |
-| **9** | `dapm/model_uncertainty_dapm_full.ipynb` | ✅ Done | 🔄 Running | 🔄 Running | 🔄 Running |
-| **10** | `dapm/Model_uncertainty_dapm_cp.ipynb` | ✅ Done | 🔄 Running | 🔄 Running | 🔄 Running |
-| **11** | `multicp_sacp/Model_uncertainty_multicp_sacp.ipynb` | ✅ Done | 🔄 Running | 🔄 Running | 🔄 Running |
+| **7** | `multi_cp/model_uncertainty_multicp.ipynb` | ✅ Done | ✅ Done | 🔄 Running | 🔄 Running |
+| **8** | `dapm/model_training_dapm_full.ipynb` | ✅ Done | ✅ Done (`k12`) | 🔄 Running | 🔄 Running |
+| **9** | `dapm/model_uncertainty_dapm_full.ipynb` | ✅ Done | ✅ Done (`k12`) | 🔄 Running | 🔄 Running |
+| **10** | `dapm/Model_uncertainty_dapm_cp.ipynb` | ✅ Done | ✅ Done (`k12`) | 🔄 Running | 🔄 Running |
+| **11** | `multicp_sacp/Model_uncertainty_multicp_sacp.ipynb` | ✅ Done | ✅ Done (`k12`) | 🔄 Running | 🔄 Running |
 
 </details>
 

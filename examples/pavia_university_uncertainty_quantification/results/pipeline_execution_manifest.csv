@@ -1,0 +1,12 @@
+notebook,description,status,duration_s,error
+baseline/model_uncertainty_comparison.ipynb,"Baseline Conformal Prediction Comparison (SplitCP, CcCP, RC3P, ClCP, RAPS)",SUCCESS,334.3,
+sacp/model_sacp_comparison.ipynb,Spatial-Aware Conformal Prediction (SACP) Evaluation,SUCCESS,1183.5,
+ensemble/model_training_ensembles.ipynb,Deep Credal Ensemble Training,SUCCESS,539.2,
+credit/model_training_credit.ipynb,CREDIT Distillation Training and Credal Uncertainty Evaluation,FAILED,2448.7,Kernel died
+ensemble/model_uncertainty_credal_ensemble.ipynb,CreDE Credal Ensemble Uncertainty Quantification,SUCCESS,922.0,
+multi_cp/model_training_multihead.ipynb,Multi-Head Architecture Training,SUCCESS,3755.9,
+multi_cp/model_uncertainty_multicp.ipynb,Multi-Head Conformal Prediction (Multi-CP) Evaluation,SUCCESS,450.4,
+dapm/model_training_dapm_full.ipynb,Dynamic Adaptive Prediction Mapping (DAPM) Training,SUCCESS,18710.4,
+dapm/model_uncertainty_dapm_full.ipynb,DAPM Domain-Adaptive Uncertainty Quantification,SUCCESS,1254.6,
+dapm/Model_uncertainty_dapm_cp.ipynb,DAPM Conformal Prediction Evaluation,SUCCESS,771.3,
+multicp_sacp/Model_uncertainty_multicp_sacp.ipynb,Spatial MultiCP (SCMCP) Evaluation,SUCCESS,3703.3,
