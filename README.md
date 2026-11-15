@@ -125,7 +125,7 @@ Each of the four active benchmark suites is paired with a Kaggle dataset, an 11-
 ```text
 Codebase & AST Verification   [████████████████████] 100%  (48 / 48 notebooks verified — 224/224 suite + 193/193 staging)
 Backbone & Ensemble Weights   [█████████████████░░░]  85%  (71 / 84 .keras models trained across HF Hub & Kaggle outputs)
-End-to-End Stage Completion   [█████████░░░░░░░░░░░]  44%  (21 / 48 stages done & extracted; 27 / 48 active on Kaggle GPU & CPU)
+End-to-End Stage Completion   [█████████░░░░░░░░░░░]  46%  (22 / 48 stages done & extracted; 26 / 48 active on Kaggle GPU & CPU)
 ```
 
 | Dataset Suite | Execution Progress | Done / Total | GPU Runner | CPU Runner | Model Checkpoints (Backbones + Ensembles) |
