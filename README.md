@@ -117,14 +117,14 @@ Each of the four active benchmark suites is paired with a Kaggle dataset, an 11-
 |---|---|---|---|---|---|---|
 | **Indian Pines** | [`indian_pines_uncertainty_quantification/`](examples/indian_pines_uncertainty_quantification/) | [`daneshselwal/ip-dataset-k01`](https://www.kaggle.com/datasets/daneshselwal/ip-dataset-k01) | [`daneshselwal/ip-suite-runner-k11`](https://www.kaggle.com/code/daneshselwal/ip-suite-runner-k11) | [`daneshselwal/ip-cpu-runner-k15`](https://www.kaggle.com/code/daneshselwal/ip-cpu-runner-k15) | [`Classification-IndianPines-Models`](https://huggingface.co/DaneshSelwal/Classification-IndianPines-Models) | 6 backbones + 15 ensembles |
 | **Pavia University** | [`pavia_university_uncertainty_quantification/`](examples/pavia_university_uncertainty_quantification/) | [`daneshselwal/pavia-dataset-k02`](https://www.kaggle.com/datasets/daneshselwal/pavia-dataset-k02) | [`daneshselwal/pavia-suite-runner-k12`](https://www.kaggle.com/code/daneshselwal/pavia-suite-runner-k12) | [`daneshselwal/pavia-cpu-runner-k16`](https://www.kaggle.com/code/daneshselwal/pavia-cpu-runner-k16) | [`Classification-PaviaUniversity-Models`](https://huggingface.co/DaneshSelwal/Classification-PaviaUniversity-Models) | 6 backbones + 15 ensembles |
-| **Hisar-3** | [`hisar_3mts_uncertainty_quantification/`](examples/hisar_3mts_uncertainty_quantification/) | [`daneshselwal/hisar3-dataset-k03`](https://www.kaggle.com/datasets/daneshselwal/hisar3-dataset-k03) | [`daneshselwal/hisar3-suite-runner-k13`](https://www.kaggle.com/code/daneshselwal/hisar3-suite-runner-k13) | [`daneshselwal/hisar3-cpu-runner-k17`](https://www.kaggle.com/code/daneshselwal/hisar3-cpu-runner-k17) | [`Classification-Hisar3-Models`](https://huggingface.co/DaneshSelwal/Classification-Hisar3-Models) | 6 backbones (ensembles in-flight in k13) |
+| **Hisar-3** | [`hisar_3mts_uncertainty_quantification/`](examples/hisar_3mts_uncertainty_quantification/) | [`daneshselwal/hisar3-dataset-k03`](https://www.kaggle.com/datasets/daneshselwal/hisar3-dataset-k03) | [`daneshselwal/hisar3-suite-runner-k13`](https://www.kaggle.com/code/daneshselwal/hisar3-suite-runner-k13) | [`daneshselwal/hisar3-cpu-runner-k17`](https://www.kaggle.com/code/daneshselwal/hisar3-cpu-runner-k17) | [`Classification-Hisar3-Models`](https://huggingface.co/DaneshSelwal/Classification-Hisar3-Models) | 6 backbones + 6 ensembles decoupled (12/21 models live) |
 | **Hissar-25** | [`hissar_25_uncertainty_quantification/`](examples/hissar_25_uncertainty_quantification/) | [`daneshselwal/hissar25-dataset-k04`](https://www.kaggle.com/datasets/daneshselwal/hissar25-dataset-k04) | [`daneshselwal/hissar25-suite-runner-k14`](https://www.kaggle.com/code/daneshselwal/hissar25-suite-runner-k14) | [`daneshselwal/hissar25-cpu-runner-k18`](https://www.kaggle.com/code/daneshselwal/hissar25-cpu-runner-k18) | [`Classification-Hissar25-Models`](https://huggingface.co/DaneshSelwal/Classification-Hissar25-Models) | 6 backbones + 15 ensembles |
 
 ### 📊 Dataset-Wise Notebook Execution Progress (4 Suites × 12 Stages = 48 Notebooks)
 
 ```text
 Codebase & AST Verification   [████████████████████] 100%  (48 / 48 notebooks verified — 224/224 suite + 193/193 staging)
-Backbone & Ensemble Weights   [█████████████████░░░]  85%  (69 / 84 .keras models hosted on HF Hub; 15 ensembles in-flight in k13)
+Backbone & Ensemble Weights   [██████████████████░░]  89%  (75 / 84 .keras models hosted on HF Hub; 6 Hisar-3 ensembles live)
 End-to-End Stage Completion   [█████████████░░░░░░░]  65%  (31 / 48 stages done; 17 / 48 active across Kaggle GPU & CPU)
 ```
 
@@ -133,7 +133,7 @@ End-to-End Stage Completion   [█████████████░░░�
 | **Indian Pines** | `████████████████████` **100%** | `12 / 12` Done, `0` Active | [`k11`](https://www.kaggle.com/code/daneshselwal/ip-suite-runner-k11) (`COMPLETE` v3 — 12/12!) | [`k15`](https://www.kaggle.com/code/daneshselwal/ip-cpu-runner-k15) (`CANCEL_ACK` / superseded) | `21 / 21` on HF + `CREDIT`, `MultiHead`, `DAPM` trained |
 | **Pavia University** | `████████████████████` **100%** | `12 / 12` Done, `0` Active | [`k12`](https://www.kaggle.com/code/daneshselwal/pavia-suite-runner-k12) (`COMPLETE` v3 — 12/12!) | [`k16`](https://www.kaggle.com/code/daneshselwal/pavia-cpu-runner-k16) (`RUNNING` v5 — superseded by `k12`) | `21 / 21` on HF (`6` backbones + `15` ensembles) |
 | **Hissar-25** | `███████░░░░░░░░░░░░░` **33%** | `4 / 12` Done, `8` Active | [`k14`](https://www.kaggle.com/code/daneshselwal/hissar25-suite-runner-k14) (`COMPLETE` v1 — Stage 3 & 4) | [`k18`](https://www.kaggle.com/code/daneshselwal/hissar25-cpu-runner-k18) (`RUNNING` v4 — orphaned/superseded) | `21 / 21` on HF (`6` backbones + `15` ensembles decoupled) |
-| **Hisar-3** | `█████░░░░░░░░░░░░░░░` **25%** | `3 / 12` Done, `9` Active | [`k13`](https://www.kaggle.com/code/daneshselwal/hisar3-suite-runner-k13) (`RUNNING` v2 — Stage 3 Ensembles) | [`k17`](https://www.kaggle.com/code/daneshselwal/hisar3-cpu-runner-k17) (`RUNNING` v4 — orphaned/superseded) | `6 / 21` on HF (`6` backbones; ensembles in-flight in `k13`) |
+| **Hisar-3** | `█████░░░░░░░░░░░░░░░` **25%** | `3 / 12` Done, `9` Active | [`k13`](https://www.kaggle.com/code/daneshselwal/hisar3-suite-runner-k13) (`CANCEL_ACK` v2 — Stage 1, 2, and 6/15 Stage 3 ensembles extracted) | [`k17`](https://www.kaggle.com/code/daneshselwal/hisar3-cpu-runner-k17) (`RUNNING` v4 — orphaned/superseded) | `12 / 21` on HF (`6` backbones + `6` ensembles decoupled) |
 
 <details>
 <summary>View 12-Stage × 4-Dataset Notebook Status Matrix (click to expand)</summary>
@@ -143,7 +143,7 @@ End-to-End Stage Completion   [█████████████░░░�
 | **0** | `baseline/model_training.ipynb` | ✅ Done | ✅ Done | ✅ Done | ✅ Done |
 | **1** | `baseline/model_uncertainty_comparison.ipynb` | ✅ Done | ✅ Done | ✅ Done | ✅ Done |
 | **2** | `sacp/model_sacp_comparison.ipynb` | ✅ Done | ✅ Done | ✅ Done (`k13`) | 🔄 Running |
-| **3** | `ensemble/model_training_ensembles.ipynb` | ✅ Done | ✅ Done | 🔄 Running (`k13`) | ✅ Done (`15/15` on HF Hub) |
+| **3** | `ensemble/model_training_ensembles.ipynb` | ✅ Done | ✅ Done | 🔄 Partial (`6/15` on HF Hub, `k13`) | ✅ Done (`15/15` on HF Hub) |
 | **4** | `credit/model_training_credit.ipynb` | ✅ Done | ✅ Done | 🔄 Running | ✅ Done (`k14`) |
 | **5** | `ensemble/model_uncertainty_credal_ensemble.ipynb` | ✅ Done | ✅ Done | 🔄 Running | 🔄 Running |
 | **6** | `multi_cp/model_training_multihead.ipynb` | ✅ Done | ✅ Done | 🔄 Running | 🔄 Running |

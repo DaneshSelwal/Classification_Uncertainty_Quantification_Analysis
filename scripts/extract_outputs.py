@@ -140,8 +140,12 @@ def get_hf_token() -> Optional[str]:
     return None
 
 
-def stream_decouple_hisar3(api: Optional[KaggleApi] = None) -> bool:
-    """Stream-decouple all 15 ensemble weights from hisar3-suite-runner-k13 to HF Hub in-memory (0 disk writes)."""
+def stream_decouple_hisar3(
+    api: Optional[KaggleApi] = None,
+    allow_partial: bool = False,
+    dry_run: bool = False,
+) -> bool:
+    """Stream-decouple ensemble weights from hisar3-suite-runner-k13 to HF Hub in-memory (0 disk writes)."""
     hf_token = get_hf_token()
     if not hf_token:
         print("  [ERROR] Cannot decouple Hisar-3 weights: HF_TOKEN not found.", file=sys.stderr)
@@ -167,7 +171,8 @@ def stream_decouple_hisar3(api: Optional[KaggleApi] = None) -> bool:
         return False
 
     print(f"  Runner status: {status_str}")
-    if "COMPLETE" not in str(status_str).upper():
+    allowed_terms = ("COMPLETE", "CANCEL_ACKNOWLEDGED") if allow_partial else ("COMPLETE",)
+    if not any(st in str(status_str).upper() for st in allowed_terms):
         print(f"  Runner {slug} is not COMPLETE yet (current status: {status_str}). Ensembles cannot be decoupled until execution finishes.")
         return False
 
@@ -180,6 +185,12 @@ def stream_decouple_hisar3(api: Optional[KaggleApi] = None) -> bool:
     if not ensemble_files:
         print(f"  [WARN] No models/ensembles/*.keras found in {slug} session output.")
         return False
+
+    if dry_run:
+        print(f"  [DRY-RUN] Would decouple {len(ensemble_files)} ensemble model weights to HF Hub ({repo_id}):")
+        for f in sorted(ensemble_files, key=lambda x: x.file_name):
+            print(f"    - {f.file_name}")
+        return True
 
     uploaded = 0
     for f in sorted(ensemble_files, key=lambda x: x.file_name):
@@ -370,6 +381,7 @@ def check_and_extract(
     dry_run: bool = False,
     workers: int = 12,
     status_only: bool = False,
+    allow_partial: bool = False,
 ):
     """Check all runner statuses and extract valid outputs."""
     suites_to_process = (
@@ -406,9 +418,12 @@ def check_and_extract(
             print(f"  • {slug:25s} [{hw:3s} | {role:7s}]: status={status_str} | session_files={len(files)}")
 
             if files and not status_only:
-                # If hisar3-suite-runner-k13 is COMPLETE, stream-decouple its ensemble weights to HF Hub
-                if slug == "hisar3-suite-runner-k13" and "COMPLETE" in str(status_str).upper():
-                    stream_decouple_hisar3(api)
+                # If hisar3-suite-runner-k13 is COMPLETE (or allow_partial and CANCEL_ACKNOWLEDGED), stream-decouple its ensemble weights to HF Hub
+                if slug == "hisar3-suite-runner-k13" and (
+                    "COMPLETE" in str(status_str).upper()
+                    or (allow_partial and "CANCEL_ACKNOWLEDGED" in str(status_str).upper())
+                ):
+                    stream_decouple_hisar3(api, allow_partial=allow_partial, dry_run=dry_run)
 
                 jobs = plan_downloads_for_runner(slug, suite_dir, files, dry_run=dry_run)
                 all_jobs.extend(jobs)
@@ -494,13 +509,18 @@ def main():
         action="store_true",
         help="Stream-decouple Hisar-3 ensemble model weights directly to Hugging Face Hub in-memory",
     )
+    parser.add_argument(
+        "--allow-partial",
+        action="store_true",
+        help="Allow decoupling and extraction from CANCEL_ACKNOWLEDGED / timed-out runners with partial outputs",
+    )
     args = parser.parse_args()
 
     api = KaggleApi()
     api.authenticate()
 
     if args.decouple_hisar3:
-        stream_decouple_hisar3(api)
+        stream_decouple_hisar3(api, allow_partial=args.allow_partial, dry_run=args.dry_run)
         if args.status_only or "--suite" not in sys.argv:
             return
 
@@ -511,6 +531,7 @@ def main():
         dry_run=args.dry_run,
         workers=args.workers,
         status_only=args.status_only,
+        allow_partial=args.allow_partial,
     )
 
 
