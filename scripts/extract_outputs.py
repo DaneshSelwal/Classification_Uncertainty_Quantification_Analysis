@@ -300,6 +300,7 @@ def plan_downloads_for_runner(
     suite_dir: Path,
     files: List,
     dry_run: bool = False,
+    results_target: bool = True,
 ) -> List[Tuple[str, Path, str, bool]]:
     """Map output files from a runner into examples/<suite>/results and logs."""
     jobs = []
@@ -324,13 +325,15 @@ def plan_downloads_for_runner(
         # 1. Pipeline Execution Manifest
         if base_name == "pipeline_execution_manifest.csv":
             add_job(url, runner_log_dir / "pipeline_execution_manifest.csv", rel_src)
-            add_job(url, results_dir / "pipeline_execution_manifest.csv", rel_src)
+            if results_target:
+                add_job(url, results_dir / "pipeline_execution_manifest.csv", rel_src)
             continue
 
         # 2. Output prefix
         if name.startswith("output/"):
             rel = name[len("output/"):]
-            add_job(url, results_dir / rel, rel_src)
+            if results_target:
+                add_job(url, results_dir / rel, rel_src)
             if ext in {".csv", ".xlsx"} and "/" not in rel:
                 add_job(url, runner_log_dir / rel, rel_src)
             continue
@@ -338,7 +341,8 @@ def plan_downloads_for_runner(
         # 3. Results prefix
         if name.startswith("results/"):
             rel = name[len("results/"):]
-            add_job(url, results_dir / rel, rel_src)
+            if results_target:
+                add_job(url, results_dir / rel, rel_src)
             if ext in {".csv", ".xlsx"} and "/" not in rel:
                 add_job(url, runner_log_dir / rel, rel_src)
             continue
@@ -346,7 +350,8 @@ def plan_downloads_for_runner(
         # 4. Ensemble results prefix
         if name.startswith("ensemble/results/"):
             rel = name[len("ensemble/results/"):]
-            add_job(url, results_dir / "ensemble" / rel, rel_src)
+            if results_target:
+                add_job(url, results_dir / "ensemble" / rel, rel_src)
             if ext in {".csv", ".xlsx"}:
                 add_job(url, runner_log_dir / base_name, rel_src)
             continue
@@ -354,7 +359,8 @@ def plan_downloads_for_runner(
         # 5. CREDIT results prefix
         if name.startswith("credit/results/"):
             rel = name[len("credit/results/"):]
-            add_job(url, results_dir / "credit" / rel, rel_src)
+            if results_target:
+                add_job(url, results_dir / "credit" / rel, rel_src)
             if ext in {".csv", ".xlsx"}:
                 add_job(url, runner_log_dir / base_name, rel_src)
             continue
@@ -362,13 +368,15 @@ def plan_downloads_for_runner(
         # 6. Models prefix (metrics, json reports, classification tables)
         if name.startswith("models/"):
             rel = name[len("models/"):]
-            add_job(url, results_dir / "models" / rel, rel_src)
+            if results_target:
+                add_job(url, results_dir / "models" / rel, rel_src)
             if ext in {".csv", ".xlsx"}:
                 add_job(url, runner_log_dir / base_name, rel_src)
             continue
 
         # 7. Root-level tables or visualizations
-        add_job(url, results_dir / name, rel_src)
+        if results_target:
+            add_job(url, results_dir / name, rel_src)
         if ext in {".csv", ".xlsx"}:
             add_job(url, runner_log_dir / base_name, rel_src)
 
@@ -399,16 +407,25 @@ def check_and_extract(
         suite_dir = REPO_ROOT / "examples" / s_meta["dir_name"]
         print(f"\n[Suite] {s_name.upper()} ({s_meta['dir_name']})")
 
+        # First probe runner statuses to check if primary is complete
+        primary_complete = False
+        runner_statuses = {}
         for runner in s_meta["runners"]:
             slug = runner["slug"]
-            hw = runner["hw"]
-            role = runner["role"]
-
             try:
                 status_obj = api.kernels_status("daneshselwal/" + slug)
                 status_str = getattr(status_obj, "status", str(status_obj))
             except Exception as exc:
                 status_str = f"ERROR ({exc})"
+            runner_statuses[slug] = status_str
+            if runner["role"] == "primary" and "COMPLETE" in str(status_str).upper():
+                primary_complete = True
+
+        for runner in s_meta["runners"]:
+            slug = runner["slug"]
+            hw = runner["hw"]
+            role = runner["role"]
+            status_str = runner_statuses[slug]
 
             files = []
             if not status_only:
@@ -425,7 +442,10 @@ def check_and_extract(
                 ):
                     stream_decouple_hisar3(api, allow_partial=allow_partial, dry_run=dry_run)
 
-                jobs = plan_downloads_for_runner(slug, suite_dir, files, dry_run=dry_run)
+                target_results = not (role == "fallback" and primary_complete)
+                jobs = plan_downloads_for_runner(
+                    slug, suite_dir, files, dry_run=dry_run, results_target=target_results
+                )
                 all_jobs.extend(jobs)
                 print(f"    -> Planned {len(jobs)} valid download jobs from {slug}")
 
