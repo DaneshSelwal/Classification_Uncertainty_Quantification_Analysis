@@ -1,0 +1,16 @@
+model_name,method,target_coverage,empirical_coverage,avg_set_size,median_set_size,singleton_rate,empty_set_rate,runtime_sec,alpha,lam,n_clusters,mean_per_class_coverage
+AlexNet,ClassConditionalConformal,0.95,1.0,7.0,7.0,0.0,0.0,1.5997206079999842,0.05,,,1.0
+GFNet,ClassConditionalConformal,0.95,1.0,7.0,7.0,0.0,0.0,2.33797679099996,0.05,,,1.0
+ViT,ClassConditionalConformal,0.95,1.0,7.0,7.0,0.0,0.0,1.4168011740000566,0.05,,,1.0
+AlexNet,ClusteredConformal,0.95,1.0,7.0,7.0,0.0,0.0,2.6581570289999945,0.05,,4.0,1.0
+GFNet,ClusteredConformal,0.95,1.0,7.0,7.0,0.0,0.0,5.1383135869999705,0.05,,4.0,1.0
+ViT,ClusteredConformal,0.95,1.0,7.0,7.0,0.0,0.0,11.41136440799994,0.05,,4.0,1.0
+AlexNet,RAPS,0.95,1.0,7.0,7.0,0.0,0.0,0.47723056799998176,0.05,0.01,,1.0
+GFNet,RAPS,0.95,1.0,7.0,7.0,0.0,0.0,0.6026273439999841,0.05,0.01,,1.0
+ViT,RAPS,0.95,1.0,7.0,7.0,0.0,0.0,0.40662187400005223,0.05,0.01,,1.0
+AlexNet,RC3P,0.95,1.0,7.0,7.0,0.0,0.0,2.2806478820000393,0.05,,,1.0
+GFNet,RC3P,0.95,1.0,7.0,7.0,0.0,0.0,1.5931170650000013,0.05,,,1.0
+ViT,RC3P,0.95,1.0,7.0,7.0,0.0,0.0,1.3935748860000103,0.05,,,1.0
+AlexNet,SplitConformal,0.95,1.0,7.0,7.0,0.0,0.0,2.266496333999953,0.05,,,1.0
+GFNet,SplitConformal,0.95,1.0,7.0,7.0,0.0,0.0,1.4858560400000442,0.05,,,1.0
+ViT,SplitConformal,0.95,1.0,7.0,7.0,0.0,0.0,1.462208462000035,0.05,,,1.0
