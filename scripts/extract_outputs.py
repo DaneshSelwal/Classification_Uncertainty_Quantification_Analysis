@@ -30,7 +30,9 @@ import argparse
 import io
 import json
 import os
+import shutil
 import sys
+import tempfile
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
@@ -200,7 +202,7 @@ def stream_decouple_runner_models(
     dry_run: bool = False,
     kaggle_user: str = "daneshselwal",
 ) -> bool:
-    """Stream-decouple any .keras model weights from a Kaggle runner to HF Hub in-memory (0 disk writes)."""
+    """Stream-decouple .keras/.h5 model weights from a Kaggle runner to HF Hub via ephemeral Xet scratch (0 repo/tmp persistence)."""
     hf_token = get_hf_token()
     if not hf_token:
         print(f"  [ERROR] Cannot decouple {slug} weights: HF_TOKEN not found.", file=sys.stderr)
@@ -214,8 +216,12 @@ def stream_decouple_runner_models(
     if files is None:
         files = list_kernel_files(api, slug, kaggle_user=kaggle_user)
 
-    keras_files = [f for f in files if f.file_name.endswith(".keras")]
-    if not keras_files:
+    weight_files = [
+        f for f in files
+        if (f.file_name.endswith(".keras") or f.file_name.endswith(".h5"))
+        and not any(p in f.file_name for p in (".cache/", "Multi-CP/", "suite_notebooks/"))
+    ]
+    if not weight_files:
         return False
 
     try:
@@ -223,20 +229,24 @@ def stream_decouple_runner_models(
     except Exception:
         existing_hf = set()
 
-    pending = []
-    for f in sorted(keras_files, key=lambda x: x.file_name):
+    # Deduplicate by target_path, preferring canonical models/... sources
+    by_target: Dict[str, Tuple] = {}
+    for f in sorted(weight_files, key=lambda x: (0 if x.file_name.startswith("models/") else 1, x.file_name)):
         target_path = f.file_name if f.file_name.startswith("models/") else f"models/{Path(f.file_name).name}"
-        if target_path not in existing_hf and Path(f.file_name).name not in existing_hf:
-            pending.append((f, target_path))
+        if target_path in existing_hf or Path(f.file_name).name in existing_hf:
+            continue
+        if target_path not in by_target:
+            by_target[target_path] = (f, target_path)
+    pending = [by_target[k] for k in sorted(by_target)]
 
     if not pending:
-        print(f"  [HF Decouple] All {len(keras_files)} .keras weights from {slug} already live on {repo_id}.")
+        print(f"  [HF Decouple] All {len(weight_files)} weight files from {slug} already live on {repo_id}.")
         return True
 
     print("\n" + "=" * 80)
     print(f"  STREAMING WEIGHT DECOUPLING: {kaggle_user}/{slug} -> HF Hub ({repo_id})")
     print("=" * 80)
-    print(f"  Discovered {len(pending)} new .keras model weights (out of {len(keras_files)} in session output).")
+    print(f"  Discovered {len(pending)} unique new model weights (out of {len(weight_files)} in session output).")
 
     if dry_run:
         for f, target_path in pending:
@@ -245,20 +255,21 @@ def stream_decouple_runner_models(
 
     uploaded = 0
     for f, target_path in pending:
-        print(f"  -> Streaming {f.file_name} directly to HF Hub ({repo_id}/{target_path})...")
+        print(f"  -> Streaming {f.file_name} -> HF Hub ({repo_id}/{target_path})...")
         req_dl = urllib.request.Request(f.url, headers={"User-Agent": "Mozilla/5.0"})
-        with urllib.request.urlopen(req_dl, timeout=180) as r:
-            data = r.read()
-
-        hf_api.upload_file(
-            path_or_fileobj=io.BytesIO(data),
-            path_in_repo=target_path,
-            repo_id=repo_id,
-            repo_type="model",
-            commit_message=f"Decouple {target_path} from {slug}",
-        )
-        print(f"     [SUCCESS] Decoupled {target_path} ({len(data):,} bytes) to HF Hub.")
-        del data  # Keep heap bounded, zero disk persistence
+        with tempfile.TemporaryDirectory(prefix="hf_xet_") as tmpdir:
+            tmp_file = Path(tmpdir) / Path(target_path).name
+            with urllib.request.urlopen(req_dl, timeout=300) as r, open(tmp_file, "wb") as out_fp:
+                shutil.copyfileobj(r, out_fp, length=4 * 1024 * 1024)
+            fsize = tmp_file.stat().st_size
+            hf_api.upload_file(
+                path_or_fileobj=str(tmp_file),
+                path_in_repo=target_path,
+                repo_id=repo_id,
+                repo_type="model",
+                commit_message=f"Decouple {target_path} from {slug}",
+            )
+            print(f"     [SUCCESS] Decoupled {target_path} ({fsize:,} bytes) to HF Hub.")
         uploaded += 1
 
     print(f"  Decoupling complete: {uploaded}/{len(pending)} model weights uploaded to {repo_id}.\n")
@@ -456,10 +467,12 @@ def plan_downloads_for_runner(
 def check_and_extract(
     api: KaggleApi,
     suite_key: Optional[str] = None,
+    runner_slug: Optional[str] = None,
     dry_run: bool = False,
     workers: int = 12,
     status_only: bool = False,
     allow_partial: bool = False,
+    skip_weights: bool = False,
     kaggle_user: str = "daneshselwal",
 ):
     """Check all runner statuses and extract valid outputs."""
@@ -475,13 +488,21 @@ def check_and_extract(
     runner_summary: List[Tuple[str, str, str, str, int]] = []
 
     for s_name, s_meta in suites_to_process.items():
+        runners_for_suite = (
+            [r for r in s_meta["runners"] if r["slug"] == runner_slug]
+            if runner_slug
+            else s_meta["runners"]
+        )
+        if not runners_for_suite:
+            continue
+
         suite_dir = REPO_ROOT / "examples" / s_meta["dir_name"]
         print(f"\n[Suite] {s_name.upper()} ({s_meta['dir_name']})")
 
         # First probe runner statuses to check if primary is complete
         primary_complete = False
         runner_statuses = {}
-        for runner in s_meta["runners"]:
+        for runner in runners_for_suite:
             slug = runner["slug"]
             try:
                 status_obj = api.kernels_status(f"{kaggle_user}/{slug}")
@@ -489,10 +510,10 @@ def check_and_extract(
             except Exception as exc:
                 status_str = f"ERROR ({exc})"
             runner_statuses[slug] = status_str
-            if runner["role"] == "primary" and "COMPLETE" in str(status_str).upper():
+            if not runner_slug and runner["role"] == "primary" and "COMPLETE" in str(status_str).upper():
                 primary_complete = True
 
-        for runner in s_meta["runners"]:
+        for runner in runners_for_suite:
             slug = runner["slug"]
             hw = runner["hw"]
             role = runner["role"]
@@ -506,9 +527,9 @@ def check_and_extract(
             print(f"  • {slug:28s} [{hw:3s} | {role:8s}]: status={status_str} | session_files={len(files)}")
 
             if files and not status_only:
-                # If runner is COMPLETE (or allow_partial and CANCEL_ACKNOWLEDGED), stream-decouple any .keras weights to HF Hub
+                # If runner is COMPLETE (or allow_partial and CANCEL_ACKNOWLEDGED), stream-decouple any .keras/.h5 weights to HF Hub
                 hf_repo = s_meta.get("hf_repo")
-                if hf_repo and (
+                if not skip_weights and hf_repo and (
                     "COMPLETE" in str(status_str).upper()
                     or (allow_partial and "CANCEL_ACKNOWLEDGED" in str(status_str).upper())
                 ):
@@ -589,6 +610,11 @@ def main():
         help="Target benchmark suite (default: all)",
     )
     parser.add_argument(
+        "--runner",
+        default=None,
+        help="Optional single runner slug filter (e.g. hissar25-cpu-runner-k18)",
+    )
+    parser.add_argument(
         "--kaggle-user",
         default="daneshselwal",
         help="Kaggle account username owning the kernels (default: daneshselwal)",
@@ -619,6 +645,11 @@ def main():
         action="store_true",
         help="Allow decoupling and extraction from CANCEL_ACKNOWLEDGED / timed-out runners with partial outputs",
     )
+    parser.add_argument(
+        "--skip-weights",
+        action="store_true",
+        help="Skip HF Hub weight decoupling during extraction (useful when running decoupling asynchronously)",
+    )
     args = parser.parse_args()
 
     if args.kaggle_user == "daneshjangra" and "KAGGLE_CONFIG_DIR" not in os.environ:
@@ -648,10 +679,12 @@ def main():
     check_and_extract(
         api=api,
         suite_key=suite_arg,
+        runner_slug=args.runner,
         dry_run=args.dry_run,
         workers=args.workers,
         status_only=args.status_only,
         allow_partial=args.allow_partial,
+        skip_weights=args.skip_weights,
         kaggle_user=args.kaggle_user,
     )
 
