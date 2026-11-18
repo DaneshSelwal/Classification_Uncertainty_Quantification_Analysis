@@ -261,6 +261,8 @@ def is_valid_payload(ext: str, data: bytes) -> Tuple[bool, str]:
     """Validate payload content against blank CSVs and placeholder XLSX files."""
     if not data:
         return False, "empty bytes"
+    if len(data) > 49 * 1024 * 1024:
+        return False, f"oversize ({len(data) / 1048576:.1f} MB > 49 MB git limit; host on HF Hub instead)"
 
     if ext == ".csv":
         stripped = data.strip()
