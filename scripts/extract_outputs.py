@@ -164,7 +164,16 @@ def should_skip_name(name: str) -> bool:
     if name.startswith(BAD_PREFIXES):
         return True
     base = Path(name).name.lower()
-    if base == "fullgt.csv":
+    if base in {
+        "fullgt.csv",
+        "all_etmls.csv",
+        "ref.csv",
+        "vv_dectomarch.csv",
+        "vh_dectomarch.csv",
+        "gt.csv",
+        "planet.csv",
+        "planetgt.csv",
+    }:
         return True
     ext = Path(name).suffix.lower()
     if ext not in VALID_EXTS:
