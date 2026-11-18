@@ -1,12 +1,18 @@
 #!/usr/bin/env python3
 """
-Enhanced 4-Suite Benchmark Runner Output Extractor & Monitor.
+Enhanced Multi-Account & 11-Suite Benchmark Runner Output Extractor & Monitor.
 
-Monitors Kaggle GPU & CPU runners across all 4 benchmark suites:
+Monitors Kaggle GPU & CPU runners across all 9 Kaggle-staged benchmark suites
+(alongside 2 locally completed suites: DIAS 65-band and 6-band):
 - indian_pines_uncertainty_quantification (k11 / k15)
 - pavia_university_uncertainty_quantification (k12 / k16)
 - hisar_3mts_uncertainty_quantification (k13 / k17)
 - hissar_25_uncertainty_quantification (k14 / k18)
+- pavia_uncertainty_quantification (k19 / k24)
+- 372_band_uncertainty_quantification (k20 / k25)
+- multispectral_uncertainty_quantification (k21 / k26)
+- achla_multi_temporal_uncertainty_quantification (k22 / k27)
+- planet_data_hisar_uncertainty_quantification (k23 / k28)
 
 Downloads all valid non-empty CSV/XLSX/JSON/PNG outputs and logs into:
 - examples/<suite>/results/
@@ -16,7 +22,7 @@ Strict R2 Filtering:
 - Skips blank CSVs (<= 2 bytes, or stripped length < 5 bytes).
 - Skips header-only placeholder .xlsx (max_row <= 1 and size < 6000 bytes).
 - Skips fullgt.csv (case-insensitive).
-- Skips forbidden prefixes: .cache/, Multi-CP/, .git/, data/, catboost_info/, __pycache__/.
+- Skips forbidden prefixes: .cache/, Multi-CP/, .git/, data/, catboost_info/, __pycache__/, suite_notebooks/.
 - Enforces zero model weight extraction (never extracts .keras, .h5, etc.).
 """
 
@@ -45,6 +51,7 @@ BAD_PREFIXES = (
     "catboost_info/",
     "__pycache__/",
     "models/ensembles/",
+    "suite_notebooks/",
 )
 
 SUITES: Dict[str, dict] = {
@@ -76,10 +83,45 @@ SUITES: Dict[str, dict] = {
             {"slug": "hissar25-cpu-runner-k18", "hw": "CPU", "role": "fallback"},
         ],
     },
+    "pavia_centre": {
+        "dir_name": "pavia_uncertainty_quantification",
+        "runners": [
+            {"slug": "pavia-suite-runner-k19", "hw": "GPU", "role": "primary"},
+            {"slug": "pavia-cpu-runner-k24", "hw": "CPU", "role": "fallback"},
+        ],
+    },
+    "band372": {
+        "dir_name": "372_band_uncertainty_quantification",
+        "runners": [
+            {"slug": "band372-suite-runner-k20", "hw": "GPU", "role": "primary"},
+            {"slug": "band372-cpu-runner-k25", "hw": "CPU", "role": "fallback"},
+        ],
+    },
+    "etm108": {
+        "dir_name": "multispectral_uncertainty_quantification",
+        "runners": [
+            {"slug": "etm108-suite-runner-k21", "hw": "GPU", "role": "primary"},
+            {"slug": "etm108-cpu-runner-k26", "hw": "CPU", "role": "fallback"},
+        ],
+    },
+    "achla": {
+        "dir_name": "achla_multi_temporal_uncertainty_quantification",
+        "runners": [
+            {"slug": "achla-suite-runner-k22", "hw": "GPU", "role": "primary"},
+            {"slug": "achla-cpu-runner-k27", "hw": "CPU", "role": "fallback"},
+        ],
+    },
+    "planethisar": {
+        "dir_name": "planet_data_hisar_uncertainty_quantification",
+        "runners": [
+            {"slug": "planethisar-suite-runner-k23", "hw": "GPU", "role": "primary"},
+            {"slug": "planethisar-cpu-runner-k28", "hw": "CPU", "role": "fallback"},
+        ],
+    },
 }
 
 
-def list_kernel_files(api: KaggleApi, slug: str) -> List:
+def list_kernel_files(api: KaggleApi, slug: str, kaggle_user: str = "daneshselwal") -> List:
     """Paginate and return all output files from a Kaggle kernel session."""
     files = []
     token = None
@@ -87,7 +129,7 @@ def list_kernel_files(api: KaggleApi, slug: str) -> List:
         with api.build_kaggle_client() as client:
             while True:
                 req = ApiListKernelSessionOutputRequest()
-                req.user_name = "daneshselwal"
+                req.user_name = kaggle_user
                 req.kernel_slug = slug
                 if token:
                     req.page_token = token
@@ -99,14 +141,14 @@ def list_kernel_files(api: KaggleApi, slug: str) -> List:
                 if not token:
                     break
     except Exception as exc:
-        print(f"  [WARN] Failed to list files for {slug}: {exc}", file=sys.stderr)
+        print(f"  [WARN] Failed to list files for {kaggle_user}/{slug}: {exc}", file=sys.stderr)
     return files
 
 
 def should_skip_name(name: str) -> bool:
     """Filter out forbidden directories, fullgt.csv, model weights, and unsupported files."""
     path_parts = set(Path(name).parts)
-    if any(bad in path_parts for bad in {".cache", "Multi-CP", ".git", "catboost_info", "__pycache__"}):
+    if any(bad in path_parts for bad in {".cache", "Multi-CP", ".git", "catboost_info", "__pycache__", "suite_notebooks"}):
         return True
     if name.startswith(BAD_PREFIXES):
         return True
@@ -144,6 +186,7 @@ def stream_decouple_hisar3(
     api: Optional[KaggleApi] = None,
     allow_partial: bool = False,
     dry_run: bool = False,
+    kaggle_user: str = "daneshselwal",
 ) -> bool:
     """Stream-decouple ensemble weights from hisar3-suite-runner-k13 to HF Hub in-memory (0 disk writes)."""
     hf_token = get_hf_token()
@@ -160,23 +203,23 @@ def stream_decouple_hisar3(
         api.authenticate()
 
     print("\n" + "=" * 80)
-    print(f"  STREAMING WEIGHT DECOUPLING: {slug} -> HF Hub ({repo_id})")
+    print(f"  STREAMING WEIGHT DECOUPLING: {kaggle_user}/{slug} -> HF Hub ({repo_id})")
     print("=" * 80)
 
     try:
-        status_obj = api.kernels_status("daneshselwal/" + slug)
+        status_obj = api.kernels_status(f"{kaggle_user}/{slug}")
         status_str = getattr(status_obj, "status", str(status_obj))
     except Exception as exc:
-        print(f"  [ERROR] Failed to query status for {slug}: {exc}", file=sys.stderr)
+        print(f"  [ERROR] Failed to query status for {kaggle_user}/{slug}: {exc}", file=sys.stderr)
         return False
 
     print(f"  Runner status: {status_str}")
     allowed_terms = ("COMPLETE", "CANCEL_ACKNOWLEDGED") if allow_partial else ("COMPLETE",)
     if not any(st in str(status_str).upper() for st in allowed_terms):
-        print(f"  Runner {slug} is not COMPLETE yet (current status: {status_str}). Ensembles cannot be decoupled until execution finishes.")
+        print(f"  Runner {kaggle_user}/{slug} is not COMPLETE yet (current status: {status_str}). Ensembles cannot be decoupled until execution finishes.")
         return False
 
-    files = list_kernel_files(api, slug)
+    files = list_kernel_files(api, slug, kaggle_user=kaggle_user)
     ensemble_files = [
         f for f in files
         if f.file_name.startswith("models/ensembles/") and f.file_name.endswith(".keras")
@@ -390,6 +433,7 @@ def check_and_extract(
     workers: int = 12,
     status_only: bool = False,
     allow_partial: bool = False,
+    kaggle_user: str = "daneshselwal",
 ):
     """Check all runner statuses and extract valid outputs."""
     suites_to_process = (
@@ -397,7 +441,7 @@ def check_and_extract(
     )
 
     print("=" * 80)
-    print("  KAGGLE BENCHMARK RUNNERS STATUS & OUTPUT EXTRACTION")
+    print(f"  KAGGLE BENCHMARK RUNNERS STATUS & OUTPUT EXTRACTION ({kaggle_user})")
     print("=" * 80)
 
     all_jobs: List[Tuple[str, Path, str, bool]] = []
@@ -413,7 +457,7 @@ def check_and_extract(
         for runner in s_meta["runners"]:
             slug = runner["slug"]
             try:
-                status_obj = api.kernels_status("daneshselwal/" + slug)
+                status_obj = api.kernels_status(f"{kaggle_user}/{slug}")
                 status_str = getattr(status_obj, "status", str(status_obj))
             except Exception as exc:
                 status_str = f"ERROR ({exc})"
@@ -429,10 +473,10 @@ def check_and_extract(
 
             files = []
             if not status_only:
-                files = list_kernel_files(api, slug)
+                files = list_kernel_files(api, slug, kaggle_user=kaggle_user)
 
             runner_summary.append((s_name, slug, hw, str(status_str), len(files)))
-            print(f"  • {slug:25s} [{hw:3s} | {role:7s}]: status={status_str} | session_files={len(files)}")
+            print(f"  • {slug:28s} [{hw:3s} | {role:8s}]: status={status_str} | session_files={len(files)}")
 
             if files and not status_only:
                 # If hisar3-suite-runner-k13 is COMPLETE (or allow_partial and CANCEL_ACKNOWLEDGED), stream-decouple its ensemble weights to HF Hub
@@ -440,7 +484,12 @@ def check_and_extract(
                     "COMPLETE" in str(status_str).upper()
                     or (allow_partial and "CANCEL_ACKNOWLEDGED" in str(status_str).upper())
                 ):
-                    stream_decouple_hisar3(api, allow_partial=allow_partial, dry_run=dry_run)
+                    stream_decouple_hisar3(
+                        api,
+                        allow_partial=allow_partial,
+                        dry_run=dry_run,
+                        kaggle_user=kaggle_user,
+                    )
 
                 target_results = not (role == "fallback" and primary_complete)
                 jobs = plan_downloads_for_runner(
@@ -504,9 +553,14 @@ def main():
     )
     parser.add_argument(
         "--suite",
-        choices=["indian_pines", "pavia_university", "hisar_3mts", "hissar_25", "all"],
+        choices=list(SUITES.keys()) + ["all"],
         default="all",
         help="Target benchmark suite (default: all)",
+    )
+    parser.add_argument(
+        "--kaggle-user",
+        default="daneshselwal",
+        help="Kaggle account username owning the kernels (default: daneshselwal)",
     )
     parser.add_argument(
         "--status-only",
@@ -536,11 +590,26 @@ def main():
     )
     args = parser.parse_args()
 
+    if args.kaggle_user == "daneshjangra" and "KAGGLE_CONFIG_DIR" not in os.environ:
+        alt_dir = Path("~/.kaggle_alt").expanduser()
+        if (alt_dir / "access_token").exists():
+            os.environ["KAGGLE_CONFIG_DIR"] = str(alt_dir)
+
+    cfg_dir = Path(os.environ.get("KAGGLE_CONFIG_DIR", "~/.kaggle")).expanduser()
+    tok_file = cfg_dir / "access_token"
+    if tok_file.exists() and not os.environ.get("KAGGLE_API_TOKEN"):
+        os.environ["KAGGLE_API_TOKEN"] = tok_file.read_text(encoding="utf-8").strip()
+
     api = KaggleApi()
     api.authenticate()
 
     if args.decouple_hisar3:
-        stream_decouple_hisar3(api, allow_partial=args.allow_partial, dry_run=args.dry_run)
+        stream_decouple_hisar3(
+            api,
+            allow_partial=args.allow_partial,
+            dry_run=args.dry_run,
+            kaggle_user=args.kaggle_user,
+        )
         if args.status_only or "--suite" not in sys.argv:
             return
 
@@ -552,6 +621,7 @@ def main():
         workers=args.workers,
         status_only=args.status_only,
         allow_partial=args.allow_partial,
+        kaggle_user=args.kaggle_user,
     )
 
 
