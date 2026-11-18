@@ -75,22 +75,27 @@ The project is organized into a modular architecture optimized for portability a
 │       ├── edl/
 │       ├── edl_v2/
 │       └── focal_loss/
-├── examples/          # 📁 Dataset Suites (Indian Pines, Pavia Uni, DIAS, 6-Band, Hisar-3, Hissar-25)
+├── examples/          # 📁 11 Benchmark Dataset Suites (4 Completed, 2 Continuation, 5 Staged Ready)
 │   ├── indian_pines_uncertainty_quantification/
 │   ├── pavia_university_uncertainty_quantification/
 │   ├── dias_uncertainty_quantification/
 │   ├── 6_band_uncertainty_quantification/
 │   ├── hisar_3mts_uncertainty_quantification/
-│   └── hissar_25_uncertainty_quantification/
+│   ├── hissar_25_uncertainty_quantification/
+│   ├── pavia_uncertainty_quantification/
+│   ├── 372_band_uncertainty_quantification/
+│   ├── multispectral_uncertainty_quantification/
+│   ├── achla_multi_temporal_uncertainty_quantification/
+│   └── planet_data_hisar_uncertainty_quantification/
 ├── kaggle_staging/    # 🚀 Automated Kaggle GPU/CPU runner staging & packaging
-│   ├── create_staged_runners.py # Builds all 8 unified GPU (k11-k14) & CPU (k15-k18) runners
-│   ├── verify_staging.py        # Verifies 193 staging, packaging & security checks
-│   ├── ip-suite-runner-k11/     # ... through hissar25-suite-runner-k14/ (GPU runners)
-│   └── ip-cpu-runner-k15/       # ... through hissar25-cpu-runner-k18/ (CPU runners)
+│   ├── create_staged_runners.py # Builds all 18 unified GPU (k11-k14, k19-k23) & CPU (k15-k18, k24-k28) runners
+│   ├── verify_staging.py        # Verifies 928 staging, packaging & token-hygiene checks
+│   ├── ip-suite-runner-k11/     # ... through planethisar-suite-runner-k23/ (9 GPU runners)
+│   └── ip-cpu-runner-k15/       # ... through planethisar-cpu-runner-k28/ (9 CPU runners)
 ├── scripts/           # 🧪 Automated verification, symbol-repair, and synchronization tools
 │   ├── fix_all_missing_symbols.py # Cross-suite AST symbol completeness & import fixer
-│   └── verify_suites.py         # 224-check notebook schema, AST & regression verifier
-├── kaggle_name_mapping.json # 🗂️ Obfuscation mapping for remote execution
+│   └── verify_suites.py         # 449-check notebook schema, AST & regression verifier across 11 suites
+├── kaggle_name_mapping.json # 🗂️ Obfuscation mapping for all 9 datasets (k01-k09) & 18 runners
 └── README.md          # 📑 Documentation
 ```
 
@@ -108,10 +113,15 @@ Each dataset suite in `examples/<dataset_suite>/` contains full standalone Jupyt
 | [**6-Band Multispectral**](examples/6_band_uncertainty_quantification/) | $330 \times 307$ | 6 | 6 | AlexNet, GFNet, ViT-UNet | Split-CP, Multi-CP, SACP, SCMCP, CREDIT, CreDE, DAPM + Foundation Models | [`Classification-6Bands-Models`](https://huggingface.co/DaneshSelwal/Classification-6Bands-Models) |
 | [**Hisar-3**](examples/hisar_3mts_uncertainty_quantification/) | $1733 \times 2647$ | 4 | 8 | AlexNet, GFNet, ViT-UNet | Split-CP, Multi-CP, SACP, SCMCP, CREDIT, CreDE, DAPM | [`Classification-Hisar3-Models`](https://huggingface.co/DaneshSelwal/Classification-Hisar3-Models) |
 | [**Hissar-25**](examples/hissar_25_uncertainty_quantification/) | $722 \times 1014$ | 4 | 8 | AlexNet, GFNet, ViT-UNet | Split-CP, Multi-CP, SACP, SCMCP, CREDIT, CreDE, DAPM | [`Classification-Hissar25-Models`](https://huggingface.co/DaneshSelwal/Classification-Hissar25-Models) |
+| [**Pavia Centre**](examples/pavia_uncertainty_quantification/) | $1096 \times 715$ | 102 | 9 | AlexNet, GFNet, ViT-UNet | Split-CP, Multi-CP, SACP, SCMCP, CREDIT, CreDE, DAPM | [`Classification-PaviaCentre-Models`](https://huggingface.co/DaneshSelwal/Classification-PaviaCentre-Models) |
+| [**372-Band Hyperspectral**](examples/372_band_uncertainty_quantification/) | $1101 \times 566$ | 372 | 13 | AlexNet, GFNet, ViT-UNet | Split-CP, Multi-CP, SACP, SCMCP, CREDIT, CreDE, DAPM | [`Classification-372Band-Models`](https://huggingface.co/DaneshSelwal/Classification-372Band-Models) |
+| [**ETM 108 Multispectral**](examples/multispectral_uncertainty_quantification/) | $330 \times 307$ | 108 | 7 | AlexNet, GFNet, ViT-UNet | Split-CP, Multi-CP, SACP, SCMCP, CREDIT, CreDE, DAPM | [`Classification-ETM108-Models`](https://huggingface.co/DaneshSelwal/Classification-ETM108-Models) |
+| [**Achla Multi-Temporal SAR**](examples/achla_multi_temporal_uncertainty_quantification/) | $964 \times 1028$ | 32 | 12 | AlexNet, GFNet, ViT-UNet | Split-CP, Multi-CP, SACP, SCMCP, CREDIT, CreDE, DAPM | [`Classification-AchlaSAR-Models`](https://huggingface.co/DaneshSelwal/Classification-AchlaSAR-Models) |
+| [**Planet Hisar CSV**](examples/planet_data_hisar_uncertainty_quantification/) | $1733 \times 2647$ | 4 | 8 | AlexNet, GFNet, ViT-UNet | Split-CP, Multi-CP, SACP, SCMCP, CREDIT, CreDE, DAPM | [`Classification-PlanetHisar-Models`](https://huggingface.co/DaneshSelwal/Classification-PlanetHisar-Models) |
 
 ### 🚀 Kaggle Execution Runners, Datasets & Model Repositories
 
-Each dataset suite is paired with a Kaggle dataset, remote execution runners (either unified 11-stage suite runners or dedicated method kernels), and a public Hugging Face Hub model repository for zero-weight git cleanliness.
+Each dataset suite is paired with a private Kaggle dataset, remote execution runners (unified GPU/CPU suite runners or dedicated method kernels), and a public Hugging Face Hub model repository for zero-weight git cleanliness.
 
 | Suite | Local Directory | Kaggle Dataset | GPU Runner | CPU Runner | Hugging Face Model Repo | Pre-Trained Weights on HF |
 |---|---|---|---|---|---|---|
@@ -121,41 +131,51 @@ Each dataset suite is paired with a Kaggle dataset, remote execution runners (ei
 | **6-Band Multispectral** | [`6_band_uncertainty_quantification/`](examples/6_band_uncertainty_quantification/) | [`daneshselwal/dias-6-bands-data`](https://www.kaggle.com/datasets/daneshselwal/dias-6-bands-data) | [`daneshselwal/cuq6-*-k*`](https://www.kaggle.com/daneshselwal/code) (17 dedicated method kernels) | — | [`Classification-6Bands-Models`](https://huggingface.co/DaneshSelwal/Classification-6Bands-Models) | 6 backbones + extended models |
 | **Hisar-3** | [`hisar_3mts_uncertainty_quantification/`](examples/hisar_3mts_uncertainty_quantification/) | [`daneshselwal/hisar3-dataset-k03`](https://www.kaggle.com/datasets/daneshselwal/hisar3-dataset-k03) | [`daneshselwal/hisar3-suite-runner-k13`](https://www.kaggle.com/code/daneshselwal/hisar3-suite-runner-k13) | [`daneshselwal/hisar3-cpu-runner-k17`](https://www.kaggle.com/code/daneshselwal/hisar3-cpu-runner-k17) | [`Classification-Hisar3-Models`](https://huggingface.co/DaneshSelwal/Classification-Hisar3-Models) | 6 backbones + 6 ensembles decoupled (12/21 models live) |
 | **Hissar-25** | [`hissar_25_uncertainty_quantification/`](examples/hissar_25_uncertainty_quantification/) | [`daneshselwal/hissar25-dataset-k04`](https://www.kaggle.com/datasets/daneshselwal/hissar25-dataset-k04) | [`daneshselwal/hissar25-suite-runner-k14`](https://www.kaggle.com/code/daneshselwal/hissar25-suite-runner-k14) | [`daneshselwal/hissar25-cpu-runner-k18`](https://www.kaggle.com/code/daneshselwal/hissar25-cpu-runner-k18) | [`Classification-Hissar25-Models`](https://huggingface.co/DaneshSelwal/Classification-Hissar25-Models) | 6 backbones + 15 ensembles (21/21 models live) |
+| **Pavia Centre** | [`pavia_uncertainty_quantification/`](examples/pavia_uncertainty_quantification/) | [`daneshselwal/pavia-centre-dataset-k05`](https://www.kaggle.com/datasets/daneshselwal/pavia-centre-dataset-k05) | [`daneshselwal/pavia-suite-runner-k19`](https://www.kaggle.com/code/daneshselwal/pavia-suite-runner-k19) | [`daneshselwal/pavia-cpu-runner-k24`](https://www.kaggle.com/code/daneshselwal/pavia-cpu-runner-k24) | [`Classification-PaviaCentre-Models`](https://huggingface.co/DaneshSelwal/Classification-PaviaCentre-Models) | Staged Ready (Stage 0 -> HF auto-upload) |
+| **372-Band** | [`372_band_uncertainty_quantification/`](examples/372_band_uncertainty_quantification/) | [`daneshselwal/band372-dataset-k06`](https://www.kaggle.com/datasets/daneshselwal/band372-dataset-k06) | [`daneshselwal/band372-suite-runner-k20`](https://www.kaggle.com/code/daneshselwal/band372-suite-runner-k20) | [`daneshselwal/band372-cpu-runner-k25`](https://www.kaggle.com/code/daneshselwal/band372-cpu-runner-k25) | [`Classification-372Band-Models`](https://huggingface.co/DaneshSelwal/Classification-372Band-Models) | Staged Ready (Stage 0 -> HF auto-upload) |
+| **ETM 108** | [`multispectral_uncertainty_quantification/`](examples/multispectral_uncertainty_quantification/) | [`daneshselwal/etm108-dataset-k07`](https://www.kaggle.com/datasets/daneshselwal/etm108-dataset-k07) | [`daneshselwal/etm108-suite-runner-k21`](https://www.kaggle.com/code/daneshselwal/etm108-suite-runner-k21) | [`daneshselwal/etm108-cpu-runner-k26`](https://www.kaggle.com/code/daneshselwal/etm108-cpu-runner-k26) | [`Classification-ETM108-Models`](https://huggingface.co/DaneshSelwal/Classification-ETM108-Models) | Staged Ready (Stage 0 -> HF auto-upload) |
+| **Achla SAR** | [`achla_multi_temporal_uncertainty_quantification/`](examples/achla_multi_temporal_uncertainty_quantification/) | [`daneshselwal/achla-dataset-k08`](https://www.kaggle.com/datasets/daneshselwal/achla-dataset-k08) | [`daneshselwal/achla-suite-runner-k22`](https://www.kaggle.com/code/daneshselwal/achla-suite-runner-k22) | [`daneshselwal/achla-cpu-runner-k27`](https://www.kaggle.com/code/daneshselwal/achla-cpu-runner-k27) | [`Classification-AchlaSAR-Models`](https://huggingface.co/DaneshSelwal/Classification-AchlaSAR-Models) | Staged Ready (Stage 0 -> HF auto-upload) |
+| **Planet Hisar CSV** | [`planet_data_hisar_uncertainty_quantification/`](examples/planet_data_hisar_uncertainty_quantification/) | [`daneshselwal/planethisar-dataset-k09`](https://www.kaggle.com/datasets/daneshselwal/planethisar-dataset-k09) | [`daneshselwal/planethisar-suite-runner-k23`](https://www.kaggle.com/code/daneshselwal/planethisar-suite-runner-k23) | [`daneshselwal/planethisar-cpu-runner-k28`](https://www.kaggle.com/code/daneshselwal/planethisar-cpu-runner-k28) | [`Classification-PlanetHisar-Models`](https://huggingface.co/DaneshSelwal/Classification-PlanetHisar-Models) | Staged Ready (Stage 0 -> HF auto-upload) |
 
-### 📊 Dataset-Wise Notebook Execution Progress (6 Benchmark Suites)
+### 📊 Dataset-Wise Notebook Execution Progress (11 Benchmark Suites)
 
 ```text
-Codebase & AST Verification   [████████████████████] 100%  (All 6 suites verified — 252/252 suite + 193/193 staging)
-Active Suites Weight Decoupling[██████████████████░░]  89%  (75 / 84 .keras models hosted on HF Hub across active runners; 132+ across all 6 suites)
-Core Stage Completion         [███████████████░░░░░]  76%  (55 / 72 core stages complete across 6 suites; 17 active/queued)
+Codebase, AST & Staging Checks [████████████████████] 100%  (All 11 suites verified — 449/449 suite + 928/928 staging)
+Cloud Datasets & HF Provisioned[████████████████████] 100%  (11 / 11 suites provisioned — 9 private Kaggle datasets + 11 HF repos)
+Core Stage Completion          [████████░░░░░░░░░░░░]  42%  (55 / 132 core stages complete across 11 suites; 77 continuation/staged ready)
 ```
 
-| Dataset Suite | Execution Progress | Done / Total | Execution Runners | Model Checkpoints (Backbones + Ensembles) |
-|---|---|---|---|---|
-| [**Indian Pines**](examples/indian_pines_uncertainty_quantification/) | `████████████████████` **100%** | `12 / 12` Done | [`k11`](https://www.kaggle.com/code/daneshselwal/ip-suite-runner-k11) (`COMPLETE` v3) / [`k15`](https://www.kaggle.com/code/daneshselwal/ip-cpu-runner-k15) | `21 / 21` on HF + `CREDIT`, `MultiHead`, `DAPM` trained |
-| [**Pavia University**](examples/pavia_university_uncertainty_quantification/) | `████████████████████` **100%** | `12 / 12` Done | [`k12`](https://www.kaggle.com/code/daneshselwal/pavia-suite-runner-k12) (`COMPLETE` v3) / [`k16`](https://www.kaggle.com/code/daneshselwal/pavia-cpu-runner-k16) | `21 / 21` on HF (`6` backbones + `15` ensembles) |
-| [**DIAS (65-Band)**](examples/dias_uncertainty_quantification/) | `████████████████████` **100%** | `12 / 12` Done | Dedicated Kaggle Runners (`dias-*-k*`, 20 kernels) | `51` models on HF ([`Classification-DIAS-65Bands`](https://huggingface.co/DaneshSelwal/Classification-DIAS-65Bands)) |
-| [**6-Band Multispectral**](examples/6_band_uncertainty_quantification/) | `████████████████████` **100%** | `12 / 12` Done (+ 4 Ext) | Dedicated Kaggle Runners (`cuq6-*-k*`, 17 kernels) | `6` backbones on HF ([`Classification-6Bands-Models`](https://huggingface.co/DaneshSelwal/Classification-6Bands-Models)) |
-| [**Hissar-25**](examples/hissar_25_uncertainty_quantification/) | `███████░░░░░░░░░░░░░` **33%** | `4 / 12` Done, `8` Ready | [`k14`](https://www.kaggle.com/code/daneshselwal/hissar25-suite-runner-k14) (`COMPLETE` v1 — Ensembles `15/15` decoupled) | `21 / 21` on HF (`6` backbones + `15` ensembles live) |
-| [**Hisar-3**](examples/hisar_3mts_uncertainty_quantification/) | `█████░░░░░░░░░░░░░░░` **25%** | `3 / 12` Done, `9` Queued | [`k13`](https://www.kaggle.com/code/daneshselwal/hisar3-suite-runner-k13) (`CANCEL_ACK` v2 — Stg 1, 2, 6/15 Stg 3 live) | `12 / 21` on HF (`6` backbones + `6` ensembles live) |
+| Dataset Suite | Status | Execution Progress | Done / Total | Execution Runners | Model Checkpoints (Backbones + Ensembles) |
+|---|---|---|---|---|---|
+| [**Indian Pines**](examples/indian_pines_uncertainty_quantification/) | ✅ Completed | `████████████████████` **100%** | `12 / 12` Done | [`k11`](https://www.kaggle.com/code/daneshselwal/ip-suite-runner-k11) (`COMPLETE`) / [`k15`](https://www.kaggle.com/code/daneshselwal/ip-cpu-runner-k15) | `21 / 21` on HF + `CREDIT`, `MultiHead`, `DAPM` |
+| [**Pavia University**](examples/pavia_university_uncertainty_quantification/) | ✅ Completed | `████████████████████` **100%** | `12 / 12` Done | [`k12`](https://www.kaggle.com/code/daneshselwal/pavia-suite-runner-k12) (`COMPLETE`) / [`k16`](https://www.kaggle.com/code/daneshselwal/pavia-cpu-runner-k16) | `21 / 21` on HF (`6` backbones + `15` ensembles) |
+| [**DIAS (65-Band)**](examples/dias_uncertainty_quantification/) | ✅ Completed | `████████████████████` **100%** | `12 / 12` Done | Dedicated Kaggle Runners (`dias-*-k*`, 20 kernels) | `51` models on HF ([`Classification-DIAS-65Bands`](https://huggingface.co/DaneshSelwal/Classification-DIAS-65Bands)) |
+| [**6-Band Multispectral**](examples/6_band_uncertainty_quantification/) | ✅ Completed | `████████████████████` **100%** | `12 / 12` Done (+ 4 Ext) | Dedicated Kaggle Runners (`cuq6-*-k*`, 17 kernels) | `6` backbones on HF ([`Classification-6Bands-Models`](https://huggingface.co/DaneshSelwal/Classification-6Bands-Models)) |
+| [**Hissar-25**](examples/hissar_25_uncertainty_quantification/) | 🔄 Continuation | `███████░░░░░░░░░░░░░` **33%** | `4 / 12` Done, `8` Staged | [`k14`](https://www.kaggle.com/code/daneshselwal/hissar25-suite-runner-k14) / [`k18`](https://www.kaggle.com/code/daneshselwal/hissar25-cpu-runner-k18) (Stages 2, 5–11) | `21 / 21` on HF (`6` backbones + `15` ensembles live) |
+| [**Hisar-3**](examples/hisar_3mts_uncertainty_quantification/) | 🔄 Continuation | `█████░░░░░░░░░░░░░░░` **25%** | `3 / 12` Done, `9` Staged | [`k13`](https://www.kaggle.com/code/daneshselwal/hisar3-suite-runner-k13) (Stg 3+4–11) / [`k17`](https://www.kaggle.com/code/daneshselwal/hisar3-cpu-runner-k17) (Stg 6–11) | `12 / 21` on HF (`6` backbones + `6` ensembles live) |
+| [**Pavia Centre**](examples/pavia_uncertainty_quantification/) | 📦 Staged Ready | `░░░░░░░░░░░░░░░░░░░░` **0%** | `0 / 12` Done, `12` Staged | [`k19`](https://www.kaggle.com/code/daneshselwal/pavia-suite-runner-k19) (GPU) / [`k24`](https://www.kaggle.com/code/daneshselwal/pavia-cpu-runner-k24) (CPU) | Dataset `k05` + HF Repo live (Stage 0–11 ready) |
+| [**372-Band**](examples/372_band_uncertainty_quantification/) | 📦 Staged Ready | `░░░░░░░░░░░░░░░░░░░░` **0%** | `0 / 12` Done, `12` Staged | [`k20`](https://www.kaggle.com/code/daneshselwal/band372-suite-runner-k20) (GPU) / [`k25`](https://www.kaggle.com/code/daneshselwal/band372-cpu-runner-k25) (CPU) | Dataset `k06` + HF Repo live (Stage 0–11 ready) |
+| [**ETM 108**](examples/multispectral_uncertainty_quantification/) | 📦 Staged Ready | `░░░░░░░░░░░░░░░░░░░░` **0%** | `0 / 12` Done, `12` Staged | [`k21`](https://www.kaggle.com/code/daneshselwal/etm108-suite-runner-k21) (GPU) / [`k26`](https://www.kaggle.com/code/daneshselwal/etm108-cpu-runner-k26) (CPU) | Dataset `k07` + HF Repo live (Stage 0–11 ready) |
+| [**Achla SAR**](examples/achla_multi_temporal_uncertainty_quantification/) | 📦 Staged Ready | `░░░░░░░░░░░░░░░░░░░░` **0%** | `0 / 12` Done, `12` Staged | [`k22`](https://www.kaggle.com/code/daneshselwal/achla-suite-runner-k22) (GPU) / [`k27`](https://www.kaggle.com/code/daneshselwal/achla-cpu-runner-k27) (CPU) | Dataset `k08` (3 files) + HF Repo live (Stage 0–11 ready) |
+| [**Planet Hisar CSV**](examples/planet_data_hisar_uncertainty_quantification/) | 📦 Staged Ready | `░░░░░░░░░░░░░░░░░░░░` **0%** | `0 / 12` Done, `12` Staged | [`k23`](https://www.kaggle.com/code/daneshselwal/planethisar-suite-runner-k23) (GPU) / [`k28`](https://www.kaggle.com/code/daneshselwal/planethisar-cpu-runner-k28) (CPU) | Dataset `k09` + HF Repo live (Stage 0–11 ready) |
 
 <details>
-<summary>View 12-Stage × 6-Dataset Notebook Status Matrix (click to expand)</summary>
+<summary>View 12-Stage × 11-Dataset Notebook Status Matrix (click to expand)</summary>
 
-| Stage | Notebook | Indian Pines | Pavia University | DIAS (65-Band) | 6-Band Multispectral | Hisar-3 | Hissar-25 |
-|---|---|---|---|---|---|---|---|
-| **0** | `baseline/model_training.ipynb` | ✅ Done | ✅ Done | ✅ Done | ✅ Done | ✅ Done | ✅ Done |
-| **1** | `baseline/model_uncertainty_comparison.ipynb` | ✅ Done | ✅ Done | ✅ Done | ✅ Done | ✅ Done | ✅ Done |
-| **2** | `sacp/model_sacp_comparison.ipynb` | ✅ Done | ✅ Done | ✅ Done | ✅ Done | ✅ Done (`k13`) | 🔄 Ready (HF-cached) |
-| **3** | `ensemble/model_training_ensembles.ipynb` | ✅ Done | ✅ Done | ✅ Done | ✅ Done | 🔄 Partial (`6/15` on HF Hub, `k13`) | ✅ Done (`15/15` on HF Hub) |
-| **4** | `credit/model_training_credit.ipynb` | ✅ Done | ✅ Done | ✅ Done | ✅ Done | 🔄 Queued | ✅ Done (`k14`) |
-| **5** | `ensemble/model_uncertainty_credal_ensemble.ipynb` | ✅ Done | ✅ Done | ✅ Done | ✅ Done | 🔄 Queued | 🔄 Ready (HF-cached) |
-| **6** | `multi_cp/model_training_multihead.ipynb` | ✅ Done | ✅ Done | ✅ Done | ✅ Done | 🔄 Queued | 🔄 Ready (HF-cached) |
-| **7** | `multi_cp/model_uncertainty_multicp.ipynb` | ✅ Done | ✅ Done | ✅ Done | ✅ Done | 🔄 Queued | 🔄 Ready (HF-cached) |
-| **8** | `dapm/model_training_dapm_full.ipynb` | ✅ Done | ✅ Done (`k12`) | ✅ Done | ✅ Done | 🔄 Queued | 🔄 Ready (HF-cached) |
-| **9** | `dapm/model_uncertainty_dapm_full.ipynb` | ✅ Done | ✅ Done (`k12`) | ✅ Done | ✅ Done | 🔄 Queued | 🔄 Ready (HF-cached) |
-| **10** | `dapm/Model_uncertainty_dapm_cp.ipynb` | ✅ Done | ✅ Done (`k12`) | ✅ Done | ✅ Done | 🔄 Queued | 🔄 Ready (HF-cached) |
-| **11** | `multicp_sacp/Model_uncertainty_multicp_sacp.ipynb` | ✅ Done | ✅ Done (`k12`) | ✅ Done | ✅ Done | 🔄 Queued | 🔄 Ready (HF-cached) |
+| Stage | Notebook | Indian Pines | Pavia Uni | DIAS 65B | 6-Band | Hisar-3 | Hissar-25 | Pavia Centre | 372-Band | ETM 108 | Achla SAR | Planet Hisar |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| **0** | `baseline/model_training.ipynb` | ✅ Done | ✅ Done | ✅ Done | ✅ Done | ✅ Done | ✅ Done | 📦 Staged | 📦 Staged | 📦 Staged | 📦 Staged | 📦 Staged |
+| **1** | `baseline/model_uncertainty_comparison.ipynb` | ✅ Done | ✅ Done | ✅ Done | ✅ Done | ✅ Done | ✅ Done | 📦 Staged | 📦 Staged | 📦 Staged | 📦 Staged | 📦 Staged |
+| **2** | `sacp/model_sacp_comparison.ipynb` | ✅ Done | ✅ Done | ✅ Done | ✅ Done | ✅ Done | 🔄 Staged (`k14`/`k18`) | 📦 Staged | 📦 Staged | 📦 Staged | 📦 Staged | 📦 Staged |
+| **3** | `ensemble/model_training_ensembles.ipynb` | ✅ Done | ✅ Done | ✅ Done | ✅ Done | 🔄 `6/15` (`k13`) | ✅ Done | 📦 Staged | 📦 Staged | 📦 Staged | 📦 Staged | 📦 Staged |
+| **4** | `credit/model_training_credit.ipynb` | ✅ Done | ✅ Done | ✅ Done | ✅ Done | 🔄 Staged (`k13`) | ✅ Done | 📦 Staged | 📦 Staged | 📦 Staged | 📦 Staged | 📦 Staged |
+| **5** | `ensemble/model_uncertainty_credal_ensemble.ipynb` | ✅ Done | ✅ Done | ✅ Done | ✅ Done | 🔄 Staged (`k13`) | 🔄 Staged (`k14`/`k18`) | 📦 Staged | 📦 Staged | 📦 Staged | 📦 Staged | 📦 Staged |
+| **6** | `multi_cp/model_training_multihead.ipynb` | ✅ Done | ✅ Done | ✅ Done | ✅ Done | 🔄 Staged (`k13`/`k17`) | 🔄 Staged (`k14`/`k18`) | 📦 Staged | 📦 Staged | 📦 Staged | 📦 Staged | 📦 Staged |
+| **7** | `multi_cp/model_uncertainty_multicp.ipynb` | ✅ Done | ✅ Done | ✅ Done | ✅ Done | 🔄 Staged (`k13`/`k17`) | 🔄 Staged (`k14`/`k18`) | 📦 Staged | 📦 Staged | 📦 Staged | 📦 Staged | 📦 Staged |
+| **8** | `dapm/model_training_dapm_full.ipynb` | ✅ Done | ✅ Done | ✅ Done | ✅ Done | 🔄 Staged (`k13`/`k17`) | 🔄 Staged (`k14`/`k18`) | 📦 Staged | 📦 Staged | 📦 Staged | 📦 Staged | 📦 Staged |
+| **9** | `dapm/model_uncertainty_dapm_full.ipynb` | ✅ Done | ✅ Done | ✅ Done | ✅ Done | 🔄 Staged (`k13`/`k17`) | 🔄 Staged (`k14`/`k18`) | 📦 Staged | 📦 Staged | 📦 Staged | 📦 Staged | 📦 Staged |
+| **10** | `dapm/Model_uncertainty_dapm_cp.ipynb` | ✅ Done | ✅ Done | ✅ Done | ✅ Done | 🔄 Staged (`k13`/`k17`) | 🔄 Staged (`k14`/`k18`) | 📦 Staged | 📦 Staged | 📦 Staged | 📦 Staged | 📦 Staged |
+| **11** | `multicp_sacp/Model_uncertainty_multicp_sacp.ipynb` | ✅ Done | ✅ Done | ✅ Done | ✅ Done | 🔄 Staged (`k13`/`k17`) | 🔄 Staged (`k14`/`k18`) | 📦 Staged | 📦 Staged | 📦 Staged | 📦 Staged | 📦 Staged |
 
 </details>
 
@@ -171,13 +191,13 @@ In addition to the 12 core uncertainty quantification stages, the **6-Band Multi
 | **SpatialGCN** | [`examples/6_band_uncertainty_quantification/spatialgcn/`](examples/6_band_uncertainty_quantification/spatialgcn/) | Graph Convolutional Network modeling spatial adjacency & spectral topology | [`cuq6-spatialgcn-k16`](https://www.kaggle.com/code/daneshselwal/cuq6-spatialgcn-k16) / [`cuq6-spatialgcn-uq-k17`](https://www.kaggle.com/code/daneshselwal/cuq6-spatialgcn-uq-k17) | ✅ Complete |
 | **Trials** | [`examples/6_band_uncertainty_quantification/trials/`](examples/6_band_uncertainty_quantification/trials/) | Hyperparameter tuning trials, architecture search, and calibration ablation logs | — | ✅ Documented |
 
-### 📋 11-Stage Uncertainty Quantification Pipeline (Per Suite)
+### 📋 12-Stage Uncertainty Quantification Pipeline (Per Suite)
 
-Baseline backbone weights (`AlexNet_CNN`, `GFNet`, `ViT_UNet`) trained by [`baseline/model_training.ipynb`](examples/indian_pines_uncertainty_quantification/baseline/model_training.ipynb) are hosted on Hugging Face Hub and automatically pulled at runner startup, followed by the 11 downstream stages executed via Papermill (CPU runners `k15`–`k18` skip Stage 3 and pull `models/ensembles/*.keras` from Hugging Face):
+Baseline backbone weights (`AlexNet_CNN`, `GFNet`, `ViT_UNet`) trained by [`baseline/model_training.ipynb`](examples/indian_pines_uncertainty_quantification/baseline/model_training.ipynb) are hosted on Hugging Face Hub and automatically pulled at runner startup (or trained in Stage 0 and auto-uploaded on `k19`–`k23`), followed by the 11 downstream stages executed via Papermill (CPU runners skip Stage 3 and pull `models/ensembles/*.keras` from Hugging Face):
 
 | Stage | Notebook Path (relative to suite dir) | Role & Method | Runner Scope |
 |---|---|---|---|
-| **0 (Pretrained)** | `baseline/model_training.ipynb` | Train & export `AlexNet_CNN`, `GFNet`, `ViT_UNet` backbones (hosted on HF) | Pre-staged on HF |
+| **0 (Pretrained)** | `baseline/model_training.ipynb` | Train & export `AlexNet_CNN`, `GFNet`, `ViT_UNet` backbones (hosted on HF) | GPU (`k19`–`k23`) / HF Pre-staged |
 | **1** | `baseline/model_uncertainty_comparison.ipynb` | Baseline Conformal Prediction comparison (`SplitCP`, `CcCP`, `RC3P`, `ClCP`, `RAPS`) | GPU & CPU |
 | **2** | `sacp/model_sacp_comparison.ipynb` | Spatial-Aware Conformal Prediction (`SACP`) evaluation | GPU & CPU |
 | **3** | `ensemble/model_training_ensembles.ipynb` | Deep Credal Ensemble training ($M=5$ per backbone; reuses HF weights if present) | GPU only |
@@ -193,9 +213,9 @@ Baseline backbone weights (`AlexNet_CNN`, `GFNet`, `ViT_UNet`) trained by [`base
 #### Staging & Verification Commands
 
 ```bash
-python scripts/verify_suites.py          # Runs 252 structural, AST & regression checks across all 6 suites
-python kaggle_staging/create_staged_runners.py  # Rebuilds all 8 Kaggle GPU/CPU runner notebooks
-python kaggle_staging/verify_staging.py  # Runs 193 staging, packaging & token-hygiene checks
+python scripts/verify_suites.py                  # Runs 449 structural, AST & regression checks across all 11 suites
+python kaggle_staging/create_staged_runners.py   # Rebuilds all 18 Kaggle GPU/CPU runner notebooks (multi-account ready)
+python kaggle_staging/verify_staging.py          # Runs 928 staging, packaging & token-hygiene checks
 ```
 
 ### Pipeline Architecture

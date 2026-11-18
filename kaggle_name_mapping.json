@@ -1,6 +1,6 @@
 {
-  "project": "Classification and Uncertainty Quantification Pipeline (Indian Pines, Pavia Uni, Hisar-3, Hissar-25)",
-  "timestamp": "2026-11-09",
+  "project": "Classification and Uncertainty Quantification Pipeline (Indian Pines, Pavia Uni, Hisar-3, Hissar-25, Pavia Centre, 372-Band, ETM 108, Achla SAR, Planet Hisar)",
+  "timestamp": "2026-11-18",
   "kernels": {
     "ip-uncertainty-k01": {
       "local_notebook": "examples/indian_pines_uncertainty_quantification/Model_training.ipynb",
@@ -107,6 +107,510 @@
           "size": 1464218
         }
       }
+    },
+    "pavia-centre-dataset-k05": {
+      "kaggle_id": "daneshselwal/pavia-centre-dataset-k05",
+      "files": {
+        "k001.mat": "examples/pavia_uncertainty_quantification/data/pavia.mat",
+        "k002.mat": "examples/pavia_uncertainty_quantification/data/pavia_gt.mat"
+      },
+      "file_hashes": {
+        "k001.mat": {
+          "path": "examples/pavia_uncertainty_quantification/data/pavia.mat",
+          "sha256": "b60341da323fd271cd97dd6d7a69514d385ccd7fdfc5a60c4ff5994b047f152e",
+          "size": 129624657
+        },
+        "k002.mat": {
+          "path": "examples/pavia_uncertainty_quantification/data/pavia_gt.mat",
+          "sha256": "7eb54ab81b404dd3ae572e6d0ec211595029e5a847bec2cfb8f9e72d07066b69",
+          "size": 34887
+        }
+      }
+    },
+    "band372-dataset-k06": {
+      "kaggle_id": "daneshselwal/band372-dataset-k06",
+      "files": {
+        "k001.mat": "examples/372_band_uncertainty_quantification/data/full.mat",
+        "k002.mat": "examples/372_band_uncertainty_quantification/data/full_gt.mat"
+      },
+      "file_hashes": {
+        "k001.mat": {
+          "path": "examples/372_band_uncertainty_quantification/data/full.mat",
+          "sha256": "1f8fac1ccc456996e66fc81db397ea3d990457eadd15edb3dd961d36ec2aec22",
+          "size": 1127377466
+        },
+        "k002.mat": {
+          "path": "examples/372_band_uncertainty_quantification/data/full_gt.mat",
+          "sha256": "d8536e6e909f5916979be353ffd64fa8c224fe3b7f24196fd8be6a5c2ac84cda",
+          "size": 4957
+        }
+      }
+    },
+    "etm108-dataset-k07": {
+      "kaggle_id": "daneshselwal/etm108-dataset-k07",
+      "files": {
+        "k001.csv": "examples/multispectral_uncertainty_quantification/data/all_etmls.csv",
+        "k002.csv": "examples/multispectral_uncertainty_quantification/data/ref.csv"
+      },
+      "file_hashes": {
+        "k001.csv": {
+          "path": "examples/multispectral_uncertainty_quantification/data/all_etmls.csv",
+          "sha256": "2441e9a19754ef83c1548febbf54ec70b0cc5cbbf887b0c1572075ee4c27efe0",
+          "size": 73871491
+        },
+        "k002.csv": {
+          "path": "examples/multispectral_uncertainty_quantification/data/ref.csv",
+          "sha256": "8389087ad918bb2ac4b70d4c5579dd5a2970871cc69d00f068f84a12217ca56d",
+          "size": 303934
+        }
+      }
+    },
+    "achla-dataset-k08": {
+      "kaggle_id": "daneshselwal/achla-dataset-k08",
+      "files": {
+        "k001.csv": "examples/achla_multi_temporal_uncertainty_quantification/data/vv_dectomarch.csv",
+        "k002.csv": "examples/achla_multi_temporal_uncertainty_quantification/data/vh_dectomarch.csv",
+        "k003.csv": "examples/achla_multi_temporal_uncertainty_quantification/data/gt.csv"
+      },
+      "file_hashes": {
+        "k001.csv": {
+          "path": "examples/achla_multi_temporal_uncertainty_quantification/data/vv_dectomarch.csv",
+          "sha256": "8dd34b1816634d66000bcbbbae2a0d91068c38151874e41963170b7f00daedf9",
+          "size": 57533163
+        },
+        "k002.csv": {
+          "path": "examples/achla_multi_temporal_uncertainty_quantification/data/vh_dectomarch.csv",
+          "sha256": "f5ad392b6fa58b812734733bc0ba8a700e69a4b2edb47e15a56179e66e88cd8f",
+          "size": 57309174
+        },
+        "k003.csv": {
+          "path": "examples/achla_multi_temporal_uncertainty_quantification/data/gt.csv",
+          "sha256": "b7a7636be03b651219f4b8cccf321990aa1f83cc49a06e616362201bd1c1e0eb",
+          "size": 2974164
+        }
+      }
+    },
+    "planethisar-dataset-k09": {
+      "kaggle_id": "daneshselwal/planethisar-dataset-k09",
+      "files": {
+        "k001.csv": "examples/planet_data_hisar_uncertainty_quantification/data/planet.csv",
+        "k002.csv": "examples/planet_data_hisar_uncertainty_quantification/data/planetgt.csv"
+      },
+      "file_hashes": {
+        "k001.csv": {
+          "path": "examples/planet_data_hisar_uncertainty_quantification/data/planet.csv",
+          "sha256": "60790023fa631e070fc83c72121c563f8749f0fc1d5de1106b517abf1fc9996f",
+          "size": 463312351
+        },
+        "k002.csv": {
+          "path": "examples/planet_data_hisar_uncertainty_quantification/data/planetgt.csv",
+          "sha256": "1e06681e778e5b3a336f657e4088de424872020bbd0aed03801e646b30a3a76e",
+          "size": 119268526
+        }
+      }
+    }
+  },
+  "runners": {
+    "ip-suite-runner-k11": {
+      "dataset_name": "Indian Pines",
+      "suite_directory": "examples/indian_pines_uncertainty_quantification",
+      "staging_dir": "kaggle_staging/ip-suite-runner-k11",
+      "kaggle_id": "daneshselwal/ip-suite-runner-k11",
+      "code_file": "k011.ipynb",
+      "dataset_source": "daneshselwal/ip-dataset-k01",
+      "hf_model_repo": "DaneshSelwal/Classification-IndianPines-Models",
+      "num_classes": 16,
+      "pipeline_stages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    "pavia-suite-runner-k12": {
+      "dataset_name": "Pavia University",
+      "suite_directory": "examples/pavia_university_uncertainty_quantification",
+      "staging_dir": "kaggle_staging/pavia-suite-runner-k12",
+      "kaggle_id": "daneshselwal/pavia-suite-runner-k12",
+      "code_file": "k012.ipynb",
+      "dataset_source": "daneshselwal/pavia-dataset-k02",
+      "hf_model_repo": "DaneshSelwal/Classification-PaviaUniversity-Models",
+      "num_classes": 9,
+      "pipeline_stages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    "hisar3-suite-runner-k13": {
+      "dataset_name": "Hisar-3",
+      "suite_directory": "examples/hisar_3mts_uncertainty_quantification",
+      "staging_dir": "kaggle_staging/hisar3-suite-runner-k13",
+      "kaggle_id": "daneshselwal/hisar3-suite-runner-k13",
+      "code_file": "k013.ipynb",
+      "dataset_source": "daneshselwal/hisar3-dataset-k03",
+      "hf_model_repo": "DaneshSelwal/Classification-Hisar3-Models",
+      "num_classes": 8,
+      "pipeline_stages": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    "hissar25-suite-runner-k14": {
+      "dataset_name": "Hissar-25",
+      "suite_directory": "examples/hissar_25_uncertainty_quantification",
+      "staging_dir": "kaggle_staging/hissar25-suite-runner-k14",
+      "kaggle_id": "daneshselwal/hissar25-suite-runner-k14",
+      "code_file": "k014.ipynb",
+      "dataset_source": "daneshselwal/hissar25-dataset-k04",
+      "hf_model_repo": "DaneshSelwal/Classification-Hissar25-Models",
+      "num_classes": 8,
+      "pipeline_stages": [
+        2,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    "pavia-suite-runner-k19": {
+      "dataset_name": "Pavia Centre",
+      "suite_directory": "examples/pavia_uncertainty_quantification",
+      "staging_dir": "kaggle_staging/pavia-suite-runner-k19",
+      "kaggle_id": "daneshselwal/pavia-suite-runner-k19",
+      "code_file": "k019.ipynb",
+      "dataset_source": "daneshselwal/pavia-centre-dataset-k05",
+      "hf_model_repo": "DaneshSelwal/Classification-PaviaCentre-Models",
+      "num_classes": 9,
+      "pipeline_stages": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    "band372-suite-runner-k20": {
+      "dataset_name": "372-Band",
+      "suite_directory": "examples/372_band_uncertainty_quantification",
+      "staging_dir": "kaggle_staging/band372-suite-runner-k20",
+      "kaggle_id": "daneshselwal/band372-suite-runner-k20",
+      "code_file": "k020.ipynb",
+      "dataset_source": "daneshselwal/band372-dataset-k06",
+      "hf_model_repo": "DaneshSelwal/Classification-372Band-Models",
+      "num_classes": 13,
+      "pipeline_stages": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    "etm108-suite-runner-k21": {
+      "dataset_name": "ETM 108",
+      "suite_directory": "examples/multispectral_uncertainty_quantification",
+      "staging_dir": "kaggle_staging/etm108-suite-runner-k21",
+      "kaggle_id": "daneshselwal/etm108-suite-runner-k21",
+      "code_file": "k021.ipynb",
+      "dataset_source": "daneshselwal/etm108-dataset-k07",
+      "hf_model_repo": "DaneshSelwal/Classification-ETM108-Models",
+      "num_classes": 7,
+      "pipeline_stages": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    "achla-suite-runner-k22": {
+      "dataset_name": "Achla SAR",
+      "suite_directory": "examples/achla_multi_temporal_uncertainty_quantification",
+      "staging_dir": "kaggle_staging/achla-suite-runner-k22",
+      "kaggle_id": "daneshselwal/achla-suite-runner-k22",
+      "code_file": "k022.ipynb",
+      "dataset_source": "daneshselwal/achla-dataset-k08",
+      "hf_model_repo": "DaneshSelwal/Classification-AchlaSAR-Models",
+      "num_classes": 12,
+      "pipeline_stages": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    "planethisar-suite-runner-k23": {
+      "dataset_name": "Planet Hisar CSV",
+      "suite_directory": "examples/planet_data_hisar_uncertainty_quantification",
+      "staging_dir": "kaggle_staging/planethisar-suite-runner-k23",
+      "kaggle_id": "daneshselwal/planethisar-suite-runner-k23",
+      "code_file": "k023.ipynb",
+      "dataset_source": "daneshselwal/planethisar-dataset-k09",
+      "hf_model_repo": "DaneshSelwal/Classification-PlanetHisar-Models",
+      "num_classes": 8,
+      "pipeline_stages": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ]
+    }
+  },
+  "cpu_runners": {
+    "ip-cpu-runner-k15": {
+      "dataset_name": "Indian Pines",
+      "suite_directory": "examples/indian_pines_uncertainty_quantification",
+      "staging_dir": "kaggle_staging/ip-cpu-runner-k15",
+      "kaggle_id": "daneshselwal/ip-cpu-runner-k15",
+      "code_file": "k015.ipynb",
+      "dataset_source": "daneshselwal/ip-dataset-k01",
+      "hf_model_repo": "DaneshSelwal/Classification-IndianPines-Models",
+      "num_classes": 16,
+      "pipeline_stages": [
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    "pavia-cpu-runner-k16": {
+      "dataset_name": "Pavia University",
+      "suite_directory": "examples/pavia_university_uncertainty_quantification",
+      "staging_dir": "kaggle_staging/pavia-cpu-runner-k16",
+      "kaggle_id": "daneshselwal/pavia-cpu-runner-k16",
+      "code_file": "k016.ipynb",
+      "dataset_source": "daneshselwal/pavia-dataset-k02",
+      "hf_model_repo": "DaneshSelwal/Classification-PaviaUniversity-Models",
+      "num_classes": 9,
+      "pipeline_stages": [
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    "hisar3-cpu-runner-k17": {
+      "dataset_name": "Hisar-3",
+      "suite_directory": "examples/hisar_3mts_uncertainty_quantification",
+      "staging_dir": "kaggle_staging/hisar3-cpu-runner-k17",
+      "kaggle_id": "daneshselwal/hisar3-cpu-runner-k17",
+      "code_file": "k017.ipynb",
+      "dataset_source": "daneshselwal/hisar3-dataset-k03",
+      "hf_model_repo": "DaneshSelwal/Classification-Hisar3-Models",
+      "num_classes": 8,
+      "pipeline_stages": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    "hissar25-cpu-runner-k18": {
+      "dataset_name": "Hissar-25",
+      "suite_directory": "examples/hissar_25_uncertainty_quantification",
+      "staging_dir": "kaggle_staging/hissar25-cpu-runner-k18",
+      "kaggle_id": "daneshselwal/hissar25-cpu-runner-k18",
+      "code_file": "k018.ipynb",
+      "dataset_source": "daneshselwal/hissar25-dataset-k04",
+      "hf_model_repo": "DaneshSelwal/Classification-Hissar25-Models",
+      "num_classes": 8,
+      "pipeline_stages": [
+        2,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    "pavia-cpu-runner-k24": {
+      "dataset_name": "Pavia Centre",
+      "suite_directory": "examples/pavia_uncertainty_quantification",
+      "staging_dir": "kaggle_staging/pavia-cpu-runner-k24",
+      "kaggle_id": "daneshselwal/pavia-cpu-runner-k24",
+      "code_file": "k024.ipynb",
+      "dataset_source": "daneshselwal/pavia-centre-dataset-k05",
+      "hf_model_repo": "DaneshSelwal/Classification-PaviaCentre-Models",
+      "num_classes": 9,
+      "pipeline_stages": [
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    "band372-cpu-runner-k25": {
+      "dataset_name": "372-Band",
+      "suite_directory": "examples/372_band_uncertainty_quantification",
+      "staging_dir": "kaggle_staging/band372-cpu-runner-k25",
+      "kaggle_id": "daneshselwal/band372-cpu-runner-k25",
+      "code_file": "k025.ipynb",
+      "dataset_source": "daneshselwal/band372-dataset-k06",
+      "hf_model_repo": "DaneshSelwal/Classification-372Band-Models",
+      "num_classes": 13,
+      "pipeline_stages": [
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    "etm108-cpu-runner-k26": {
+      "dataset_name": "ETM 108",
+      "suite_directory": "examples/multispectral_uncertainty_quantification",
+      "staging_dir": "kaggle_staging/etm108-cpu-runner-k26",
+      "kaggle_id": "daneshselwal/etm108-cpu-runner-k26",
+      "code_file": "k026.ipynb",
+      "dataset_source": "daneshselwal/etm108-dataset-k07",
+      "hf_model_repo": "DaneshSelwal/Classification-ETM108-Models",
+      "num_classes": 7,
+      "pipeline_stages": [
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    "achla-cpu-runner-k27": {
+      "dataset_name": "Achla SAR",
+      "suite_directory": "examples/achla_multi_temporal_uncertainty_quantification",
+      "staging_dir": "kaggle_staging/achla-cpu-runner-k27",
+      "kaggle_id": "daneshselwal/achla-cpu-runner-k27",
+      "code_file": "k027.ipynb",
+      "dataset_source": "daneshselwal/achla-dataset-k08",
+      "hf_model_repo": "DaneshSelwal/Classification-AchlaSAR-Models",
+      "num_classes": 12,
+      "pipeline_stages": [
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    "planethisar-cpu-runner-k28": {
+      "dataset_name": "Planet Hisar CSV",
+      "suite_directory": "examples/planet_data_hisar_uncertainty_quantification",
+      "staging_dir": "kaggle_staging/planethisar-cpu-runner-k28",
+      "kaggle_id": "daneshselwal/planethisar-cpu-runner-k28",
+      "code_file": "k028.ipynb",
+      "dataset_source": "daneshselwal/planethisar-dataset-k09",
+      "hf_model_repo": "DaneshSelwal/Classification-PlanetHisar-Models",
+      "num_classes": 8,
+      "pipeline_stages": [
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ]
     }
   }
 }
