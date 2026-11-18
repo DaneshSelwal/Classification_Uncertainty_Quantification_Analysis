@@ -57,6 +57,7 @@ BAD_PREFIXES = (
 SUITES: Dict[str, dict] = {
     "indian_pines": {
         "dir_name": "indian_pines_uncertainty_quantification",
+        "hf_repo": "DaneshSelwal/Classification-IndianPines-Models",
         "runners": [
             {"slug": "ip-suite-runner-k11", "hw": "GPU", "role": "primary"},
             {"slug": "ip-cpu-runner-k15", "hw": "CPU", "role": "fallback"},
@@ -64,6 +65,7 @@ SUITES: Dict[str, dict] = {
     },
     "pavia_university": {
         "dir_name": "pavia_university_uncertainty_quantification",
+        "hf_repo": "DaneshSelwal/Classification-PaviaUniversity-Models",
         "runners": [
             {"slug": "pavia-suite-runner-k12", "hw": "GPU", "role": "primary"},
             {"slug": "pavia-cpu-runner-k16", "hw": "CPU", "role": "fallback"},
@@ -71,6 +73,7 @@ SUITES: Dict[str, dict] = {
     },
     "hisar_3mts": {
         "dir_name": "hisar_3mts_uncertainty_quantification",
+        "hf_repo": "DaneshSelwal/Classification-Hisar3-Models",
         "runners": [
             {"slug": "hisar3-suite-runner-k13", "hw": "GPU", "role": "primary"},
             {"slug": "hisar3-cpu-runner-k17", "hw": "CPU", "role": "fallback"},
@@ -78,6 +81,7 @@ SUITES: Dict[str, dict] = {
     },
     "hissar_25": {
         "dir_name": "hissar_25_uncertainty_quantification",
+        "hf_repo": "DaneshSelwal/Classification-Hissar25-Models",
         "runners": [
             {"slug": "hissar25-suite-runner-k14", "hw": "GPU", "role": "primary"},
             {"slug": "hissar25-cpu-runner-k18", "hw": "CPU", "role": "fallback"},
@@ -85,6 +89,7 @@ SUITES: Dict[str, dict] = {
     },
     "pavia_centre": {
         "dir_name": "pavia_uncertainty_quantification",
+        "hf_repo": "DaneshSelwal/Classification-PaviaCentre-Models",
         "runners": [
             {"slug": "pavia-suite-runner-k19", "hw": "GPU", "role": "primary"},
             {"slug": "pavia-cpu-runner-k24", "hw": "CPU", "role": "fallback"},
@@ -92,6 +97,7 @@ SUITES: Dict[str, dict] = {
     },
     "band372": {
         "dir_name": "372_band_uncertainty_quantification",
+        "hf_repo": "DaneshSelwal/Classification-372Band-Models",
         "runners": [
             {"slug": "band372-suite-runner-k20", "hw": "GPU", "role": "primary"},
             {"slug": "band372-cpu-runner-k25", "hw": "CPU", "role": "fallback"},
@@ -99,6 +105,7 @@ SUITES: Dict[str, dict] = {
     },
     "etm108": {
         "dir_name": "multispectral_uncertainty_quantification",
+        "hf_repo": "DaneshSelwal/Classification-ETM108-Models",
         "runners": [
             {"slug": "etm108-suite-runner-k21", "hw": "GPU", "role": "primary"},
             {"slug": "etm108-cpu-runner-k26", "hw": "CPU", "role": "fallback"},
@@ -106,6 +113,7 @@ SUITES: Dict[str, dict] = {
     },
     "achla": {
         "dir_name": "achla_multi_temporal_uncertainty_quantification",
+        "hf_repo": "DaneshSelwal/Classification-AchlaSAR-Models",
         "runners": [
             {"slug": "achla-suite-runner-k22", "hw": "GPU", "role": "primary"},
             {"slug": "achla-cpu-runner-k27", "hw": "CPU", "role": "fallback"},
@@ -113,6 +121,7 @@ SUITES: Dict[str, dict] = {
     },
     "planethisar": {
         "dir_name": "planet_data_hisar_uncertainty_quantification",
+        "hf_repo": "DaneshSelwal/Classification-PlanetHisar-Models",
         "runners": [
             {"slug": "planethisar-suite-runner-k23", "hw": "GPU", "role": "primary"},
             {"slug": "planethisar-cpu-runner-k28", "hw": "CPU", "role": "fallback"},
@@ -182,6 +191,80 @@ def get_hf_token() -> Optional[str]:
     return None
 
 
+def stream_decouple_runner_models(
+    api: Optional[KaggleApi],
+    slug: str,
+    repo_id: str,
+    files: Optional[List] = None,
+    allow_partial: bool = False,
+    dry_run: bool = False,
+    kaggle_user: str = "daneshselwal",
+) -> bool:
+    """Stream-decouple any .keras model weights from a Kaggle runner to HF Hub in-memory (0 disk writes)."""
+    hf_token = get_hf_token()
+    if not hf_token:
+        print(f"  [ERROR] Cannot decouple {slug} weights: HF_TOKEN not found.", file=sys.stderr)
+        return False
+
+    hf_api = HfApi(token=hf_token)
+    if api is None:
+        api = KaggleApi()
+        api.authenticate()
+
+    if files is None:
+        files = list_kernel_files(api, slug, kaggle_user=kaggle_user)
+
+    keras_files = [f for f in files if f.file_name.endswith(".keras")]
+    if not keras_files:
+        return False
+
+    try:
+        existing_hf = set(hf_api.list_repo_files(repo_id=repo_id, repo_type="model"))
+    except Exception:
+        existing_hf = set()
+
+    pending = []
+    for f in sorted(keras_files, key=lambda x: x.file_name):
+        target_path = f.file_name if f.file_name.startswith("models/") else f"models/{Path(f.file_name).name}"
+        if target_path not in existing_hf and Path(f.file_name).name not in existing_hf:
+            pending.append((f, target_path))
+
+    if not pending:
+        print(f"  [HF Decouple] All {len(keras_files)} .keras weights from {slug} already live on {repo_id}.")
+        return True
+
+    print("\n" + "=" * 80)
+    print(f"  STREAMING WEIGHT DECOUPLING: {kaggle_user}/{slug} -> HF Hub ({repo_id})")
+    print("=" * 80)
+    print(f"  Discovered {len(pending)} new .keras model weights (out of {len(keras_files)} in session output).")
+
+    if dry_run:
+        for f, target_path in pending:
+            print(f"    - [DRY-RUN] {f.file_name} -> {target_path}")
+        return True
+
+    uploaded = 0
+    for f, target_path in pending:
+        print(f"  -> Streaming {f.file_name} directly to HF Hub ({repo_id}/{target_path})...")
+        req_dl = urllib.request.Request(f.url, headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req_dl, timeout=180) as r:
+            data = r.read()
+
+        hf_api.upload_file(
+            path_or_fileobj=io.BytesIO(data),
+            path_in_repo=target_path,
+            repo_id=repo_id,
+            repo_type="model",
+            commit_message=f"Decouple {target_path} from {slug}",
+        )
+        print(f"     [SUCCESS] Decoupled {target_path} ({len(data):,} bytes) to HF Hub.")
+        del data  # Keep heap bounded, zero disk persistence
+        uploaded += 1
+
+    print(f"  Decoupling complete: {uploaded}/{len(pending)} model weights uploaded to {repo_id}.\n")
+    return True
+
+
 def stream_decouple_hisar3(
     api: Optional[KaggleApi] = None,
     allow_partial: bool = False,
@@ -189,72 +272,14 @@ def stream_decouple_hisar3(
     kaggle_user: str = "daneshselwal",
 ) -> bool:
     """Stream-decouple ensemble weights from hisar3-suite-runner-k13 to HF Hub in-memory (0 disk writes)."""
-    hf_token = get_hf_token()
-    if not hf_token:
-        print("  [ERROR] Cannot decouple Hisar-3 weights: HF_TOKEN not found.", file=sys.stderr)
-        return False
-
-    hf_api = HfApi(token=hf_token)
-    repo_id = "DaneshSelwal/Classification-Hisar3-Models"
-    slug = "hisar3-suite-runner-k13"
-
-    if api is None:
-        api = KaggleApi()
-        api.authenticate()
-
-    print("\n" + "=" * 80)
-    print(f"  STREAMING WEIGHT DECOUPLING: {kaggle_user}/{slug} -> HF Hub ({repo_id})")
-    print("=" * 80)
-
-    try:
-        status_obj = api.kernels_status(f"{kaggle_user}/{slug}")
-        status_str = getattr(status_obj, "status", str(status_obj))
-    except Exception as exc:
-        print(f"  [ERROR] Failed to query status for {kaggle_user}/{slug}: {exc}", file=sys.stderr)
-        return False
-
-    print(f"  Runner status: {status_str}")
-    allowed_terms = ("COMPLETE", "CANCEL_ACKNOWLEDGED") if allow_partial else ("COMPLETE",)
-    if not any(st in str(status_str).upper() for st in allowed_terms):
-        print(f"  Runner {kaggle_user}/{slug} is not COMPLETE yet (current status: {status_str}). Ensembles cannot be decoupled until execution finishes.")
-        return False
-
-    files = list_kernel_files(api, slug, kaggle_user=kaggle_user)
-    ensemble_files = [
-        f for f in files
-        if f.file_name.startswith("models/ensembles/") and f.file_name.endswith(".keras")
-    ]
-    print(f"  Discovered {len(ensemble_files)} ensemble model weights in session output.")
-    if not ensemble_files:
-        print(f"  [WARN] No models/ensembles/*.keras found in {slug} session output.")
-        return False
-
-    if dry_run:
-        print(f"  [DRY-RUN] Would decouple {len(ensemble_files)} ensemble model weights to HF Hub ({repo_id}):")
-        for f in sorted(ensemble_files, key=lambda x: x.file_name):
-            print(f"    - {f.file_name}")
-        return True
-
-    uploaded = 0
-    for f in sorted(ensemble_files, key=lambda x: x.file_name):
-        print(f"  -> Streaming {f.file_name} directly to HF Hub ({repo_id})...")
-        req_dl = urllib.request.Request(f.url, headers={"User-Agent": "Mozilla/5.0"})
-        with urllib.request.urlopen(req_dl, timeout=120) as r:
-            data = r.read()
-
-        hf_api.upload_file(
-            path_or_fileobj=io.BytesIO(data),
-            path_in_repo=f.file_name,
-            repo_id=repo_id,
-            repo_type="model",
-            commit_message=f"Decouple {f.file_name} from {slug}",
-        )
-        print(f"     [SUCCESS] Decoupled {f.file_name} ({len(data):,} bytes) to HF Hub.")
-        del data  # Keep heap bounded to ~260MB, zero disk persistence
-        uploaded += 1
-
-    print(f"  Decoupling complete: {uploaded}/{len(ensemble_files)} ensembles uploaded to {repo_id}.\n")
-    return True
+    return stream_decouple_runner_models(
+        api=api,
+        slug="hisar3-suite-runner-k13",
+        repo_id="DaneshSelwal/Classification-Hisar3-Models",
+        allow_partial=allow_partial,
+        dry_run=dry_run,
+        kaggle_user=kaggle_user,
+    )
 
 
 def is_valid_payload(ext: str, data: bytes) -> Tuple[bool, str]:
@@ -481,13 +506,17 @@ def check_and_extract(
             print(f"  • {slug:28s} [{hw:3s} | {role:8s}]: status={status_str} | session_files={len(files)}")
 
             if files and not status_only:
-                # If hisar3-suite-runner-k13 is COMPLETE (or allow_partial and CANCEL_ACKNOWLEDGED), stream-decouple its ensemble weights to HF Hub
-                if slug == "hisar3-suite-runner-k13" and (
+                # If runner is COMPLETE (or allow_partial and CANCEL_ACKNOWLEDGED), stream-decouple any .keras weights to HF Hub
+                hf_repo = s_meta.get("hf_repo")
+                if hf_repo and (
                     "COMPLETE" in str(status_str).upper()
                     or (allow_partial and "CANCEL_ACKNOWLEDGED" in str(status_str).upper())
                 ):
-                    stream_decouple_hisar3(
+                    stream_decouple_runner_models(
                         api,
+                        slug=slug,
+                        repo_id=hf_repo,
+                        files=files,
                         allow_partial=allow_partial,
                         dry_run=dry_run,
                         kaggle_user=kaggle_user,
