@@ -512,6 +512,7 @@
       "hf_model_repo": "DaneshSelwal/Classification-PaviaCentre-Models",
       "num_classes": 9,
       "pipeline_stages": [
+        0,
         1,
         2,
         4,
@@ -534,6 +535,7 @@
       "hf_model_repo": "DaneshSelwal/Classification-372Band-Models",
       "num_classes": 13,
       "pipeline_stages": [
+        0,
         1,
         2,
         4,
@@ -556,6 +558,7 @@
       "hf_model_repo": "DaneshSelwal/Classification-ETM108-Models",
       "num_classes": 7,
       "pipeline_stages": [
+        0,
         1,
         2,
         4,
@@ -578,6 +581,7 @@
       "hf_model_repo": "DaneshSelwal/Classification-AchlaSAR-Models",
       "num_classes": 12,
       "pipeline_stages": [
+        0,
         1,
         2,
         4,
@@ -600,6 +604,7 @@
       "hf_model_repo": "DaneshSelwal/Classification-PlanetHisar-Models",
       "num_classes": 8,
       "pipeline_stages": [
+        0,
         1,
         2,
         4,
