@@ -1,0 +1,79 @@
+model_key,model_name,scoring_method,Class,Coverage
+AlexNet_CNN_MultiHead,AlexNet CNN,RAPS,Class 0,0.9821428571428571
+AlexNet_CNN_MultiHead,AlexNet CNN,RAPS,Class 1,0.0
+AlexNet_CNN_MultiHead,AlexNet CNN,RAPS,Class 2,0.875
+AlexNet_CNN_MultiHead,AlexNet CNN,RAPS,Class 3,1.0
+AlexNet_CNN_MultiHead,AlexNet CNN,RAPS,Class 4,1.0
+AlexNet_CNN_MultiHead,AlexNet CNN,RAPS,Class 5,0.27586206896551724
+AlexNet_CNN_MultiHead,AlexNet CNN,RAPS,Class 6,1.0
+AlexNet_CNN_MultiHead,AlexNet CNN,RAPS,Class 7,0.6666666666666666
+AlexNet_CNN_MultiHead,AlexNet CNN,RAPS,Class 8,0.12903225806451613
+AlexNet_CNN_MultiHead,AlexNet CNN,RAPS,Class 9,1.0
+AlexNet_CNN_MultiHead,AlexNet CNN,RAPS,Class 10,0.5348837209302325
+AlexNet_CNN_MultiHead,AlexNet CNN,RAPS,Class 11,1.0
+AlexNet_CNN_MultiHead,AlexNet CNN,RAPS,Class 12,0.7422680412371134
+AlexNet_CNN_MultiHead,AlexNet CNN,SAPS,Class 0,0.9821428571428571
+AlexNet_CNN_MultiHead,AlexNet CNN,SAPS,Class 1,0.0
+AlexNet_CNN_MultiHead,AlexNet CNN,SAPS,Class 2,0.3125
+AlexNet_CNN_MultiHead,AlexNet CNN,SAPS,Class 3,1.0
+AlexNet_CNN_MultiHead,AlexNet CNN,SAPS,Class 4,1.0
+AlexNet_CNN_MultiHead,AlexNet CNN,SAPS,Class 5,0.0
+AlexNet_CNN_MultiHead,AlexNet CNN,SAPS,Class 6,1.0
+AlexNet_CNN_MultiHead,AlexNet CNN,SAPS,Class 7,0.4
+AlexNet_CNN_MultiHead,AlexNet CNN,SAPS,Class 8,0.0
+AlexNet_CNN_MultiHead,AlexNet CNN,SAPS,Class 9,1.0
+AlexNet_CNN_MultiHead,AlexNet CNN,SAPS,Class 10,1.0
+AlexNet_CNN_MultiHead,AlexNet CNN,SAPS,Class 11,1.0
+AlexNet_CNN_MultiHead,AlexNet CNN,SAPS,Class 12,0.9896907216494846
+GFNet_MultiHead,GFNet,RAPS,Class 0,0.8839285714285714
+GFNet_MultiHead,GFNet,RAPS,Class 1,0.9047619047619048
+GFNet_MultiHead,GFNet,RAPS,Class 2,0.65625
+GFNet_MultiHead,GFNet,RAPS,Class 3,0.8571428571428571
+GFNet_MultiHead,GFNet,RAPS,Class 4,0.9767441860465116
+GFNet_MultiHead,GFNet,RAPS,Class 5,1.0
+GFNet_MultiHead,GFNet,RAPS,Class 6,0.9603174603174603
+GFNet_MultiHead,GFNet,RAPS,Class 7,0.9666666666666667
+GFNet_MultiHead,GFNet,RAPS,Class 8,0.3225806451612903
+GFNet_MultiHead,GFNet,RAPS,Class 9,0.7058823529411765
+GFNet_MultiHead,GFNet,RAPS,Class 10,0.9302325581395349
+GFNet_MultiHead,GFNet,RAPS,Class 11,0.9411764705882353
+GFNet_MultiHead,GFNet,RAPS,Class 12,0.9072164948453608
+GFNet_MultiHead,GFNet,SAPS,Class 0,0.9285714285714286
+GFNet_MultiHead,GFNet,SAPS,Class 1,0.8571428571428571
+GFNet_MultiHead,GFNet,SAPS,Class 2,0.65625
+GFNet_MultiHead,GFNet,SAPS,Class 3,0.8392857142857143
+GFNet_MultiHead,GFNet,SAPS,Class 4,1.0
+GFNet_MultiHead,GFNet,SAPS,Class 5,1.0
+GFNet_MultiHead,GFNet,SAPS,Class 6,1.0
+GFNet_MultiHead,GFNet,SAPS,Class 7,1.0
+GFNet_MultiHead,GFNet,SAPS,Class 8,0.1935483870967742
+GFNet_MultiHead,GFNet,SAPS,Class 9,0.7352941176470589
+GFNet_MultiHead,GFNet,SAPS,Class 10,1.0
+GFNet_MultiHead,GFNet,SAPS,Class 11,0.9264705882352942
+GFNet_MultiHead,GFNet,SAPS,Class 12,1.0
+ViT_UNet_MultiHead,ViT UNet,RAPS,Class 0,0.7767857142857143
+ViT_UNet_MultiHead,ViT UNet,RAPS,Class 1,0.6666666666666666
+ViT_UNet_MultiHead,ViT UNet,RAPS,Class 2,0.84375
+ViT_UNet_MultiHead,ViT UNet,RAPS,Class 3,0.9821428571428571
+ViT_UNet_MultiHead,ViT UNet,RAPS,Class 4,0.9302325581395349
+ViT_UNet_MultiHead,ViT UNet,RAPS,Class 5,0.6206896551724138
+ViT_UNet_MultiHead,ViT UNet,RAPS,Class 6,0.6111111111111112
+ViT_UNet_MultiHead,ViT UNet,RAPS,Class 7,0.8666666666666667
+ViT_UNet_MultiHead,ViT UNet,RAPS,Class 8,0.6451612903225806
+ViT_UNet_MultiHead,ViT UNet,RAPS,Class 9,0.5441176470588235
+ViT_UNet_MultiHead,ViT UNet,RAPS,Class 10,0.7093023255813954
+ViT_UNet_MultiHead,ViT UNet,RAPS,Class 11,0.7205882352941176
+ViT_UNet_MultiHead,ViT UNet,RAPS,Class 12,0.6597938144329897
+ViT_UNet_MultiHead,ViT UNet,SAPS,Class 0,0.6964285714285714
+ViT_UNet_MultiHead,ViT UNet,SAPS,Class 1,0.5714285714285714
+ViT_UNet_MultiHead,ViT UNet,SAPS,Class 2,0.84375
+ViT_UNet_MultiHead,ViT UNet,SAPS,Class 3,0.8928571428571429
+ViT_UNet_MultiHead,ViT UNet,SAPS,Class 4,0.9302325581395349
+ViT_UNet_MultiHead,ViT UNet,SAPS,Class 5,0.7241379310344828
+ViT_UNet_MultiHead,ViT UNet,SAPS,Class 6,0.6666666666666666
+ViT_UNet_MultiHead,ViT UNet,SAPS,Class 7,0.8666666666666667
+ViT_UNet_MultiHead,ViT UNet,SAPS,Class 8,0.9354838709677419
+ViT_UNet_MultiHead,ViT UNet,SAPS,Class 9,0.7205882352941176
+ViT_UNet_MultiHead,ViT UNet,SAPS,Class 10,0.6918604651162791
+ViT_UNet_MultiHead,ViT UNet,SAPS,Class 11,0.7058823529411765
+ViT_UNet_MultiHead,ViT UNet,SAPS,Class 12,0.7319587628865979
