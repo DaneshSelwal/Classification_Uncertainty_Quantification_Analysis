@@ -1,0 +1,13 @@
+stage,notebook,description,status,duration_s,error
+0,baseline/model_training.ipynb,"Baseline Backbone Training (AlexNet, GFNet, ViT-UNet)",SUCCESS,164.2,
+1,baseline/model_uncertainty_comparison.ipynb,"Baseline Conformal Prediction Comparison (SplitCP, CcCP, RC3P, ClCP, RAPS)",SUCCESS,175.1,
+2,sacp/model_sacp_comparison.ipynb,Spatial-Aware Conformal Prediction (SACP) Evaluation,SUCCESS,789.3,
+3,ensemble/model_training_ensembles.ipynb,Deep Credal Ensemble Training,SUCCESS,4247.6,
+4,credit/model_training_credit.ipynb,CREDIT Distillation Training and Credal Uncertainty Evaluation,SUCCESS,1234.8,
+5,ensemble/model_uncertainty_credal_ensemble.ipynb,CreDE Credal Ensemble Uncertainty Quantification,SUCCESS,627.3,
+6,multi_cp/model_training_multihead.ipynb,Multi-Head Architecture Training,SUCCESS,1362.9,
+7,multi_cp/model_uncertainty_multicp.ipynb,Multi-Head Conformal Prediction (Multi-CP) Evaluation,SUCCESS,269.4,
+8,dapm/model_training_dapm_full.ipynb,Dynamic Adaptive Prediction Mapping (DAPM) Training,SUCCESS,3559.9,
+9,dapm/model_uncertainty_dapm_full.ipynb,DAPM Domain-Adaptive Uncertainty Quantification,SUCCESS,636.3,
+10,dapm/Model_uncertainty_dapm_cp.ipynb,DAPM Conformal Prediction Evaluation,SUCCESS,410.2,
+11,multicp_sacp/Model_uncertainty_multicp_sacp.ipynb,Spatial MultiCP (SCMCP) Evaluation,SUCCESS,1885.2,

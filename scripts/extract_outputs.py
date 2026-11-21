@@ -79,6 +79,8 @@ SUITES: Dict[str, dict] = {
         "runners": [
             {"slug": "hisar3-suite-runner-k13", "hw": "GPU", "role": "primary"},
             {"slug": "hisar3-cpu-runner-k17", "hw": "CPU", "role": "fallback"},
+            {"slug": "hisar3-cpu-runner-k17-s1", "hw": "CPU", "role": "fallback"},
+            {"slug": "hisar3-cpu-runner-k17-s2", "hw": "CPU", "role": "fallback"},
         ],
     },
     "hissar_25": {
@@ -95,6 +97,8 @@ SUITES: Dict[str, dict] = {
         "runners": [
             {"slug": "pavia-suite-runner-k19", "hw": "GPU", "role": "primary"},
             {"slug": "pavia-cpu-runner-k24", "hw": "CPU", "role": "fallback"},
+            {"slug": "pavia-cpu-runner-k24-s1", "hw": "CPU", "role": "fallback"},
+            {"slug": "pavia-cpu-runner-k24-s2", "hw": "CPU", "role": "fallback"},
         ],
     },
     "band372": {
@@ -111,6 +115,7 @@ SUITES: Dict[str, dict] = {
         "runners": [
             {"slug": "etm108-suite-runner-k21", "hw": "GPU", "role": "primary"},
             {"slug": "etm108-cpu-runner-k26", "hw": "CPU", "role": "fallback"},
+            {"slug": "etm108-cpu-runner-k26-s1", "hw": "CPU", "role": "fallback"},
         ],
     },
     "achla": {
@@ -119,6 +124,7 @@ SUITES: Dict[str, dict] = {
         "runners": [
             {"slug": "achla-suite-runner-k22", "hw": "GPU", "role": "primary"},
             {"slug": "achla-cpu-runner-k27", "hw": "CPU", "role": "fallback"},
+            {"slug": "achla-cpu-runner-k27-s2", "hw": "CPU", "role": "fallback"},
         ],
     },
     "planethisar": {
@@ -126,7 +132,10 @@ SUITES: Dict[str, dict] = {
         "hf_repo": "DaneshSelwal/Classification-PlanetHisar-Models",
         "runners": [
             {"slug": "planethisar-suite-runner-k23", "hw": "GPU", "role": "primary"},
+            {"slug": "cla21-11-2026-23-02", "hw": "GPU", "role": "primary"},
             {"slug": "planethisar-cpu-runner-k28", "hw": "CPU", "role": "fallback"},
+            {"slug": "planethisar-cpu-runner-k28-s1", "hw": "CPU", "role": "fallback"},
+            {"slug": "planethisar-cpu-runner-k28-s2", "hw": "CPU", "role": "fallback"},
         ],
     },
 }

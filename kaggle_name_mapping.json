@@ -1,6 +1,6 @@
 {
   "project": "Classification and Uncertainty Quantification Pipeline (Indian Pines, Pavia Uni, Hisar-3, Hissar-25, Pavia Centre, 372-Band, ETM 108, Achla SAR, Planet Hisar)",
-  "timestamp": "2026-11-21",
+  "timestamp": "2026-11-21 23:07:26+05:00",
   "kernels": {
     "ip-uncertainty-k01": {
       "local_notebook": "examples/indian_pines_uncertainty_quantification/Model_training.ipynb",
@@ -232,7 +232,10 @@
         9,
         10,
         11
-      ]
+      ],
+      "cla_nomenclature": "CLA14_11_2026_19_45",
+      "pushed_at_local": "2026-11-14 19:45:19+05:00",
+      "last_status": "KernelWorkerStatus.COMPLETE"
     },
     "pavia-suite-runner-k12": {
       "dataset_name": "Pavia University",
@@ -255,7 +258,10 @@
         9,
         10,
         11
-      ]
+      ],
+      "cla_nomenclature": "CLA15_11_2026_17_23",
+      "pushed_at_local": "2026-11-15 17:23:10+05:00",
+      "last_status": "KernelWorkerStatus.COMPLETE"
     },
     "hisar3-suite-runner-k13": {
       "dataset_name": "Hisar-3",
@@ -276,7 +282,10 @@
         9,
         10,
         11
-      ]
+      ],
+      "cla_nomenclature": "CLA15_11_2026_19_25",
+      "pushed_at_local": "2026-11-15 19:25:49+05:00",
+      "last_status": "KernelWorkerStatus.CANCEL_ACKNOWLEDGED"
     },
     "hissar25-suite-runner-k14": {
       "dataset_name": "Hissar-25",
@@ -296,7 +305,10 @@
         9,
         10,
         11
-      ]
+      ],
+      "cla_nomenclature": "CLA12_11_2026_15_59",
+      "pushed_at_local": "2026-11-12 15:59:17+05:00",
+      "last_status": "KernelWorkerStatus.COMPLETE"
     },
     "pavia-suite-runner-k19": {
       "dataset_name": "Pavia Centre",
@@ -320,7 +332,10 @@
         9,
         10,
         11
-      ]
+      ],
+      "cla_nomenclature": "CLA21_11_2026_22_35",
+      "pushed_at_local": "2026-11-21 22:35:00+05:00",
+      "last_status": "KernelWorkerStatus.RUNNING"
     },
     "band372-suite-runner-k20": {
       "dataset_name": "372-Band",
@@ -344,7 +359,10 @@
         9,
         10,
         11
-      ]
+      ],
+      "cla_nomenclature": "CLA19_11_2026_02_21",
+      "pushed_at_local": "2026-11-19 02:21:56+05:00",
+      "last_status": "KernelWorkerStatus.CANCEL_ACKNOWLEDGED"
     },
     "etm108-suite-runner-k21": {
       "dataset_name": "ETM 108",
@@ -368,7 +386,10 @@
         9,
         10,
         11
-      ]
+      ],
+      "cla_nomenclature": "CLA21_11_2026_17_28",
+      "pushed_at_local": "2026-11-21 17:28:06+05:00",
+      "last_status": "KernelWorkerStatus.COMPLETE"
     },
     "achla-suite-runner-k22": {
       "dataset_name": "Achla SAR",
@@ -392,7 +413,10 @@
         9,
         10,
         11
-      ]
+      ],
+      "cla_nomenclature": "CLA21_11_2026_22_34",
+      "pushed_at_local": "2026-11-21 22:34:49+05:00",
+      "last_status": "KernelWorkerStatus.RUNNING"
     },
     "planethisar-suite-runner-k23": {
       "dataset_name": "Planet Hisar CSV",
@@ -440,7 +464,10 @@
         9,
         10,
         11
-      ]
+      ],
+      "cla_nomenclature": "CLA14_11_2026_13_02",
+      "pushed_at_local": "2026-11-14 13:02:00+05:00",
+      "last_status": "KernelWorkerStatus.CANCEL_ACKNOWLEDGED"
     },
     "pavia-cpu-runner-k16": {
       "dataset_name": "Pavia University",
@@ -462,7 +489,10 @@
         9,
         10,
         11
-      ]
+      ],
+      "cla_nomenclature": "CLA14_11_2026_13_03",
+      "pushed_at_local": "2026-11-14 13:03:03+05:00",
+      "last_status": "KernelWorkerStatus.CANCEL_ACKNOWLEDGED"
     },
     "hisar3-cpu-runner-k17": {
       "dataset_name": "Hisar-3",
@@ -480,7 +510,10 @@
         9,
         10,
         11
-      ]
+      ],
+      "cla_nomenclature": "CLA19_11_2026_16_06",
+      "pushed_at_local": "2026-11-19 16:06:56+05:00",
+      "last_status": "KernelWorkerStatus.CANCEL_ACKNOWLEDGED"
     },
     "hissar25-cpu-runner-k18": {
       "dataset_name": "Hissar-25",
@@ -494,7 +527,10 @@
       "pipeline_stages": [
         5,
         11
-      ]
+      ],
+      "cla_nomenclature": "CLA19_11_2026_17_07",
+      "pushed_at_local": "2026-11-19 17:07:08+05:00",
+      "last_status": "KernelWorkerStatus.CANCEL_ACKNOWLEDGED"
     },
     "pavia-cpu-runner-k24": {
       "dataset_name": "Pavia Centre",
@@ -517,7 +553,10 @@
         9,
         10,
         11
-      ]
+      ],
+      "cla_nomenclature": "CLA21_11_2026_17_15",
+      "pushed_at_local": "2026-11-21 17:15:04+05:00",
+      "last_status": "KernelWorkerStatus.RUNNING"
     },
     "band372-cpu-runner-k25": {
       "dataset_name": "372-Band",
@@ -540,7 +579,10 @@
         9,
         10,
         11
-      ]
+      ],
+      "cla_nomenclature": "CLA18_11_2026_16_17",
+      "pushed_at_local": "2026-11-18 16:17:11+05:00",
+      "last_status": "KernelWorkerStatus.CANCEL_ACKNOWLEDGED"
     },
     "etm108-cpu-runner-k26": {
       "dataset_name": "ETM 108",
@@ -563,7 +605,10 @@
         9,
         10,
         11
-      ]
+      ],
+      "cla_nomenclature": "CLA19_11_2026_16_07",
+      "pushed_at_local": "2026-11-19 16:07:21+05:00",
+      "last_status": "KernelWorkerStatus.CANCEL_ACKNOWLEDGED"
     },
     "achla-cpu-runner-k27": {
       "dataset_name": "Achla SAR",
@@ -586,7 +631,10 @@
         9,
         10,
         11
-      ]
+      ],
+      "cla_nomenclature": "CLA19_11_2026_18_09",
+      "pushed_at_local": "2026-11-19 18:09:36+05:00",
+      "last_status": "KernelWorkerStatus.CANCEL_ACKNOWLEDGED"
     },
     "planethisar-cpu-runner-k28": {
       "dataset_name": "Planet Hisar CSV",
@@ -609,7 +657,732 @@
         9,
         10,
         11
-      ]
+      ],
+      "cla_nomenclature": "CLA19_11_2026_16_00",
+      "pushed_at_local": "2026-11-19 16:00:18+05:00",
+      "last_status": "KernelWorkerStatus.CANCEL_ACKNOWLEDGED"
     }
-  }
+  },
+  "cla_nomenclature_registry": [
+    {
+      "kaggle_id": "daneshselwal/dias-baseline-k03",
+      "slug": "dias-baseline-k03",
+      "current_title": "dias-baseline-k03",
+      "cla_nomenclature": "CLA09_09_2026_12_29",
+      "pushed_at_local": "2026-09-09 12:29:02+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshselwal/dias-uncertainty-k04",
+      "slug": "dias-uncertainty-k04",
+      "current_title": "dias-uncertainty-k04",
+      "cla_nomenclature": "CLA10_09_2026_06_03",
+      "pushed_at_local": "2026-09-10 06:03:15+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshselwal/dias-sacp-k11",
+      "slug": "dias-sacp-k11",
+      "current_title": "dias-sacp-k11",
+      "cla_nomenclature": "CLA11_09_2026_13_05",
+      "pushed_at_local": "2026-09-11 13:05:15+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshselwal/dias-multicp-k12",
+      "slug": "dias-multicp-k12",
+      "current_title": "dias-multicp-k12",
+      "cla_nomenclature": "CLA12_09_2026_06_51",
+      "pushed_at_local": "2026-09-12 06:51:09+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshselwal/dias-ensemble-k13",
+      "slug": "dias-ensemble-k13",
+      "current_title": "dias-ensemble-k13",
+      "cla_nomenclature": "CLA12_09_2026_11_39",
+      "pushed_at_local": "2026-09-12 11:39:19+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshselwal/cuq6-baseline-k01",
+      "slug": "cuq6-baseline-k01",
+      "current_title": "cuq6-baseline-k01",
+      "cla_nomenclature": "CLA11_10_2026_14_22",
+      "pushed_at_local": "2026-10-11 14:22:16+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshselwal/cuq6-multicp-k06",
+      "slug": "cuq6-multicp-k06",
+      "current_title": "cuq6-multicp-k06",
+      "cla_nomenclature": "CLA11_10_2026_14_23",
+      "pushed_at_local": "2026-10-11 14:23:12+05:00",
+      "status": "KernelWorkerStatus.CANCEL_ACKNOWLEDGED",
+      "enable_gpu": false
+    },
+    {
+      "kaggle_id": "daneshselwal/cuq6-multicp-uq-k07",
+      "slug": "cuq6-multicp-uq-k07",
+      "current_title": "cuq6-multicp-uq-k07",
+      "cla_nomenclature": "CLA11_10_2026_14_24",
+      "pushed_at_local": "2026-10-11 14:24:27+05:00",
+      "status": "KernelWorkerStatus.ERROR",
+      "enable_gpu": false
+    },
+    {
+      "kaggle_id": "daneshselwal/cuq6-multicp-sacp-k08",
+      "slug": "cuq6-multicp-sacp-k08",
+      "current_title": "cuq6-multicp-sacp-k08",
+      "cla_nomenclature": "CLA11_10_2026_14_25",
+      "pushed_at_local": "2026-10-11 14:25:38+05:00",
+      "status": "KernelWorkerStatus.ERROR",
+      "enable_gpu": false
+    },
+    {
+      "kaggle_id": "daneshselwal/cuq6-uncertainty-k02",
+      "slug": "cuq6-uncertainty-k02",
+      "current_title": "cuq6-uncertainty-k02",
+      "cla_nomenclature": "CLA11_10_2026_15_15",
+      "pushed_at_local": "2026-10-11 15:15:00+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshselwal/cuq6-mambahsi-k10",
+      "slug": "cuq6-mambahsi-k10",
+      "current_title": "cuq6-mambahsi-k10",
+      "cla_nomenclature": "CLA11_10_2026_16_14",
+      "pushed_at_local": "2026-10-11 16:14:42+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshselwal/cuq6-dofa-k12",
+      "slug": "cuq6-dofa-k12",
+      "current_title": "cuq6-dofa-k12",
+      "cla_nomenclature": "CLA11_10_2026_16_30",
+      "pushed_at_local": "2026-10-11 16:30:38+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshselwal/cuq6-dofa-uq-k13",
+      "slug": "cuq6-dofa-uq-k13",
+      "current_title": "cuq6-dofa-uq-k13",
+      "cla_nomenclature": "CLA11_10_2026_17_53",
+      "pushed_at_local": "2026-10-11 17:53:07+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshselwal/cuq6-sacp-k09",
+      "slug": "cuq6-sacp-k09",
+      "current_title": "cuq6-sacp-k09",
+      "cla_nomenclature": "CLA11_10_2026_20_57",
+      "pushed_at_local": "2026-10-11 20:57:56+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshselwal/cuq6-georsclip-k14",
+      "slug": "cuq6-georsclip-k14",
+      "current_title": "cuq6-georsclip-k14",
+      "cla_nomenclature": "CLA11_10_2026_21_01",
+      "pushed_at_local": "2026-10-11 21:01:20+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshselwal/cuq6-georsclip-uq-k15",
+      "slug": "cuq6-georsclip-uq-k15",
+      "current_title": "cuq6-georsclip-uq-k15",
+      "cla_nomenclature": "CLA11_10_2026_21_12",
+      "pushed_at_local": "2026-10-11 21:12:12+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshselwal/cuq6-mambahsi-uq-k11",
+      "slug": "cuq6-mambahsi-uq-k11",
+      "current_title": "cuq6-mambahsi-uq-k11",
+      "cla_nomenclature": "CLA11_10_2026_21_44",
+      "pushed_at_local": "2026-10-11 21:44:05+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": false
+    },
+    {
+      "kaggle_id": "daneshselwal/cuq6-spatialgcn-k16",
+      "slug": "cuq6-spatialgcn-k16",
+      "current_title": "cuq6-spatialgcn-k16",
+      "cla_nomenclature": "CLA11_10_2026_22_13",
+      "pushed_at_local": "2026-10-11 22:13:31+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshselwal/cuq6-spatialgcn-uq-k17",
+      "slug": "cuq6-spatialgcn-uq-k17",
+      "current_title": "cuq6-spatialgcn-uq-k17",
+      "cla_nomenclature": "CLA11_10_2026_22_18",
+      "pushed_at_local": "2026-10-11 22:18:31+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": false
+    },
+    {
+      "kaggle_id": "daneshselwal/dias-mambahsi-k16",
+      "slug": "dias-mambahsi-k16",
+      "current_title": "dias-mambahsi-k16",
+      "cla_nomenclature": "CLA11_10_2026_22_33",
+      "pushed_at_local": "2026-10-11 22:33:29+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshselwal/dias-spatialgcn-k22",
+      "slug": "dias-spatialgcn-k22",
+      "current_title": "dias-spatialgcn-k22",
+      "cla_nomenclature": "CLA11_10_2026_23_07",
+      "pushed_at_local": "2026-10-11 23:07:26+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshselwal/dias-dofa-k18",
+      "slug": "dias-dofa-k18",
+      "current_title": "dias-dofa-k18",
+      "cla_nomenclature": "CLA11_10_2026_23_30",
+      "pushed_at_local": "2026-10-11 23:30:34+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshselwal/dias-mambahsi-uq-k17",
+      "slug": "dias-mambahsi-uq-k17",
+      "current_title": "dias-mambahsi-uq-k17",
+      "cla_nomenclature": "CLA12_10_2026_00_06",
+      "pushed_at_local": "2026-10-12 00:06:07+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshselwal/dias-spatialgcn-uq-k23",
+      "slug": "dias-spatialgcn-uq-k23",
+      "current_title": "dias-spatialgcn-uq-k23",
+      "cla_nomenclature": "CLA12_10_2026_00_18",
+      "pushed_at_local": "2026-10-12 00:18:11+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshselwal/dias-dofa-uq-k19",
+      "slug": "dias-dofa-uq-k19",
+      "current_title": "dias-dofa-uq-k19",
+      "cla_nomenclature": "CLA12_10_2026_00_19",
+      "pushed_at_local": "2026-10-12 00:19:19+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshselwal/dias-georsclip-k20",
+      "slug": "dias-georsclip-k20",
+      "current_title": "dias-georsclip-k20",
+      "cla_nomenclature": "CLA12_10_2026_00_20",
+      "pushed_at_local": "2026-10-12 00:20:51+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshselwal/dias-dapm-k24",
+      "slug": "dias-dapm-k24",
+      "current_title": "dias-dapm-k24",
+      "cla_nomenclature": "CLA12_10_2026_01_04",
+      "pushed_at_local": "2026-10-12 01:04:39+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshselwal/dias-georsclip-uq-k21",
+      "slug": "dias-georsclip-uq-k21",
+      "current_title": "dias-georsclip-uq-k21",
+      "cla_nomenclature": "CLA12_10_2026_03_06",
+      "pushed_at_local": "2026-10-12 03:06:16+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshselwal/dias-dapm-uq-k25",
+      "slug": "dias-dapm-uq-k25",
+      "current_title": "dias-dapm-uq-k25",
+      "cla_nomenclature": "CLA23_10_2026_12_10",
+      "pushed_at_local": "2026-10-23 12:10:25+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshselwal/dias-dapm-cp-k26",
+      "slug": "dias-dapm-cp-k26",
+      "current_title": "dias-dapm-cp-k26",
+      "cla_nomenclature": "CLA23_10_2026_12_42",
+      "pushed_at_local": "2026-10-23 12:42:04+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshselwal/dias-multicp-sacp-k031",
+      "slug": "dias-multicp-sacp-k031",
+      "current_title": "dias-multicp-sacp-k031",
+      "cla_nomenclature": "CLA23_10_2026_19_29",
+      "pushed_at_local": "2026-10-23 19:29:16+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshselwal/dias-multicp-sacp-k044",
+      "slug": "dias-multicp-sacp-k044",
+      "current_title": "dias-multicp-sacp-k044",
+      "cla_nomenclature": "CLA23_10_2026_19_30",
+      "pushed_at_local": "2026-10-23 19:30:30+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshselwal/dias-credit-k015",
+      "slug": "dias-credit-k015",
+      "current_title": "dias-credit-k015",
+      "cla_nomenclature": "CLA03_11_2026_14_20",
+      "pushed_at_local": "2026-11-03 14:20:22+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshselwal/dias-crede-k014",
+      "slug": "dias-crede-k014",
+      "current_title": "dias-crede-k014",
+      "cla_nomenclature": "CLA03_11_2026_14_21",
+      "pushed_at_local": "2026-11-03 14:21:56+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshselwal/cuq6-ensemble-k04",
+      "slug": "cuq6-ensemble-k04",
+      "current_title": "cuq6-ensemble-k04",
+      "cla_nomenclature": "CLA03_11_2026_18_50",
+      "pushed_at_local": "2026-11-03 18:50:53+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshselwal/cuq6-crede-k05",
+      "slug": "cuq6-crede-k05",
+      "current_title": "cuq6-crede-k05",
+      "cla_nomenclature": "CLA04_11_2026_09_21",
+      "pushed_at_local": "2026-11-04 09:21:40+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshselwal/cuq6-credit-k03",
+      "slug": "cuq6-credit-k03",
+      "current_title": "cuq6-credit-k03",
+      "cla_nomenclature": "CLA04_11_2026_09_22",
+      "pushed_at_local": "2026-11-04 09:22:44+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshselwal/ip-uncertainty-k01",
+      "slug": "ip-uncertainty-k01",
+      "current_title": "ip-uncertainty-k01",
+      "cla_nomenclature": "CLA09_11_2026_17_44",
+      "pushed_at_local": "2026-11-09 17:44:39+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshselwal/pavia-uncertainty-k02",
+      "slug": "pavia-uncertainty-k02",
+      "current_title": "pavia-uncertainty-k02",
+      "cla_nomenclature": "CLA09_11_2026_19_41",
+      "pushed_at_local": "2026-11-09 19:41:10+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshselwal/hisar3-uncertainty-k03",
+      "slug": "hisar3-uncertainty-k03",
+      "current_title": "hisar3-uncertainty-k03",
+      "cla_nomenclature": "CLA10_11_2026_10_01",
+      "pushed_at_local": "2026-11-10 10:01:17+05:00",
+      "status": "KernelWorkerStatus.ERROR",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshselwal/hissar25-uncertainty-k04",
+      "slug": "hissar25-uncertainty-k04",
+      "current_title": "hissar25-uncertainty-k04",
+      "cla_nomenclature": "CLA10_11_2026_11_46",
+      "pushed_at_local": "2026-11-10 11:46:25+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshselwal/hissar25-suite-runner-k14",
+      "slug": "hissar25-suite-runner-k14",
+      "current_title": "hissar25-suite-runner-k14",
+      "cla_nomenclature": "CLA12_11_2026_15_59",
+      "pushed_at_local": "2026-11-12 15:59:17+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshselwal/ip-cpu-runner-k15",
+      "slug": "ip-cpu-runner-k15",
+      "current_title": "ip-cpu-runner-k15",
+      "cla_nomenclature": "CLA14_11_2026_13_02",
+      "pushed_at_local": "2026-11-14 13:02:00+05:00",
+      "status": "KernelWorkerStatus.CANCEL_ACKNOWLEDGED",
+      "enable_gpu": false
+    },
+    {
+      "kaggle_id": "daneshselwal/pavia-cpu-runner-k16",
+      "slug": "pavia-cpu-runner-k16",
+      "current_title": "pavia-cpu-runner-k16",
+      "cla_nomenclature": "CLA14_11_2026_13_03",
+      "pushed_at_local": "2026-11-14 13:03:03+05:00",
+      "status": "KernelWorkerStatus.CANCEL_ACKNOWLEDGED",
+      "enable_gpu": false
+    },
+    {
+      "kaggle_id": "daneshselwal/ip-suite-runner-k11",
+      "slug": "ip-suite-runner-k11",
+      "current_title": "ip-suite-runner-k11",
+      "cla_nomenclature": "CLA14_11_2026_19_45",
+      "pushed_at_local": "2026-11-14 19:45:19+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshselwal/pavia-suite-runner-k12",
+      "slug": "pavia-suite-runner-k12",
+      "current_title": "pavia-suite-runner-k12",
+      "cla_nomenclature": "CLA15_11_2026_17_23",
+      "pushed_at_local": "2026-11-15 17:23:10+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshselwal/hisar3-suite-runner-k13",
+      "slug": "hisar3-suite-runner-k13",
+      "current_title": "hisar3-suite-runner-k13",
+      "cla_nomenclature": "CLA15_11_2026_19_25",
+      "pushed_at_local": "2026-11-15 19:25:49+05:00",
+      "status": "KernelWorkerStatus.CANCEL_ACKNOWLEDGED",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshselwal/band372-cpu-runner-k25",
+      "slug": "band372-cpu-runner-k25",
+      "current_title": "band372-cpu-runner-k25",
+      "cla_nomenclature": "CLA18_11_2026_16_17",
+      "pushed_at_local": "2026-11-18 16:17:11+05:00",
+      "status": "KernelWorkerStatus.CANCEL_ACKNOWLEDGED",
+      "enable_gpu": false
+    },
+    {
+      "kaggle_id": "daneshselwal/planethisar-cpu-runner-k28",
+      "slug": "planethisar-cpu-runner-k28",
+      "current_title": "planethisar-cpu-runner-k28",
+      "cla_nomenclature": "CLA19_11_2026_16_00",
+      "pushed_at_local": "2026-11-19 16:00:18+05:00",
+      "status": "KernelWorkerStatus.CANCEL_ACKNOWLEDGED",
+      "enable_gpu": false
+    },
+    {
+      "kaggle_id": "daneshselwal/hissar25-cpu-runner-k18",
+      "slug": "hissar25-cpu-runner-k18",
+      "current_title": "hissar25-cpu-runner-k18",
+      "cla_nomenclature": "CLA19_11_2026_17_07",
+      "pushed_at_local": "2026-11-19 17:07:08+05:00",
+      "status": "KernelWorkerStatus.CANCEL_ACKNOWLEDGED",
+      "enable_gpu": false
+    },
+    {
+      "kaggle_id": "daneshselwal/achla-cpu-runner-k27",
+      "slug": "achla-cpu-runner-k27",
+      "current_title": "achla-cpu-runner-k27",
+      "cla_nomenclature": "CLA19_11_2026_18_09",
+      "pushed_at_local": "2026-11-19 18:09:36+05:00",
+      "status": "KernelWorkerStatus.CANCEL_ACKNOWLEDGED",
+      "enable_gpu": false
+    },
+    {
+      "kaggle_id": "daneshselwal/etm108-suite-runner-k21",
+      "slug": "etm108-suite-runner-k21",
+      "current_title": "etm108-suite-runner-k21",
+      "cla_nomenclature": "CLA21_11_2026_17_28",
+      "pushed_at_local": "2026-11-21 17:28:06+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshselwal/achla-suite-runner-k22",
+      "slug": "achla-suite-runner-k22",
+      "current_title": "achla-suite-runner-k22",
+      "cla_nomenclature": "CLA21_11_2026_22_34",
+      "pushed_at_local": "2026-11-21 22:34:49+05:00",
+      "status": "KernelWorkerStatus.RUNNING",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshselwal/cla21-11-2026-17-16",
+      "slug": "cla21-11-2026-17-16",
+      "current_title": "CLA21_11_2026_17_16",
+      "cla_nomenclature": "CLA21_11_2026_17_16",
+      "pushed_at_local": "2026-11-21 22:55:08+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": false
+    },
+    {
+      "kaggle_id": "daneshselwal/cla21-11-2026-17-15",
+      "slug": "cla21-11-2026-17-15",
+      "current_title": "CLA21_11_2026_17_15",
+      "cla_nomenclature": "CLA21_11_2026_17_15",
+      "pushed_at_local": "2026-11-21 22:55:48+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": false
+    },
+    {
+      "kaggle_id": "daneshselwal/cla21-11-2026-17-14",
+      "slug": "cla21-11-2026-17-14",
+      "current_title": "CLA21_11_2026_17_14",
+      "cla_nomenclature": "CLA21_11_2026_17_14",
+      "pushed_at_local": "2026-11-21 22:56:27+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": false
+    },
+    {
+      "kaggle_id": "daneshselwal/cla21-11-2026-23-02",
+      "slug": "cla21-11-2026-23-02",
+      "current_title": "CLA21_11_2026_23_02",
+      "cla_nomenclature": "CLA21_11_2026_23_02",
+      "pushed_at_local": "2026-11-21 23:02:10+05:00",
+      "status": "KernelWorkerStatus.QUEUED",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshjangra/dias-sacp-k11",
+      "slug": "dias-sacp-k11",
+      "current_title": "dias-sacp-k11",
+      "cla_nomenclature": "CLA05_10_2026_17_29",
+      "pushed_at_local": "2026-10-05 17:29:55+05:00",
+      "status": "NOT_FOUND (HTTPError)",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshjangra/dias-sacp-k11-395cfd",
+      "slug": "dias-sacp-k11-395cfd",
+      "current_title": "dias-sacp-k11 395cfd",
+      "cla_nomenclature": "CLA05_10_2026_17_30",
+      "pushed_at_local": "2026-10-05 17:30:23+05:00",
+      "status": "NOT_FOUND (HTTPError)",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshjangra/hissar25-suite-runner-k14",
+      "slug": "hissar25-suite-runner-k14",
+      "current_title": "hissar25-suite-runner-k14",
+      "cla_nomenclature": "CLA18_11_2026_14_11",
+      "pushed_at_local": "2026-11-18 14:11:04+05:00",
+      "status": "KernelWorkerStatus.CANCEL_ACKNOWLEDGED",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshjangra/band372-suite-runner-k20",
+      "slug": "band372-suite-runner-k20",
+      "current_title": "band372-suite-runner-k20",
+      "cla_nomenclature": "CLA19_11_2026_02_21",
+      "pushed_at_local": "2026-11-19 02:21:56+05:00",
+      "status": "KernelWorkerStatus.CANCEL_ACKNOWLEDGED",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshjangra/hisar3-cpu-runner-k17",
+      "slug": "hisar3-cpu-runner-k17",
+      "current_title": "hisar3-cpu-runner-k17",
+      "cla_nomenclature": "CLA19_11_2026_16_06",
+      "pushed_at_local": "2026-11-19 16:06:56+05:00",
+      "status": "KernelWorkerStatus.CANCEL_ACKNOWLEDGED",
+      "enable_gpu": false
+    },
+    {
+      "kaggle_id": "daneshjangra/etm108-cpu-runner-k26",
+      "slug": "etm108-cpu-runner-k26",
+      "current_title": "etm108-cpu-runner-k26",
+      "cla_nomenclature": "CLA19_11_2026_16_07",
+      "pushed_at_local": "2026-11-19 16:07:21+05:00",
+      "status": "KernelWorkerStatus.CANCEL_ACKNOWLEDGED",
+      "enable_gpu": false
+    },
+    {
+      "kaggle_id": "daneshjangra/achla-cpu-runner-k27-s4",
+      "slug": "achla-cpu-runner-k27-s4",
+      "current_title": "achla-cpu-runner-k27-s4",
+      "cla_nomenclature": "CLA19_11_2026_19_59",
+      "pushed_at_local": "2026-11-19 19:59:56+05:00",
+      "status": "KernelWorkerStatus.CANCEL_ACKNOWLEDGED",
+      "enable_gpu": false
+    },
+    {
+      "kaggle_id": "daneshjangra/etm108-cpu-runner-k26-s1",
+      "slug": "etm108-cpu-runner-k26-s1",
+      "current_title": "etm108-cpu-runner-k26-s1",
+      "cla_nomenclature": "CLA21_11_2026_17_32",
+      "pushed_at_local": "2026-11-21 17:32:54+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": false
+    },
+    {
+      "kaggle_id": "daneshjangra/pavia-suite-runner-k19",
+      "slug": "pavia-suite-runner-k19",
+      "current_title": "pavia-suite-runner-k19",
+      "cla_nomenclature": "CLA21_11_2026_22_35",
+      "pushed_at_local": "2026-11-21 22:35:00+05:00",
+      "status": "KernelWorkerStatus.RUNNING",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshjangra/hisar3-suite-runner-k13",
+      "slug": "hisar3-suite-runner-k13",
+      "current_title": "hisar3-suite-runner-k13",
+      "cla_nomenclature": "CLA21_11_2026_22_36",
+      "pushed_at_local": "2026-11-21 22:36:01+05:00",
+      "status": "KernelWorkerStatus.RUNNING",
+      "enable_gpu": true
+    },
+    {
+      "kaggle_id": "daneshjangra/cla21-11-2026-17-34",
+      "slug": "cla21-11-2026-17-34",
+      "current_title": "CLA21_11_2026_17_34",
+      "cla_nomenclature": "CLA21_11_2026_17_34",
+      "pushed_at_local": "2026-11-21 23:00:13+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": false
+    },
+    {
+      "kaggle_id": "daneshjangra/cla21-11-2026-17-13",
+      "slug": "cla21-11-2026-17-13",
+      "current_title": "CLA21_11_2026_17_13",
+      "cla_nomenclature": "CLA21_11_2026_17_13",
+      "pushed_at_local": "2026-11-21 23:00:52+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": false
+    },
+    {
+      "kaggle_id": "daneshjangra/cla21-11-2026-17-14",
+      "slug": "cla21-11-2026-17-14",
+      "current_title": "CLA21_11_2026_17_14",
+      "cla_nomenclature": "CLA21_11_2026_17_14",
+      "pushed_at_local": "2026-11-21 23:01:33+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": false
+    },
+    {
+      "kaggle_id": "geminicli/achla-cpu-runner-k27-s1",
+      "slug": "achla-cpu-runner-k27-s1",
+      "current_title": "achla-cpu-runner-k27-s1",
+      "cla_nomenclature": "CLA19_11_2026_19_59",
+      "pushed_at_local": "2026-11-19 19:59:38+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": false
+    },
+    {
+      "kaggle_id": "geminicli/planethisar-cpu-runner-k28-s1",
+      "slug": "planethisar-cpu-runner-k28-s1",
+      "current_title": "planethisar-cpu-runner-k28-s1",
+      "cla_nomenclature": "CLA19_11_2026_20_00",
+      "pushed_at_local": "2026-11-19 20:00:40+05:00",
+      "status": "KernelWorkerStatus.CANCEL_ACKNOWLEDGED",
+      "enable_gpu": false
+    },
+    {
+      "kaggle_id": "geminicli/cla21-11-2026-17-14",
+      "slug": "cla21-11-2026-17-14",
+      "current_title": "CLA21_11_2026_17_14",
+      "cla_nomenclature": "CLA21_11_2026_17_14",
+      "pushed_at_local": "2026-11-21 22:50:01+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": false
+    },
+    {
+      "kaggle_id": "geminicli/cla21-11-2026-17-15",
+      "slug": "cla21-11-2026-17-15",
+      "current_title": "CLA21_11_2026_17_15",
+      "cla_nomenclature": "CLA21_11_2026_17_15",
+      "pushed_at_local": "2026-11-21 22:57:06+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": false
+    },
+    {
+      "kaggle_id": "geminicli/cla19-11-2026-19-59",
+      "slug": "cla19-11-2026-19-59",
+      "current_title": "CLA19_11_2026_19_59",
+      "cla_nomenclature": "CLA19_11_2026_19_59",
+      "pushed_at_local": "2026-11-21 22:57:45+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": false
+    },
+    {
+      "kaggle_id": "daneshselwal1/pavia-cpu-runner-k24-s3",
+      "slug": "pavia-cpu-runner-k24-s3",
+      "current_title": "pavia-cpu-runner-k24-s3",
+      "cla_nomenclature": "CLA19_11_2026_19_59",
+      "pushed_at_local": "2026-11-19 19:59:43+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": false
+    },
+    {
+      "kaggle_id": "daneshselwal1/achla-cpu-runner-k27-s3",
+      "slug": "achla-cpu-runner-k27-s3",
+      "current_title": "achla-cpu-runner-k27-s3",
+      "cla_nomenclature": "CLA19_11_2026_20_00",
+      "pushed_at_local": "2026-11-19 20:00:48+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": false
+    },
+    {
+      "kaggle_id": "daneshselwal1/cla21-11-2026-17-14",
+      "slug": "cla21-11-2026-17-14",
+      "current_title": "CLA21_11_2026_17_14",
+      "cla_nomenclature": "CLA21_11_2026_17_14",
+      "pushed_at_local": "2026-11-21 22:58:18+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": false
+    },
+    {
+      "kaggle_id": "daneshselwal1/cla21-11-2026-17-15",
+      "slug": "cla21-11-2026-17-15",
+      "current_title": "CLA21_11_2026_17_15",
+      "cla_nomenclature": "CLA21_11_2026_17_15",
+      "pushed_at_local": "2026-11-21 22:58:55+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": false
+    },
+    {
+      "kaggle_id": "daneshselwal1/cla19-11-2026-20-00",
+      "slug": "cla19-11-2026-20-00",
+      "current_title": "CLA19_11_2026_20_00",
+      "cla_nomenclature": "CLA19_11_2026_20_00",
+      "pushed_at_local": "2026-11-21 22:59:32+05:00",
+      "status": "KernelWorkerStatus.COMPLETE",
+      "enable_gpu": false
+    }
+  ]
 }
