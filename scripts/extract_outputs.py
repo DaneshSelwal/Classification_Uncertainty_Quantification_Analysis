@@ -497,11 +497,14 @@ def check_and_extract(
     runner_summary: List[Tuple[str, str, str, str, int]] = []
 
     for s_name, s_meta in suites_to_process.items():
-        runners_for_suite = (
-            [r for r in s_meta["runners"] if r["slug"] == runner_slug]
-            if runner_slug
-            else s_meta["runners"]
-        )
+        if runner_slug:
+            runners_for_suite = [
+                {**r, "slug": runner_slug}
+                for r in s_meta["runners"]
+                if r["slug"] == runner_slug or runner_slug.startswith(r["slug"] + "-")
+            ]
+        else:
+            runners_for_suite = s_meta["runners"]
         if not runners_for_suite:
             continue
 
@@ -661,8 +664,13 @@ def main():
     )
     args = parser.parse_args()
 
-    if args.kaggle_user == "daneshjangra" and "KAGGLE_CONFIG_DIR" not in os.environ:
-        alt_dir = Path("~/.kaggle_alt").expanduser()
+    user_config_dirs = {
+        "daneshjangra": "~/.kaggle_alt",
+        "geminicli": "~/.kaggle_alt3",
+        "daneshselwal1": "~/.kaggle_alt4",
+    }
+    if args.kaggle_user in user_config_dirs and "KAGGLE_CONFIG_DIR" not in os.environ:
+        alt_dir = Path(user_config_dirs[args.kaggle_user]).expanduser()
         if (alt_dir / "access_token").exists():
             os.environ["KAGGLE_CONFIG_DIR"] = str(alt_dir)
 

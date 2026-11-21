@@ -1,0 +1,13 @@
+stage,notebook,description,status,duration_s,error
+8,dapm/model_training_dapm_full.ipynb,DAPM Domain-Adaptive Training,FAILED,24.2,"
+---------------------------------------------------------------------------
+Exception encountered at ""In [8]"":
+--------------------------------------"
+9,dapm/model_uncertainty_dapm_full.ipynb,DAPM Uncertainty Quantification,FAILED,216.1,"
+---------------------------------------------------------------------------
+Exception encountered at ""In [14]"":
+-------------------------------------"
+10,dapm/Model_uncertainty_dapm_cp.ipynb,DAPM Conformal Prediction Evaluation,FAILED,202.4,"
+---------------------------------------------------------------------------
+Exception encountered at ""In [1]"":
+--------------------------------------"

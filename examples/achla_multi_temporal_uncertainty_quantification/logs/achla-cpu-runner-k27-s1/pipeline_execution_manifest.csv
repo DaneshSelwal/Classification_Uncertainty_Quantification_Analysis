@@ -1,0 +1,10 @@
+stage,notebook,description,status,duration_s,error
+1,baseline/model_uncertainty_comparison.ipynb,"Baseline Conformal Prediction (SplitCP, CcCP, RC3P, ClCP, RAPS)",FAILED,202.0,"
+---------------------------------------------------------------------------
+Exception encountered at ""In [1]"":
+--------------------------------------"
+2,sacp/model_sacp_comparison.ipynb,Spatial-Aware Conformal Prediction (SACP),FAILED,201.8,"
+---------------------------------------------------------------------------
+Exception encountered at ""In [1]"":
+--------------------------------------"
+4,credit/model_training_credit.ipynb,CREDIT Credal Distillation Training & Evaluation,SUCCESS,16.1,

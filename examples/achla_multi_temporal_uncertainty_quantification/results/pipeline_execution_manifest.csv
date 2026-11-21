@@ -1,0 +1,17 @@
+stage,notebook,description,status,duration_s,error
+8,dapm/model_training_dapm_full.ipynb,DAPM Domain-Adaptive Training,FAILED,16.2,"
+---------------------------------------------------------------------------
+Exception encountered at ""In [8]"":
+--------------------------------------"
+9,dapm/model_uncertainty_dapm_full.ipynb,DAPM Uncertainty Quantification,FAILED,214.1,"
+---------------------------------------------------------------------------
+Exception encountered at ""In [14]"":
+-------------------------------------"
+10,dapm/Model_uncertainty_dapm_cp.ipynb,DAPM Conformal Prediction Evaluation,FAILED,202.2,"
+---------------------------------------------------------------------------
+Exception encountered at ""In [1]"":
+--------------------------------------"
+11,multicp_sacp/Model_uncertainty_multicp_sacp.ipynb,Spatial MultiCP (SCMCP) Evaluation,FAILED,43.1,"
+---------------------------------------------------------------------------
+Exception encountered at ""In [5]"":
+--------------------------------------"
