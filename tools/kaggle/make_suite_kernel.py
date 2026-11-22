@@ -1,7 +1,10 @@
 """Build a Kaggle GPU *script* job that runs the 12 v2.0 notebooks of one dataset suite in order
 with papermill (no pre-trained weights are downloaded: every model is trained in the run).
 
-usage: make_suite_kernel.py <suite_dir> <out_dir> <dataset_source> [--smoke] [--stages 0,1,...]
+usage: make_suite_kernel.py <suite_dir> <out_dir> <account> [--smoke] [--stages 0,1,...]
+The Kaggle dataset of the suite and its file-name map come from tools/kaggle/suites.json.
+Datasets store files under tokens (k001.mat ...): the job builds a read-only mirror of /kaggle/input
+at /kaggle/kin (symlinks, plus links under the real file names) and points the notebooks at it.
 
 --smoke : shrink epochs / ensemble size / samples so every stage runs end-to-end in minutes.
           (Only run-length settings change; no maths is touched.)
@@ -43,7 +46,10 @@ smoke = "--smoke" in args; args = [a for a in args if a != "--smoke"]
 stages = list(range(12))
 if "--stages" in args:
     i = args.index("--stages"); stages = [int(s) for s in args[i + 1].split(",")]; del args[i:i + 2]
-suite_dir, out_dir, dataset = args
+suite_dir, out_dir, account = args
+_cfg = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "suites.json")))[
+    os.path.basename(os.path.normpath(suite_dir))]
+dataset, FILE_MAP = _cfg["dataset"][account], _cfg["files"]
 os.makedirs(out_dir, exist_ok=True)
 buf = io.BytesIO()
 with tarfile.open(fileobj=buf, mode="w:gz") as tar:
@@ -58,17 +64,28 @@ from pathlib import Path
 SUITE, SMOKE, STAGES = {suite!r}, {smoke!r}, {stages!r}
 PIPELINE = {PIPELINE!r}
 SMOKE_RULES = {SMOKE_RULES!r}
+FILE_MAP = {FILE_MAP!r}
 W = Path("/kaggle/working"); SRC = Path("/kaggle/tmp_suite"); OUT = W / "output"
 OUT.mkdir(parents=True, exist_ok=True); SRC.mkdir(parents=True, exist_ok=True)
 tarfile.open(fileobj=io.BytesIO(base64.b64decode({payload!r})), mode="r:gz").extractall(SRC)
 subprocess.run([sys.executable, "-m", "pip", "install", "-q", "papermill"], check=True)
+KIN = Path("/kaggle/kin")
+for p in Path("/kaggle/input").rglob("*"):
+    if p.is_file():
+        q = KIN / p.relative_to("/kaggle/input"); q.parent.mkdir(parents=True, exist_ok=True)
+        if not q.exists(): q.symlink_to(p)
+        if p.name in FILE_MAP and not (q.parent / FILE_MAP[p.name]).exists():
+            (q.parent / FILE_MAP[p.name]).symlink_to(p)
+print("input mirror:", sorted(str(x.relative_to(KIN)) for x in KIN.rglob("*") if not x.is_dir())[:20])
 print(subprocess.run(["nvidia-smi", "-L"], capture_output=True, text=True).stdout)
 
 def smoke_patch(path):
     nb = json.load(open(path)); n = 0
     for c in nb["cells"]:
         if c["cell_type"] != "code": continue
-        s = "".join(c["source"])
+        s = "".join(c["source"]).replace("/kaggle/input", "/kaggle/kin")
+        if not SMOKE:
+            c["source"] = s.splitlines(keepends=True); continue
         for pat, new in SMOKE_RULES:
             s, k = re.subn(pat, new, s, flags=re.M); n += k
         c["source"] = s.splitlines(keepends=True)
@@ -79,7 +96,7 @@ status, T0 = [], time.time()
 for st, rel in PIPELINE:
     if st not in STAGES: continue
     src = SRC / rel
-    n = smoke_patch(src) if SMOKE else 0
+    n = smoke_patch(src)
     out = OUT / ("EXECUTED_%02d_" % st + Path(rel).name)
     t0 = time.time()
     print("\\n" + "=" * 70 + f"\\nSTAGE {{st}}: {{rel}}  (smoke overrides: {{n}})\\n" + "=" * 70, flush=True)

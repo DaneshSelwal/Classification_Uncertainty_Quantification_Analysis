@@ -1,2 +1,3 @@
 code_name	slug	suite	job_dir	pushed_at	kind	status
-CLA22_11_2026_20_01	daneshselwal/cla22-11-2026-20-01	indian_pines_uncertainty_quantification	ip_smoke	2026-11-22 20:01	gpu	RUNNING SMOKE Indian Pines v2.0 (12 stages)
+CLA22_11_2026_20_01	daneshselwal/cla22-11-2026-20-01	indian_pines_uncertainty_quantification	ip_smoke	2026-11-22 20:01	gpu	DONE smoke 51 min: 10/12 OK; stage 8 (confusion-matrix labels, K2) and 11 (hard-coded window count, K3) failed -> fixed
+CLA22_11_2026_21_07	daneshselwal/cla22-11-2026-21-07	indian_pines_uncertainty_quantification	ip_smoke2	2026-11-22 21:07	gpu	RUNNING SMOKE-2 Indian Pines stages 0,6,8-11 (K2/K3 fixes, DAPM 3 epochs)
