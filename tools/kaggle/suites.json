@@ -1,7 +1,8 @@
 {
  "indian_pines_uncertainty_quantification": {
   "dataset": {
-   "daneshselwal": "daneshselwal/ip-dataset-k01"
+   "daneshselwal": "daneshselwal/ip-dataset-k01",
+   "daneshjangra": "daneshselwal/ip-dataset-k01"
   },
   "files": {
    "k001.mat": "Indian_pines.mat",
@@ -10,7 +11,8 @@
  },
  "pavia_university_uncertainty_quantification": {
   "dataset": {
-   "daneshselwal": "daneshselwal/pavia-dataset-k02"
+   "daneshselwal": "daneshselwal/pavia-dataset-k02",
+   "daneshjangra": "daneshselwal/pavia-dataset-k02"
   },
   "files": {
    "k001.mat": "paviauni.mat",
@@ -19,7 +21,8 @@
  },
  "hisar_3mts_uncertainty_quantification": {
   "dataset": {
-   "daneshselwal": "daneshselwal/hisar3-dataset-k03"
+   "daneshselwal": "daneshselwal/hisar3-dataset-k03",
+   "daneshjangra": "daneshselwal/hisar3-dataset-k03"
   },
   "files": {
    "k001.tif": "Hisar3.tif",
@@ -28,7 +31,8 @@
  },
  "hissar_25_uncertainty_quantification": {
   "dataset": {
-   "daneshselwal": "daneshselwal/hissar25-dataset-k04"
+   "daneshselwal": "daneshselwal/hissar25-dataset-k04",
+   "daneshjangra": "daneshselwal/hissar25-dataset-k04"
   },
   "files": {
    "k001.mat": "datas.mat",
@@ -37,7 +41,8 @@
  },
  "pavia_uncertainty_quantification": {
   "dataset": {
-   "daneshselwal": "daneshselwal/pavia-centre-dataset-k05"
+   "daneshselwal": "daneshselwal/pavia-centre-dataset-k05",
+   "daneshjangra": "daneshselwal/pavia-centre-dataset-k05"
   },
   "files": {
    "k001.mat": "pavia.mat",
@@ -46,7 +51,8 @@
  },
  "372_band_uncertainty_quantification": {
   "dataset": {
-   "daneshselwal": "daneshselwal/band372-dataset-k06"
+   "daneshselwal": "daneshselwal/band372-dataset-k06",
+   "daneshjangra": "daneshselwal/band372-dataset-k06"
   },
   "files": {
    "k001.mat": "full.mat",
@@ -55,7 +61,8 @@
  },
  "multispectral_uncertainty_quantification": {
   "dataset": {
-   "daneshselwal": "daneshselwal/etm108-dataset-k07"
+   "daneshselwal": "daneshselwal/etm108-dataset-k07",
+   "daneshjangra": "daneshselwal/etm108-dataset-k07"
   },
   "files": {
    "k001.csv": "all_etmls.csv",
@@ -85,13 +92,15 @@
  },
  "dias_uncertainty_quantification": {
   "dataset": {
-   "daneshselwal": "daneshselwal/dias-dataset-k01"
+   "daneshselwal": "daneshselwal/dias-dataset-k01",
+   "daneshjangra": "daneshselwal/dias-dataset-k01"
   },
   "files": {}
  },
  "6_band_uncertainty_quantification": {
   "dataset": {
-   "daneshselwal": "daneshselwal/dias-6-bands-data"
+   "daneshselwal": "daneshselwal/dias-6-bands-data",
+   "daneshjangra": "daneshselwal/dias-6-bands-data"
   },
   "files": {}
  }

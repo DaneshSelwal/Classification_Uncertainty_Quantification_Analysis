@@ -13,6 +13,7 @@ LOCK="${OTHER_REG}.lock"; [[ -d "$(dirname "$OTHER_REG")" ]] || LOCK="$REG.lock"
 [[ -f "$REG" ]] || printf "code_name\tslug\tsuite\tjob_dir\tpushed_at\tkind\tstatus\n" > "$REG"
 NOTE="$1"; shift
 for d in "$@"; do
+  tries=0
   while true; do
     until mkdir "$LOCK" 2>/dev/null; do sleep 5; done
     now="$(date '+%Y-%m-%d %H:%M')"; code="CLA$(date +%d_%m_%Y_%H_%M)"
@@ -33,7 +34,11 @@ PY
       rmdir "$LOCK"; echo "$(date +%H:%M) $code ($suite) pushed: https://www.kaggle.com/code/$KUSER/$slug"; break
     fi
     rmdir "$LOCK"
-    if ! echo "$out" | grep -qi "Maximum.*session"; then echo "$(date +%H:%M) ERROR $d: $out"; break; fi
+    # session limit (also reported by the client as an empty reply "Expecting value") -> retry, at most 6 h
+    tries=$((${tries:-0}+1))
+    if ! echo "$out" | grep -qiE "Maximum.*session|Expecting value" || (( tries > 180 )); then
+      echo "$(date +%H:%M) ERROR $d: $out"; break; fi
+    echo "$(date +%H:%M) waiting for a free GPU session ($out)"
     sleep 120
   done
 done

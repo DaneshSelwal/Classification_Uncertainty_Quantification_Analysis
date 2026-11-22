@@ -26,6 +26,8 @@ notebooks.
 | M19 | ClCP | Same calibration data used to fit the class clusters and to compute the quantiles. | Half of calibration fits the clusters, the other half calibrates. |
 | M20 | Multi-CP | External repo `yamtawa/Multi-CP` cloned at an unpinned HEAD. | Pinned to commit `fc252502d0bd2e2311f872672e3b70f7f64bcb74`. |
 | K1 | Excel writers | `xlsxwriter` crashed on inf (now valid for q_hat). | `nan_inf_to_errors` option. |
+| K2 | all with confusion matrices / reports | With the spatial split a very small class can have no held-out pixel; `confusion_matrix` / `classification_report` then returned fewer rows than class names and the plot crashed. | `labels=np.arange(num_classes)` everywhere, so every class keeps its row (empty classes show zeros). |
+| K3 | spatial Multi-CP | Final table check hard-coded 4 SACP window sizes (24 rows). | Row count derived from `SACP_WINDOW_SIZES`. |
 
 Not changed (reported, owner aware): duplicate notebooks in each suite root (`Model_training.ipynb`
 etc.) are v1 copies and are not part of the v2.0 pipeline; the extra model folders of 6-Band / DIAS

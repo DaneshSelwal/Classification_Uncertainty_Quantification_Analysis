@@ -1,3 +1,7 @@
 code_name	slug	suite	job_dir	pushed_at	kind	status
 CLA22_11_2026_20_01	daneshselwal/cla22-11-2026-20-01	indian_pines_uncertainty_quantification	ip_smoke	2026-11-22 20:01	gpu	DONE smoke 51 min: 10/12 OK; stage 8 (confusion-matrix labels, K2) and 11 (hard-coded window count, K3) failed -> fixed
-CLA22_11_2026_21_07	daneshselwal/cla22-11-2026-21-07	indian_pines_uncertainty_quantification	ip_smoke2	2026-11-22 21:07	gpu	RUNNING SMOKE-2 Indian Pines stages 0,6,8-11 (K2/K3 fixes, DAPM 3 epochs)
+CLA22_11_2026_21_07	daneshselwal/cla22-11-2026-21-07	indian_pines_uncertainty_quantification	ip_smoke2	2026-11-22 21:07	gpu	DONE smoke 28 min: stages 0,6,8,9,10,11 all OK; DAPM diffusion OA follows classifier OA with 3 epochs; split alignment verified
+CLA23_11_2026_01_04	daneshselwal/cla23-11-2026-01-04	indian_pines_uncertainty_quantification	ip_full	2026-11-23 01:04	gpu	DONE FULL 216 min: all 12 stages OK; SplitCP 0.947/0.957/0.955 (AlexNet/GFNet/ViT); SACP 0.91-0.98; Multi-CP 0.98-1.00; 4 of 16 classes have no evaluation pixels under the spatial split
+CLA23_11_2026_01_05	daneshselwal/cla23-11-2026-01-05	pavia_university_uncertainty_quantification	pavia_university_smoke	2026-11-23 01:05	gpu	DONE smoke 143 min: all 12 stages OK, split alignment verified, data via /kaggle/kin; SplitCP 0.95 ClassCond 0.94 RAPS 0.95
+CLA23_11_2026_01_06	daneshjangra/cla23-11-2026-01-06	achla_multi_temporal_uncertainty_quantification	achla_multi_temporal_smoke	2026-11-23 01:06	gpu	RUNNING SMOKE
+CLA23_11_2026_01_07	daneshjangra/cla23-11-2026-01-07	planet_data_hisar_uncertainty_quantification	planet_data_hisar_smoke	2026-11-23 01:07	gpu	RUNNING SMOKE

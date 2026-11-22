@@ -1,0 +1,79 @@
+{
+ "suite": "indian_pines_uncertainty_quantification",
+ "smoke": false,
+ "stages": [
+  {
+   "stage": 0,
+   "notebook": "baseline/model_training.ipynb",
+   "ok": true,
+   "minutes": 19.33
+  },
+  {
+   "stage": 1,
+   "notebook": "baseline/model_uncertainty_comparison.ipynb",
+   "ok": true,
+   "minutes": 2.82
+  },
+  {
+   "stage": 2,
+   "notebook": "sacp/model_sacp_comparison.ipynb",
+   "ok": true,
+   "minutes": 5.35
+  },
+  {
+   "stage": 3,
+   "notebook": "ensemble/model_training_ensembles.ipynb",
+   "ok": true,
+   "minutes": 84.0
+  },
+  {
+   "stage": 4,
+   "notebook": "credit/model_training_credit.ipynb",
+   "ok": true,
+   "minutes": 22.14
+  },
+  {
+   "stage": 5,
+   "notebook": "ensemble/model_uncertainty_credal_ensemble.ipynb",
+   "ok": true,
+   "minutes": 6.08
+  },
+  {
+   "stage": 6,
+   "notebook": "multi_cp/model_training_multihead.ipynb",
+   "ok": true,
+   "minutes": 23.55
+  },
+  {
+   "stage": 7,
+   "notebook": "multi_cp/model_uncertainty_multicp.ipynb",
+   "ok": true,
+   "minutes": 2.81
+  },
+  {
+   "stage": 8,
+   "notebook": "dapm/model_training_dapm_full.ipynb",
+   "ok": true,
+   "minutes": 40.46
+  },
+  {
+   "stage": 9,
+   "notebook": "dapm/model_uncertainty_dapm_full.ipynb",
+   "ok": true,
+   "minutes": 1.5
+  },
+  {
+   "stage": 10,
+   "notebook": "dapm/Model_uncertainty_dapm_cp.ipynb",
+   "ok": true,
+   "minutes": 2.97
+  },
+  {
+   "stage": 11,
+   "notebook": "multicp_sacp/Model_uncertainty_multicp_sacp.ipynb",
+   "ok": true,
+   "minutes": 4.86
+  }
+ ],
+ "total_minutes": 216.07
+}

@@ -10,6 +10,9 @@
 * GPU budget: `tools/kaggle/gpu_ledger.sh` appends the weekly GPU use of both accounts to
   `docs/gpu_ledger.tsv`. (The API reports `totalTimeAllowed` = 6 h, but daneshjangra already shows
   22.8 h used, so the real weekly allowance is higher; the Kaggle settings page is authoritative.)
+  The real weekly limit is 30 h per account (Kaggle push error). A push is refused when used hours plus the
+  time reserved for running sessions plus the new session would exceed 30 h, so a long full run may have to
+  wait until another run on that account finishes.
 * All runs: `docs/run_registry.tsv` (code name, slug, suite, job, push time, kind, status).
 
 Workflow per suite: smoke run -> all 12 stages OK -> full run -> verify tables -> commit results.

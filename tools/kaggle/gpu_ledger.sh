@@ -26,6 +26,7 @@ for k in api.kernels_list(mine=True, sort_by="dateRun", page_size=20):
 print(f"{time.strftime('%Y-%m-%d %H:%M')}\t{sys.argv[1]}\t{used/3600:.2f}\t{float(g['totalTimeAllowed'].rstrip('s'))/3600:.1f}\t{j['quotaRefreshTime'][:10]}\t{','.join(run) or '-'}")
 PY
 )
+  line=$(echo "$line" | grep '^20')
   [[ -n "$line" ]] && { echo "$line" >> "$L"; break; }; sleep 10; done
 done
 tail -2 "$L"
