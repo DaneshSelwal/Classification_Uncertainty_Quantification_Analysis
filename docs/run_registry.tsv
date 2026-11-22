@@ -1,0 +1,2 @@
+code_name	slug	suite	job_dir	pushed_at	kind	status
+CLA22_11_2026_20_01	daneshselwal/cla22-11-2026-20-01	indian_pines_uncertainty_quantification	ip_smoke	2026-11-22 20:01	gpu	RUNNING SMOKE Indian Pines v2.0 (12 stages)

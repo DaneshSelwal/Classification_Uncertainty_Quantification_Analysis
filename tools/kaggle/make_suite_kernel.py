@@ -28,8 +28,8 @@ PIPELINE = [
 SMOKE_RULES = [
     (r"^EPOCHS(\s*)=\s*\d+", "EPOCHS = 2"),
     (r"^STUDENT_EPOCHS(\s*)=\s*\d+", "STUDENT_EPOCHS = 2"),
-    (r"^STAGE1_EPOCHS(\s*)=\s*\d+", "STAGE1_EPOCHS = 1"),
-    (r"^STAGE2_EPOCHS(\s*)=\s*\d+", "STAGE2_EPOCHS = 1"),
+    (r"^STAGE1_EPOCHS(\s*)=\s*\d+", "STAGE1_EPOCHS = 3"),
+    (r"^STAGE2_EPOCHS(\s*)=\s*\d+", "STAGE2_EPOCHS = 3"),
     (r"^MAX_TARGET_UNLABELED(\s*)=\s*\d+", "MAX_TARGET_UNLABELED = 2000"),
     (r"^N_SAMPLES(\s*)=\s*\d+", "N_SAMPLES = 5"),
     (r"^M(\s*)=\s*\d+", "M = 2"),

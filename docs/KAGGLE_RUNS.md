@@ -1,0 +1,15 @@
+# Kaggle runs (version2.0)
+
+* Every run is named `CLA<DD>_<MM>_<YYYY>_<HH>_<MM>` = local push time (slug `cla<dd>-<mm>-<yyyy>-<hh>-<mm>`).
+* At most one push per minute, shared with the regression project (common lock, both registries checked):
+  `tools/kaggle/queue_push.sh "<note>" <job_dir>`.
+* Job = one dataset suite, 12 notebooks in order, GPU + internet, no pre-trained weights:
+  `python3 tools/kaggle/make_suite_kernel.py examples/<suite> <job_dir> <kaggle_dataset> [--smoke]`.
+  `--smoke` only shortens run length (epochs, ensemble size M = 2, diffusion samples, SACP windows 3/5).
+* Accounts: daneshselwal (`~/.kaggle`) and daneshjangra (`~/.kaggle_alt`), 2 GPU sessions each.
+* GPU budget: `tools/kaggle/gpu_ledger.sh` appends the weekly GPU use of both accounts to
+  `docs/gpu_ledger.tsv`. (The API reports `totalTimeAllowed` = 6 h, but daneshjangra already shows
+  22.8 h used, so the real weekly allowance is higher; the Kaggle settings page is authoritative.)
+* All runs: `docs/run_registry.tsv` (code name, slug, suite, job, push time, kind, status).
+
+Workflow per suite: smoke run -> all 12 stages OK -> full run -> verify tables -> commit results.
