@@ -3,7 +3,7 @@ indian_pines_uncertainty_quantification	smoke	daneshselwal	CLA22_11_2026_21_07	d
 indian_pines_uncertainty_quantification	full	daneshselwal	CLA23_11_2026_01_04	daneshselwal/cla23-11-2026-01-04	DONE_OK	216 min; all 12 stages OK; results committed
 pavia_university_uncertainty_quantification	smoke	daneshselwal	CLA23_11_2026_01_05	daneshselwal/cla23-11-2026-01-05	DONE_OK	143 min; all 12 stages OK
 achla_multi_temporal_uncertainty_quantification	smoke	daneshjangra	CLA23_11_2026_01_06	daneshjangra/cla23-11-2026-01-06	DONE_OK	256 min; all 12 stages OK
-planet_data_hisar_uncertainty_quantification	smoke	daneshjangra	CLA23_11_2026_01_07	daneshjangra/cla23-11-2026-01-07	RUNNING	pushed 11-23 01:07 (collected automatically)
+planet_data_hisar_uncertainty_quantification	smoke	daneshjangra	CLA23_11_2026_01_07	daneshjangra/cla23-11-2026-01-07	DONE_FAILED	TIMEOUT 12h (no error): stages 0-8 OK in 694 min, 9-11 not reached; needs owner decision, see agy.md 5
 hisar_3mts_uncertainty_quantification	smoke	*			PENDING	
 hissar_25_uncertainty_quantification	smoke	*			PENDING	
 pavia_uncertainty_quantification	smoke	*			PENDING	

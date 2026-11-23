@@ -52,7 +52,7 @@ the DIAS / 6-Band folders `dofa`, `georsclip`, `mambahsi`, `spatialgcn`, `trials
 | Indian Pines | OK (CLA22_11_2026_21_07) | **DONE, 12/12 OK** (CLA23_11_2026_01_04), results in `examples/indian_pines_uncertainty_quantification/logs/v2.0_CLA23_11_2026_01_04/` |
 | Pavia University | OK, 12/12 (CLA23_11_2026_01_05) | pending |
 | Achla multi-temporal | OK, 12/12 (CLA23_11_2026_01_06) | pending (daneshjangra only) |
-| Planet Hisar | running since 01:07 (CLA23_11_2026_01_07); `run_plan.py` collects it | pending (daneshjangra only) |
+| Planet Hisar | **12 h timeout** (CLA23_11_2026_01_07): stages 0-8 OK, no error; 9-11 not reached | **blocked: owner decision** (see 5, "Long kernels") |
 | Hisar-3 MTS | pending | pending |
 | Hissar-25 | pending | pending |
 | Pavia Centre | pending | pending |
@@ -66,7 +66,7 @@ Local checks already passed for all suites: `tools/check_notebooks.py` (all 132 
 DIAS and 6-Band also with `--fake-models`, i.e. every stage finds the models of the earlier stages).
 372-Band (1.1 GB) and Achla / Planet Hisar (data only on Kaggle) were checked statically only.
 
-Measured run times: smoke 2.4 h (Pavia University) to 4.3 h (Achla); full 3.6 h (Indian Pines). Larger scenes
+Measured run times: smoke 2.4 h (Pavia University) to 4.3 h (Achla), Planet Hisar smoke > 12 h (DAPM training alone 4 h); full 3.6 h (Indian Pines). Larger scenes
 (372-Band, Hisar-3, Pavia Centre) will be longer. Expect roughly 20 h for the 7 smokes and 40-60 h for the 10
 fulls, i.e. **more than one week of quota (2 x 30 h)**. `run_plan.py` simply continues after the reset.
 
@@ -171,6 +171,15 @@ hours used per account and anything that needed the owner's decision.
   stages that finished. Re-run only the missing stages with
   `python3 tools/kaggle/make_suite_kernel.py examples/<suite> <job_dir> <account> --stages 8,9,10,11`.
   This only works if the earlier stages' models are present, so normally re-run the whole suite and tell the owner.
+* **Planet Hisar does not fit in one 12 h session.** Its smoke run (CLA23_11_2026_01_07, log and
+  `stage_status.json` in `docs/smoke_runs/CLA23_11_2026_01_07/`) finished stages 0-8 without any error and was
+  stopped by Kaggle at 12 h (694 min) before stages 9-11 (DAPM uncertainty, DAPM CP, Multi-CP+SACP). Its full run
+  (more epochs) will not fit either, so `run_plan.py` will not start it (the smoke row is DONE_FAILED). Do NOT
+  shorten epochs or change the DAPM settings yourself (that changes results). Ask the owner which option to use:
+  (a) split the suite into two kernels (stages 0-8, then 9-11 with the first kernel's `/kaggle/working` output
+  attached as input, which needs a small change to `make_suite_kernel.py`), or (b) accept the smoke for 0-8 and
+  run only the full flow split as in (a). Watch 372-Band, Hisar-3 MTS and Pavia Centre the same way: if a smoke
+  of theirs times out, report it the same way.
 * **Regression project:** it shares the push lock and the Kaggle accounts (CPU runs). Do not delete its lock
   directory (`.../Regression_Uncertainty_Quantification_Analysis/docs/run_registry.tsv.lock`) unless no
   push is running for more than 10 minutes.
