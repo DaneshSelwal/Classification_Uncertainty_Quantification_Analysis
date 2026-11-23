@@ -15,4 +15,9 @@
   wait until another run on that account finishes.
 * All runs: `docs/run_registry.tsv` (code name, slug, suite, job, push time, kind, status).
 
+* `--cpu` builds a CPU-only job (for when the GPU quota is used up).
+* DIAS and 6-Band notebooks were written for Colab: the runner turns `drive.mount` into a no-op and maps
+  `/content/drive/My Drive/Classification` to `/kaggle/working` with `data/` linking the input files.
+* Embedded notebooks are stripped of their old outputs (papermill writes new ones).
+
 Workflow per suite: smoke run -> all 12 stages OK -> full run -> verify tables -> commit results.

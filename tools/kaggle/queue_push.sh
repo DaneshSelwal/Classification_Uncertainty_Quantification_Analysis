@@ -30,7 +30,7 @@ PY
     suite=$(head -1 "$d/run.py" | sed 's/^# v2.0 suite runner: //; s/ |.*//')
     out=$("$KAGGLE_BIN" kernels push -p "$d" 2>&1 | grep -v outdated)
     if echo "$out" | grep -q "successfully pushed"; then
-      printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\n" "$code" "$KUSER/$slug" "$suite" "$(basename "$d")" "$now" "gpu" "RUNNING $NOTE" >> "$REG"
+      printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\n" "$code" "$KUSER/$slug" "$suite" "$(basename "$d")" "$now" "$(grep -q '"enable_gpu": true' "$d/kernel-metadata.json" && echo gpu || echo cpu)" "RUNNING $NOTE" >> "$REG"
       rmdir "$LOCK"; echo "$(date +%H:%M) $code ($suite) pushed: https://www.kaggle.com/code/$KUSER/$slug"; break
     fi
     rmdir "$LOCK"

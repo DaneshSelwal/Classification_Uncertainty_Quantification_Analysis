@@ -95,7 +95,10 @@
    "daneshselwal": "daneshselwal/dias-dataset-k01",
    "daneshjangra": "daneshselwal/dias-dataset-k01"
   },
-  "files": {}
+  "files": {
+   "k001.mat": "DIAS.mat",
+   "k002.mat": "DIAS_ref.mat"
+  }
  },
  "6_band_uncertainty_quantification": {
   "dataset": {

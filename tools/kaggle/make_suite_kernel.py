@@ -1,7 +1,7 @@
 """Build a Kaggle GPU *script* job that runs the 12 v2.0 notebooks of one dataset suite in order
 with papermill (no pre-trained weights are downloaded: every model is trained in the run).
 
-usage: make_suite_kernel.py <suite_dir> <out_dir> <account> [--smoke] [--stages 0,1,...]
+usage: make_suite_kernel.py <suite_dir> <out_dir> <account> [--smoke] [--cpu] [--stages 0,1,...]
 The Kaggle dataset of the suite and its file-name map come from tools/kaggle/suites.json.
 Datasets store files under tokens (k001.mat ...): the job builds a read-only mirror of /kaggle/input
 at /kaggle/kin (symlinks, plus links under the real file names) and points the notebooks at it.
@@ -43,6 +43,7 @@ SMOKE_RULES = [
 
 args = sys.argv[1:]
 smoke = "--smoke" in args; args = [a for a in args if a != "--smoke"]
+cpu = "--cpu" in args; args = [a for a in args if a != "--cpu"]   # no GPU (when GPU quota is used up)
 stages = list(range(12))
 if "--stages" in args:
     i = args.index("--stages"); stages = [int(s) for s in args[i + 1].split(",")]; del args[i:i + 2]
@@ -54,7 +55,11 @@ os.makedirs(out_dir, exist_ok=True)
 buf = io.BytesIO()
 with tarfile.open(fileobj=buf, mode="w:gz") as tar:
     for _, rel in PIPELINE:
-        tar.add(os.path.join(suite_dir, rel), arcname=rel)
+        nb = json.load(open(os.path.join(suite_dir, rel)))   # old outputs are not needed to run
+        for c in nb["cells"]:
+            if c["cell_type"] == "code": c["outputs"], c["execution_count"] = [], None
+        data = json.dumps(nb).encode(); ti = tarfile.TarInfo(rel); ti.size = len(data)
+        tar.addfile(ti, io.BytesIO(data))
 payload = base64.b64encode(buf.getvalue()).decode()
 suite = os.path.basename(os.path.normpath(suite_dir))
 
@@ -76,6 +81,18 @@ for p in Path("/kaggle/input").rglob("*"):
         if not q.exists(): q.symlink_to(p)
         if p.name in FILE_MAP and not (q.parent / FILE_MAP[p.name]).exists():
             (q.parent / FILE_MAP[p.name]).symlink_to(p)
+# Colab-written notebooks (DIAS, 6-Band): /content/drive/My Drive/Classification -> /kaggle/working,
+# with data/ holding links to every input file (removed again at the end, so they are not saved as output)
+COLAB_ROOT = Path("/content/drive/My Drive/Classification")
+USES_COLAB = any("/content/drive" in (SRC / rel).read_text() for _, rel in PIPELINE)
+if USES_COLAB:
+    COLAB_ROOT.parent.mkdir(parents=True, exist_ok=True)
+    if not COLAB_ROOT.exists(): COLAB_ROOT.symlink_to(W)
+    (W / "data").mkdir(exist_ok=True)
+    for q in KIN.rglob("*"):
+        if not q.is_dir() and not (W / "data" / q.name).exists(): (W / "data" / q.name).symlink_to(q.resolve())
+    print("colab root ->", W, "| data/:", sorted(x.name for x in (W / "data").iterdir()))
+COLAB_STUB = 'drive = __import__("types").SimpleNamespace(mount=lambda *a, **k: print("Kaggle runner: drive.mount skipped"))'
 print("input mirror:", sorted(str(x.relative_to(KIN)) for x in KIN.rglob("*") if not x.is_dir())[:20])
 print(subprocess.run(["nvidia-smi", "-L"], capture_output=True, text=True).stdout)
 
@@ -84,6 +101,7 @@ def smoke_patch(path):
     for c in nb["cells"]:
         if c["cell_type"] != "code": continue
         s = "".join(c["source"]).replace("/kaggle/input", "/kaggle/kin")
+        s = s.replace("from google.colab import drive", COLAB_STUB)
         if not SMOKE:
             c["source"] = s.splitlines(keepends=True); continue
         for pat, new in SMOKE_RULES:
@@ -109,6 +127,9 @@ for st, rel in PIPELINE:
     json.dump({{"suite": SUITE, "smoke": SMOKE, "stages": status,
                "total_minutes": round((time.time() - T0) / 60, 2)}}, open(OUT / "stage_status.json", "w"), indent=1)
 
+if USES_COLAB:
+    for q in (W / "data").iterdir():
+        if q.is_symlink(): q.unlink()
 if SMOKE:   # smoke runs keep notebooks + tables only (no model weights) to keep the output small
     for p in W.rglob("*.keras"): p.unlink()
     for p in W.rglob("*.h5"): p.unlink()
@@ -118,7 +139,7 @@ print("RUN_STATUS:", "OK" if all(s["ok"] for s in status) else "FAILED", f"total
 open(os.path.join(out_dir, "run.py"), "w").write(run_py)
 meta = {"id": "PLACEHOLDER/placeholder", "title": "placeholder", "code_file": "run.py",
         "language": "python", "kernel_type": "script", "is_private": True,
-        "enable_gpu": True, "enable_tpu": False, "enable_internet": True,
+        "enable_gpu": not cpu, "enable_tpu": False, "enable_internet": True,
         "dataset_sources": [dataset], "kernel_sources": [], "competition_sources": [], "model_sources": []}
 json.dump(meta, open(os.path.join(out_dir, "kernel-metadata.json"), "w"), indent=1)
-print("built", out_dir, "| suite", suite, "| smoke", smoke, "| stages", stages, "|", len(payload) // 1024, "KB")
+print("built", out_dir, "| suite", suite, "| smoke", smoke, "| cpu", cpu, "| stages", stages, "|", len(payload) // 1024, "KB")
