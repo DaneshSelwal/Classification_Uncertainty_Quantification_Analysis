@@ -7,7 +7,8 @@
   "files": {
    "k001.mat": "Indian_pines.mat",
    "k002.mat": "Indian_pines_gt.mat"
-  }
+  },
+  "num_classes": 16
  },
  "pavia_university_uncertainty_quantification": {
   "dataset": {
@@ -17,7 +18,8 @@
   "files": {
    "k001.mat": "paviauni.mat",
    "k002.mat": "paviauni_gt.mat"
-  }
+  },
+  "num_classes": 9
  },
  "hisar_3mts_uncertainty_quantification": {
   "dataset": {
@@ -27,7 +29,8 @@
   "files": {
    "k001.tif": "Hisar3.tif",
    "k002.tif": "Clsimg3.tif"
-  }
+  },
+  "num_classes": 8
  },
  "hissar_25_uncertainty_quantification": {
   "dataset": {
@@ -37,7 +40,8 @@
   "files": {
    "k001.mat": "datas.mat",
    "k002.csv": "fullgt.csv"
-  }
+  },
+  "num_classes": 8
  },
  "pavia_uncertainty_quantification": {
   "dataset": {
@@ -47,7 +51,8 @@
   "files": {
    "k001.mat": "pavia.mat",
    "k002.mat": "pavia_gt.mat"
-  }
+  },
+  "num_classes": 9
  },
  "372_band_uncertainty_quantification": {
   "dataset": {
@@ -57,7 +62,8 @@
   "files": {
    "k001.mat": "full.mat",
    "k002.mat": "full_gt.mat"
-  }
+  },
+  "num_classes": 13
  },
  "multispectral_uncertainty_quantification": {
   "dataset": {
@@ -67,7 +73,8 @@
   "files": {
    "k001.csv": "all_etmls.csv",
    "k002.csv": "ref.csv"
-  }
+  },
+  "num_classes": 7
  },
  "achla_multi_temporal_uncertainty_quantification": {
   "dataset": {
@@ -78,7 +85,8 @@
    "k001.csv": "vv_dectomarch.csv",
    "k002.csv": "vh_dectomarch.csv",
    "k003.csv": "gt.csv"
-  }
+  },
+  "num_classes": 12
  },
  "planet_data_hisar_uncertainty_quantification": {
   "dataset": {
@@ -88,7 +96,8 @@
   "files": {
    "k001.csv": "planet.csv",
    "k002.csv": "planetgt.csv"
-  }
+  },
+  "num_classes": 8
  },
  "dias_uncertainty_quantification": {
   "dataset": {
@@ -98,13 +107,15 @@
   "files": {
    "k001.mat": "DIAS.mat",
    "k002.mat": "DIAS_ref.mat"
-  }
+  },
+  "num_classes": 8
  },
  "6_band_uncertainty_quantification": {
   "dataset": {
    "daneshselwal": "daneshselwal/dias-6-bands-data",
    "daneshjangra": "daneshselwal/dias-6-bands-data"
   },
-  "files": {}
+  "files": {},
+  "num_classes": 7
  }
 }

@@ -1,0 +1,19 @@
+def main_algo(Dcells_scores, Dcells_target, Dre_cal_scores, Dre_cal_target,
+              test_scores, test_target, alpha, config):
+    """Multi-head conformal inference with a valid joint guarantee (FIX H11).
+
+    The prediction set is the intersection of the K per-head sets. Each head is calibrated
+    at level alpha / K (Bonferroni) with the finite-sample split-conformal quantile, so the
+    joint set covers the true label with probability >= 1 - alpha. The reported set size is
+    the size of that joint set (the same set used for coverage).
+    Note: the Dcells subset is held out from calibration but not used for cell selection.
+    """
+    K, N_cal = Dre_cal_scores.shape[0], Dre_cal_scores.shape[1]
+    cal_true = Dre_cal_scores[np.arange(K)[:, None], np.arange(N_cal), Dre_cal_target]
+    q        = np.array([conformal_qhat(cal_true[k], alpha / K) for k in range(K)])
+    pred_sets = test_scores <= q[:, None, None]
+    joint    = pred_sets.all(axis=0)
+    test_target = np.asarray(test_target).astype(int)
+    idx      = np.where((test_target >= 0) & (test_target < joint.shape[1]))[0]
+    covered  = joint[idx, test_target[idx]]
+    return covered.mean(), joint.sum(axis=1).mean(), pred_sets

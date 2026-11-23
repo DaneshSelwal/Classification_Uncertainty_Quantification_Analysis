@@ -1,0 +1,23 @@
+suite	kind	account	code_name	slug	status	note
+indian_pines_uncertainty_quantification	smoke	daneshselwal	CLA22_11_2026_21_07	daneshselwal/cla22-11-2026-21-07	DONE_OK	smoke 1 + 2 (after K2/K3) all stages OK
+indian_pines_uncertainty_quantification	full	daneshselwal	CLA23_11_2026_01_04	daneshselwal/cla23-11-2026-01-04	DONE_OK	216 min; all 12 stages OK; results committed
+pavia_university_uncertainty_quantification	smoke	daneshselwal	CLA23_11_2026_01_05	daneshselwal/cla23-11-2026-01-05	DONE_OK	143 min; all 12 stages OK
+achla_multi_temporal_uncertainty_quantification	smoke	daneshjangra	CLA23_11_2026_01_06	daneshjangra/cla23-11-2026-01-06	DONE_OK	256 min; all 12 stages OK
+planet_data_hisar_uncertainty_quantification	smoke	daneshjangra	CLA23_11_2026_01_07	daneshjangra/cla23-11-2026-01-07	RUNNING	pushed 11-23 01:07 (collected automatically)
+hisar_3mts_uncertainty_quantification	smoke	*			PENDING	
+hissar_25_uncertainty_quantification	smoke	*			PENDING	
+pavia_uncertainty_quantification	smoke	*			PENDING	
+multispectral_uncertainty_quantification	smoke	*			PENDING	
+dias_uncertainty_quantification	smoke	*			PENDING	
+6_band_uncertainty_quantification	smoke	*			PENDING	
+372_band_uncertainty_quantification	smoke	*			PENDING	
+pavia_university_uncertainty_quantification	full	*			PENDING	
+achla_multi_temporal_uncertainty_quantification	full	daneshjangra			PENDING	
+planet_data_hisar_uncertainty_quantification	full	daneshjangra			PENDING	
+hisar_3mts_uncertainty_quantification	full	*			PENDING	
+hissar_25_uncertainty_quantification	full	*			PENDING	
+pavia_uncertainty_quantification	full	*			PENDING	
+multispectral_uncertainty_quantification	full	*			PENDING	
+dias_uncertainty_quantification	full	*			PENDING	
+6_band_uncertainty_quantification	full	*			PENDING	
+372_band_uncertainty_quantification	full	*			PENDING	

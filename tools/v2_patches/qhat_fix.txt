@@ -1,0 +1,14 @@
+def conformal_qhat(scores, alpha):
+    """Split-conformal threshold: the ceil((n+1)(1-alpha))-th smallest calibration score.
+
+    FIX H6: when ceil((n+1)(1-alpha)) > n there are too few calibration points for a finite
+    threshold; the correct value is +inf (keep the class in every set), not the largest score.
+    """
+    scores  = np.asarray(scores, dtype=np.float64)
+    n       = len(scores)
+    if n == 0 or alpha <= 0:
+        return float('inf')
+    k = int(np.ceil((n + 1) * (1.0 - alpha)))
+    if k > n:
+        return float('inf')
+    return float(np.sort(scores)[k - 1])

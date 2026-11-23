@@ -1,0 +1,42 @@
+import scipy.ndimage as ndi
+
+def conformal_qhat(scores, alpha):
+    """Split-conformal threshold: the ceil((n+1)(1-alpha))-th smallest calibration score.
+
+    FIX H6: when ceil((n+1)(1-alpha)) > n there are too few calibration points for a finite
+    threshold; the correct value is +inf (keep the class in every set), not the largest score.
+    """
+    scores  = np.asarray(scores, dtype=np.float64)
+    n       = len(scores)
+    if n == 0 or alpha <= 0:
+        return float('inf')
+    k = int(np.ceil((n + 1) * (1.0 - alpha)))
+    if k > n:
+        return float('inf')
+    return float(np.sort(scores)[k - 1])
+
+
+# FIX H9/H10: spatial conformal methods computed on the FULL-scene prediction map.
+# Smoothing uses only model predictions (never labels), and calibration, evaluation and the
+# map all read from the same smoothed score map, so calibration and test scores come from
+# the same function and the map is exactly the calibrated procedure.
+def _neighbour_mean(arr, window_size):
+    """Mean over the window_size x window_size neighbourhood, excluding the centre pixel."""
+    w   = int(window_size)
+    tot = ndi.uniform_filter(arr, size=(w, w) + (1,) * (arr.ndim - 2), mode='nearest') * (w * w)
+    return (tot - arr) / (w * w - 1)
+
+
+def aps_score_map(prob_full, seed=SEED):
+    """Randomised APS score for every pixel and every class: (H, W, C)."""
+    Hh, Ww, C = prob_full.shape
+    p     = prob_full.reshape(-1, C).astype(np.float64)
+    order = np.argsort(-p, axis=1)
+    ps    = np.take_along_axis(p, order, axis=1)
+    u     = np.random.default_rng(seed).random((p.shape[0], 1))
+    s_sorted = np.cumsum(ps, axis=1) - ps + u * ps
+    s = np.empty_like(p)
+    np.put_along_axis(s, order, s_sorted, axis=1)
+    return s.reshape(Hh, Ww, C)
+
+

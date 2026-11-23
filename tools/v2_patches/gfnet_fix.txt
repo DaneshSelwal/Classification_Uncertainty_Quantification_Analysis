@@ -1,0 +1,8 @@
+        # FIX C5: fft2d transforms the two innermost axes, so move channels first and
+        # filter over the (token_row, token_col) spatial grid as GFNet intends.
+        x_2d       = tf.transpose(x_2d, [0, 3, 1, 2])                       # (B, C, s, s)
+        x_fft      = tf.signal.fft2d(tf.cast(x_2d, tf.complex64))
+        w_complex  = tf.transpose(tf.complex(self.w_real, self.w_imag), [2, 0, 1])
+        x_filtered = x_fft * w_complex
+        x_spatial  = tf.math.real(tf.signal.ifft2d(x_filtered))
+        x_spatial  = tf.transpose(x_spatial, [0, 2, 3, 1])                  # (B, s, s, C)

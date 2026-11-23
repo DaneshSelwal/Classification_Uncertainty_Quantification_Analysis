@@ -20,4 +20,13 @@
   `/content/drive/My Drive/Classification` to `/kaggle/working` with `data/` linking the input files.
 * Embedded notebooks are stripped of their old outputs (papermill writes new ones).
 
+* Unattended: `python3 tools/kaggle/run_plan.py` works through `docs/run_plan.tsv` (see `agy.md`).
+* Local checks before a run: `tools/check_notebooks.py`, `tools/dry_run_data.py`.
+
 Workflow per suite: smoke run -> all 12 stages OK -> full run -> verify tables -> commit results.
+
+## Results (full runs)
+
+| Suite | Run | Stages | Split CP coverage (AlexNet / GFNet / ViT) | Notes |
+|---|---|---|---|---|
+| Indian Pines | CLA23_11_2026_01_04 | 12/12 OK, 216 min | 0.947 / 0.957 / 0.955 | SACP 0.91-0.98, Multi-CP 0.98-1.00; ClassCond / RC3P AlexNet 0.885 / 0.892; 4 of 16 classes without evaluation pixels |

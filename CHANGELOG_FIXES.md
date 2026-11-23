@@ -28,12 +28,21 @@ notebooks.
 | K1 | Excel writers | `xlsxwriter` crashed on inf (now valid for q_hat). | `nan_inf_to_errors` option. |
 | K2 | all with confusion matrices / reports | With the spatial split a very small class can have no held-out pixel; `confusion_matrix` / `classification_report` then returned fewer rows than class names and the plot crashed. | `labels=np.arange(num_classes)` everywhere, so every class keeps its row (empty classes show zeros). |
 | K3 | spatial Multi-CP | Final table check hard-coded 4 SACP window sizes (24 rows). | Row count derived from `SACP_WINDOW_SIZES`. |
+| K4 | DIAS, 6-Band (all) | Unguarded `from google.colab import drive` / `drive.mount` crashed outside Colab. | Import in `try/except ImportError`; mount only in Colab. The Kaggle runner maps `/content/drive/My Drive/Classification` to `/kaggle/working`. |
+| K5 | DIAS (9 notebooks), 6-Band DAPM (2) | DIAS stages read models from separate v1 Kaggle datasets under coded names whose meaning differs between notebooks (k005 = AlexNet in SACP, ViT in DAPM), so a chained run could not use its own models; 6-Band DAPM training saved to `dapm/dapm_full_artifacts` but the consumers read `dapm/models/dapm_full_artifacts`. | A cell after the path set-up selects the models / artefacts written by the earlier stages of the same run (original file names under `/kaggle/working`); the old lookup stays as fallback. |
+| C1b | DIAS, 6-Band multi-head training | Shared split was called with `y_img`, which these notebooks do not define (their label image is `y`). | `make_shared_split(y, ...)`. |
 
 Not changed (reported, owner aware): duplicate notebooks in each suite root (`Model_training.ipynb`
 etc.) are v1 copies and are not part of the v2.0 pipeline; the extra model folders of 6-Band / DIAS
 (dofa, georsclip, mambahsi, spatialgcn, trials) are out of scope of the 12-notebook pipeline.
 
 ## Verification
+* `python3 tools/check_notebooks.py`: syntax of every code cell, no v1 bug signature, required v2.0 pieces,
+  literal class counts equal the dataset's class count (all 132 pipeline notebooks: OK).
+* `python3 tools/dry_run_data.py examples/<suite> <input_root> [--fake-models]`: runs the data loading, shared split
+  and alignment check of all 12 notebooks locally (TensorFlow stubbed); with `--fake-models` also checks that
+  every stage finds the models of the earlier stages. OK for Indian Pines, Pavia University, Pavia Centre,
+  Hisar-3, Hissar-25, ETM, DIAS and 6-Band (372-Band: data too large to fetch locally, static checks only).
 * Local (numpy only, seconds): split CP coverage 0.949 at alpha = 0.05; RAPS 0.950; SACP 0.951; Multi-CP
   joint coverage 0.938 at alpha = 0.10 (K = 3); CREDIT AU + EU = TU, lower <= upper; vectorised
   smoothing equals the loop (1e-16).

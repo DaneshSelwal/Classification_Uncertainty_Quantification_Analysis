@@ -1,0 +1,25 @@
+def raps_score_single(prob_row, true_label, lam=0.01, k_reg=1, u=None):
+    """Randomised RAPS score (Angelopoulos et al., 2021).
+
+    FIX H7: E = sum of probabilities ranked above y  +  u * p_y  +  lam * (rank_y - k_reg)^+,
+    with rank_y 1-based and u ~ U(0,1). The old score left out p_y and had no u, so q_hat
+    collapsed to 0 and every set became top-1.
+    """
+    order = np.argsort(prob_row)[::-1]
+    rank0 = int(np.where(order == true_label)[0][0])          # 0-based position of y
+    u     = np.random.rand() if u is None else u
+    above = float(np.sum(prob_row[order[:rank0]]))
+    return above + u * float(prob_row[true_label]) + float(lam) * max(rank0 + 1 - int(k_reg), 0)
+
+
+def raps_set_single(prob_row, q_hat, lam=0.01, k_reg=1, u=None):
+    """RAPS prediction set {y : E(x, y, u) <= q_hat} using the same u for every candidate class."""
+    order    = np.argsort(prob_row)[::-1]
+    p_sorted = prob_row[order]
+    u        = np.random.rand() if u is None else u
+    above    = np.concatenate([[0.0], np.cumsum(p_sorted)[:-1]])
+    ranks    = np.arange(1, len(prob_row) + 1)
+    scores   = above + u * p_sorted + float(lam) * np.maximum(ranks - int(k_reg), 0)
+    pred_set = np.zeros_like(prob_row, dtype=bool)
+    pred_set[order[scores <= q_hat]] = True
+    return pred_set

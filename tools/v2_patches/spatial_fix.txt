@@ -1,0 +1,112 @@
+# FIX H9/H10: spatial conformal methods computed on the FULL-scene prediction map.
+# Smoothing uses only model predictions (never labels), and calibration, evaluation and the
+# map all read from the same smoothed score map, so calibration and test scores come from
+# the same function and the map is exactly the calibrated procedure.
+def _neighbour_mean(arr, window_size):
+    """Mean over the window_size x window_size neighbourhood, excluding the centre pixel."""
+    w   = int(window_size)
+    tot = ndi.uniform_filter(arr, size=(w, w) + (1,) * (arr.ndim - 2), mode='nearest') * (w * w)
+    return (tot - arr) / (w * w - 1)
+
+
+def aps_score_map(prob_full, seed=SEED):
+    """Randomised APS score for every pixel and every class: (H, W, C)."""
+    Hh, Ww, C = prob_full.shape
+    p     = prob_full.reshape(-1, C).astype(np.float64)
+    order = np.argsort(-p, axis=1)
+    ps    = np.take_along_axis(p, order, axis=1)
+    u     = np.random.default_rng(seed).random((p.shape[0], 1))
+    s_sorted = np.cumsum(ps, axis=1) - ps + u * ps
+    s = np.empty_like(p)
+    np.put_along_axis(s, order, s_sorted, axis=1)
+    return s.reshape(Hh, Ww, C)
+
+
+def build_sacp_outputs_for_model(
+    model_name, y_cal, prob_cal, coords_cal,
+    y_eval, prob_eval, coords_eval,
+    prob_full, H, W, alpha=0.05, window_size=3, lambda_=0.5,
+):
+    """SACP: APS scores smoothed over the full-scene grid, split-conformal threshold."""
+    t0 = time.perf_counter()
+    n_classes = prob_full.shape[2]
+    S  = aps_score_map(prob_full)
+    Sm = (1.0 - lambda_) * S + lambda_ * _neighbour_mean(S, window_size)
+    cr, cc = coords_cal[:, 0], coords_cal[:, 1]
+    er, ec = coords_eval[:, 0], coords_eval[:, 1]
+    q_hat = conformal_qhat(Sm[cr, cc, y_cal], alpha)
+
+    pred_sets_eval = Sm[er, ec, :] <= q_hat
+    metrics = compute_set_metrics(pred_sets_eval, y_eval)
+    per_cls = per_class_coverage_df(pred_sets_eval, y_eval, n_classes)
+
+    pred_sets_full  = Sm <= q_hat
+    set_sizes_map   = np.sum(pred_sets_full, axis=2)
+    pred_class_map  = np.argmax(prob_full, axis=2)
+    combined_map    = np.where(set_sizes_map == 1, pred_class_map, n_classes)
+    pixel_counts_df = build_pixel_counts_df(combined_map, n_classes)
+    return _spatial_bundle(model_name, 'SACP', metrics, per_cls, set_sizes_map, combined_map,
+                           pixel_counts_df, alpha, lambda_, t0,
+                           pd.DataFrame([{'q_hat_sacp': float(q_hat), 'window_size': int(window_size),
+                                          'lambda': float(lambda_)}]))
+
+
+def build_scmcp_outputs_for_model(
+    model_name, y_cal, prob_cal, coords_cal,
+    y_eval, prob_eval, coords_eval,
+    prob_full, H, W, alpha=0.05, window_size=3, lambda_=0.5,
+):
+    """SCMCP: class-conditional split conformal on spatially smoothed full-scene probabilities."""
+    t0 = time.perf_counter()
+    n_classes = prob_full.shape[2]
+    P  = prob_full.astype(np.float64)
+    Pm = (1.0 - lambda_) * P + lambda_ * _neighbour_mean(P, window_size)
+    Pm = Pm / np.maximum(Pm.sum(axis=2, keepdims=True), 1e-12)
+    cr, cc = coords_cal[:, 0], coords_cal[:, 1]
+    er, ec = coords_eval[:, 0], coords_eval[:, 1]
+    q_hats = np.array([conformal_qhat(1.0 - Pm[cr[y_cal == c], cc[y_cal == c], c], alpha)
+                       for c in range(n_classes)])
+    thr = 1.0 - q_hats
+
+    pred_sets_eval = Pm[er, ec, :] >= thr[None, :]
+    metrics = compute_set_metrics(pred_sets_eval, y_eval)
+    per_cls = per_class_coverage_df(pred_sets_eval, y_eval, n_classes)
+
+    pred_sets_full  = Pm >= thr[None, None, :]
+    set_sizes_map   = np.sum(pred_sets_full, axis=2)
+    pred_class_map  = np.argmax(Pm, axis=2)
+    combined_map    = np.where(set_sizes_map == 1, pred_class_map, n_classes)
+    pixel_counts_df = build_pixel_counts_df(combined_map, n_classes)
+    return _spatial_bundle(model_name, 'SCMCP', metrics, per_cls, set_sizes_map, combined_map,
+                           pixel_counts_df, alpha, lambda_, t0,
+                           pd.DataFrame({'class_id': np.arange(n_classes), 'q_hat_scmcp': q_hats}))
+
+
+def _spatial_bundle(model_name, method, metrics, per_cls, set_sizes_map, combined_map,
+                    pixel_counts_df, alpha, lambda_, t0, thr_df):
+    n_classes = len(per_cls)
+    plot_buffers = {
+        'Per-Class Coverage': make_per_class_coverage_plot(per_cls, alpha=alpha,
+                                                           title=f'{method}: Per-Class Coverage'),
+        'Certain vs Uncertain Map': make_certain_uncertain_map_plot(
+            set_sizes_map, title=f'Predictions with Uncertainty Map\n({method})'),
+        'Class Map with Uncertain Mask': make_class_uncertain_mask_plot(
+            combined_map, n_classes=n_classes, title=f'Predictions with Uncertainty Mask\n({method})'),
+        'Pixel Counts': make_pixel_counts_plot(pixel_counts_df, title=f'Pixel Count per Class ({method})',
+                                               n_classes=n_classes),
+    }
+    summary = {
+        'model_name': model_name, 'method': method, 'target_coverage': float(1.0 - alpha),
+        'empirical_coverage': metrics['empirical_coverage'], 'avg_set_size': metrics['avg_set_size'],
+        'median_set_size': metrics['median_set_size'], 'singleton_rate': metrics['singleton_rate'],
+        'empty_set_rate': metrics['empty_set_rate'], 'runtime_sec': float(time.perf_counter() - t0),
+        'alpha': float(alpha), 'lam': float(lambda_), 'n_clusters': np.nan,
+        'mean_per_class_coverage': float(per_cls['class_coverage'].mean(skipna=True)),
+    }
+    tables = {'Summary': pd.DataFrame([summary]), 'Per-Class Coverage Values': per_cls,
+              'Pixel Counts': pixel_counts_df, 'Thresholds': thr_df}
+    return {'model_name': model_name, 'method': method, 'summary': summary, 'per_class_df': per_cls,
+            'plot_buffers': plot_buffers, 'tables': tables}
+
+
+# ===== END SPATIAL =====

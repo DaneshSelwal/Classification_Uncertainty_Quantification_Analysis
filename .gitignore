@@ -40,3 +40,6 @@ tokens/
 
 # Oversize report workbook hosted on HF Hub (DaneshSelwal/Classification-Hisar3-Models/reports/)
 examples/hisar_3mts_uncertainty_quantification/results/uncertainty_results/conformal_reports_all_models.xlsx
+
+# generated Kaggle kernels (tools/kaggle/run_plan.py)
+.kaggle_jobs/
