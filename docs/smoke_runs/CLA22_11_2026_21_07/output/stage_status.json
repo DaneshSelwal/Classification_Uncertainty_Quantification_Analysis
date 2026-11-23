@@ -1,0 +1,43 @@
+{
+ "suite": "indian_pines_uncertainty_quantification",
+ "smoke": true,
+ "stages": [
+  {
+   "stage": 0,
+   "notebook": "baseline/model_training.ipynb",
+   "ok": true,
+   "minutes": 6.43
+  },
+  {
+   "stage": 6,
+   "notebook": "multi_cp/model_training_multihead.ipynb",
+   "ok": true,
+   "minutes": 6.35
+  },
+  {
+   "stage": 8,
+   "notebook": "dapm/model_training_dapm_full.ipynb",
+   "ok": true,
+   "minutes": 7.2
+  },
+  {
+   "stage": 9,
+   "notebook": "dapm/model_uncertainty_dapm_full.ipynb",
+   "ok": true,
+   "minutes": 1.43
+  },
+  {
+   "stage": 10,
+   "notebook": "dapm/Model_uncertainty_dapm_cp.ipynb",
+   "ok": true,
+   "minutes": 3.01
+  },
+  {
+   "stage": 11,
+   "notebook": "multicp_sacp/Model_uncertainty_multicp_sacp.ipynb",
+   "ok": true,
+   "minutes": 3.1
+  }
+ ],
+ "total_minutes": 27.53
+}
