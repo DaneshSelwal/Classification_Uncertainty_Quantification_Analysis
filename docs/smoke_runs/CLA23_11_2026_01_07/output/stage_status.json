@@ -1,0 +1,61 @@
+{
+ "suite": "planet_data_hisar_uncertainty_quantification",
+ "smoke": true,
+ "stages": [
+  {
+   "stage": 0,
+   "notebook": "baseline/model_training.ipynb",
+   "ok": true,
+   "minutes": 47.73
+  },
+  {
+   "stage": 1,
+   "notebook": "baseline/model_uncertainty_comparison.ipynb",
+   "ok": true,
+   "minutes": 31.14
+  },
+  {
+   "stage": 2,
+   "notebook": "sacp/model_sacp_comparison.ipynb",
+   "ok": true,
+   "minutes": 78.03
+  },
+  {
+   "stage": 3,
+   "notebook": "ensemble/model_training_ensembles.ipynb",
+   "ok": true,
+   "minutes": 70.42
+  },
+  {
+   "stage": 4,
+   "notebook": "credit/model_training_credit.ipynb",
+   "ok": true,
+   "minutes": 56.66
+  },
+  {
+   "stage": 5,
+   "notebook": "ensemble/model_uncertainty_credal_ensemble.ipynb",
+   "ok": true,
+   "minutes": 60.77
+  },
+  {
+   "stage": 6,
+   "notebook": "multi_cp/model_training_multihead.ipynb",
+   "ok": true,
+   "minutes": 24.97
+  },
+  {
+   "stage": 7,
+   "notebook": "multi_cp/model_uncertainty_multicp.ipynb",
+   "ok": true,
+   "minutes": 84.79
+  },
+  {
+   "stage": 8,
+   "notebook": "dapm/model_training_dapm_full.ipynb",
+   "ok": true,
+   "minutes": 239.41
+  }
+ ],
+ "total_minutes": 693.92
+}
