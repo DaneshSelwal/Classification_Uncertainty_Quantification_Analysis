@@ -353,6 +353,9 @@ def is_valid_payload(ext: str, data: bytes) -> Tuple[bool, str]:
     return False, f"unsupported ext {ext}"
 
 
+MAX_LOCAL_BYTES = 48 * 1024 * 1024
+
+
 def download_and_save(item: Tuple[str, Path, str, bool]) -> Tuple[str, str, str, str]:
     """Download item from URL, validate payload, and save to destination path."""
     url, dest_path, rel_src, dry_run = item
@@ -361,7 +364,16 @@ def download_and_save(item: Tuple[str, Path, str, bool]) -> Tuple[str, str, str,
     if dry_run:
         return "planned", rel_src, str(dest_path), f"dry-run {ext}"
 
-    attempts = 3
+    if dest_path.exists() and dest_path.stat().st_size > 0:
+        try:
+            existing_bytes = dest_path.read_bytes()
+            ok_cached, reason_cached = is_valid_payload(ext, existing_bytes)
+            if ok_cached and len(existing_bytes) <= MAX_LOCAL_BYTES:
+                return "saved", rel_src, str(dest_path), f"cached {reason_cached}"
+        except Exception:
+            pass
+
+    attempts = 4
     data = None
     last_err = None
     for attempt in range(attempts):
@@ -371,7 +383,10 @@ def download_and_save(item: Tuple[str, Path, str, bool]) -> Tuple[str, str, str,
             clean_path = quote(parts.path, safe="/%")
             clean_url = urlunsplit((parts.scheme, parts.netloc, clean_path, parts.query, parts.fragment))
             req = urllib.request.Request(clean_url, headers={"User-Agent": "Mozilla/5.0"})
-            with urllib.request.urlopen(req, timeout=45) as resp:
+            with urllib.request.urlopen(req, timeout=240) as resp:
+                cl = int(resp.headers.get("Content-Length") or 0)
+                if cl > MAX_LOCAL_BYTES:
+                    return "skipped", rel_src, str(dest_path), f"skipped >48MB for Git ({cl}B)"
                 data = resp.read()
             break
         except Exception as exc:
@@ -381,6 +396,9 @@ def download_and_save(item: Tuple[str, Path, str, bool]) -> Tuple[str, str, str,
                 time.sleep(1.0)
     if data is None:
         return "error", rel_src, str(dest_path), f"download failed: {last_err}"
+
+    if len(data) > MAX_LOCAL_BYTES:
+        return "skipped", rel_src, str(dest_path), f"skipped >48MB for Git ({len(data)}B)"
 
     ok, reason = is_valid_payload(ext, data)
     if not ok:

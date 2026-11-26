@@ -1,17 +1,13 @@
 stage,notebook,description,status,duration_s,error
-8,dapm/model_training_dapm_full.ipynb,DAPM Domain-Adaptive Training,FAILED,16.2,"
----------------------------------------------------------------------------
-Exception encountered at ""In [8]"":
---------------------------------------"
-9,dapm/model_uncertainty_dapm_full.ipynb,DAPM Uncertainty Quantification,FAILED,214.1,"
----------------------------------------------------------------------------
-Exception encountered at ""In [14]"":
--------------------------------------"
-10,dapm/Model_uncertainty_dapm_cp.ipynb,DAPM Conformal Prediction Evaluation,FAILED,202.2,"
----------------------------------------------------------------------------
-Exception encountered at ""In [1]"":
---------------------------------------"
-11,multicp_sacp/Model_uncertainty_multicp_sacp.ipynb,Spatial MultiCP (SCMCP) Evaluation,FAILED,43.1,"
----------------------------------------------------------------------------
-Exception encountered at ""In [5]"":
---------------------------------------"
+0,baseline/model_training.ipynb,"Baseline Backbone Training (AlexNet, GFNet, ViT-UNet)",SUCCESS,522.4,
+1,baseline/model_uncertainty_comparison.ipynb,"Baseline Conformal Prediction Comparison (SplitCP, CcCP, RC3P, ClCP, RAPS)",SUCCESS,544.2,
+2,sacp/model_sacp_comparison.ipynb,Spatial-Aware Conformal Prediction (SACP) Evaluation,SUCCESS,3694.4,
+3,ensemble/model_training_ensembles.ipynb,Deep Credal Ensemble Training,SUCCESS,2471.5,
+4,credit/model_training_credit.ipynb,CREDIT Distillation Training and Credal Uncertainty Evaluation,SUCCESS,1376.2,
+5,ensemble/model_uncertainty_credal_ensemble.ipynb,CreDE Credal Ensemble Uncertainty Quantification,SUCCESS,2362.9,
+6,multi_cp/model_training_multihead.ipynb,Multi-Head Architecture Training,SUCCESS,84.1,
+7,multi_cp/model_uncertainty_multicp.ipynb,Multi-Head Conformal Prediction (Multi-CP) Evaluation,SUCCESS,1246.8,
+8,dapm/model_training_dapm_full.ipynb,Dynamic Adaptive Prediction Mapping (DAPM) Training,SUCCESS,2477.6,
+9,dapm/model_uncertainty_dapm_full.ipynb,DAPM Domain-Adaptive Uncertainty Quantification,SUCCESS,5654.4,
+10,dapm/Model_uncertainty_dapm_cp.ipynb,DAPM Conformal Prediction Evaluation,SUCCESS,2968.2,
+11,multicp_sacp/Model_uncertainty_multicp_sacp.ipynb,Spatial MultiCP (SCMCP) Evaluation,SUCCESS,15227.7,

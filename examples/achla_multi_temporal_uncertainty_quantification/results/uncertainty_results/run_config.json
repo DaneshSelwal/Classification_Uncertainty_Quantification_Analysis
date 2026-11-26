@@ -1,0 +1,20 @@
+{
+  "seed": 42,
+  "data_file": "/kaggle/input/datasets/daneshselwal/achla-dataset-k08/k001.csv",
+  "label_file": "/kaggle/input/datasets/daneshselwal/achla-dataset-k08/k003.csv",
+  "model_dir": "/kaggle/working/models",
+  "output_dir": "/kaggle/working/results/uncertainty_results",
+  "results_dir": "/kaggle/working/results/uncertainty_results",
+  "h": 964,
+  "w": 1028,
+  "b": 32,
+  "patch_size": 9,
+  "train_percent": 0.75,
+  "calib_fraction_of_test": 0.5,
+  "alpha": 0.05,
+  "raps_lam": 0.01,
+  "raps_k_reg": 1,
+  "n_clusters": 4,
+  "batch_size": 128,
+  "timestamp_utc": "2026-11-21T17:54:03.088659+00:00"
+}

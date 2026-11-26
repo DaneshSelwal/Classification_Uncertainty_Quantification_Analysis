@@ -1,0 +1,4 @@
+model_name,method,window_size,target_coverage,empirical_coverage,avg_set_size,median_set_size,singleton_rate,empty_set_rate,runtime_sec,alpha,lambda,k,q_hat,mean_per_class_coverage
+AlexNet,SACP,5,0.95,1.0,1.0025619128949617,1.0,0.9974380871050385,0.0,269.3600380079997,0.05,0.5,1,0.7574211655501617,1.0
+GFNet,SACP,5,0.95,1.0,1.0008539709649873,1.0,0.9991460290350128,0.0,255.279144996,0.05,0.5,1,0.7555036763704616,1.0
+ViT,SACP,5,0.95,1.0,1.0,1.0,1.0,0.0,304.184484849,0.05,0.5,1,0.7415775423556389,1.0

@@ -1,13 +1,16 @@
 stage,notebook,description,status,duration_s,error
-8,dapm/model_training_dapm_full.ipynb,DAPM Domain-Adaptive Training,FAILED,24.2,"
----------------------------------------------------------------------------
-Exception encountered at ""In [8]"":
---------------------------------------"
-9,dapm/model_uncertainty_dapm_full.ipynb,DAPM Uncertainty Quantification,FAILED,216.1,"
+3,ensemble/model_training_ensembles.ipynb,Deep Credal Ensemble Training,FAILED,8415.4,Kernel died
+4,credit/model_training_credit.ipynb,CREDIT Distillation Training and Credal Uncertainty Evaluation,FAILED,1524.6,Kernel died
+5,ensemble/model_uncertainty_credal_ensemble.ipynb,CreDE Credal Ensemble Uncertainty Quantification,SUCCESS,2910.4,
+6,multi_cp/model_training_multihead.ipynb,Multi-Head Architecture Training,SUCCESS,8014.5,
+7,multi_cp/model_uncertainty_multicp.ipynb,Multi-Head Conformal Prediction (Multi-CP) Evaluation,SUCCESS,1476.0,
+8,dapm/model_training_dapm_full.ipynb,Dynamic Adaptive Prediction Mapping (DAPM) Training,FAILED,2113.1,Kernel died
+9,dapm/model_uncertainty_dapm_full.ipynb,DAPM Domain-Adaptive Uncertainty Quantification,FAILED,33.3,"
 ---------------------------------------------------------------------------
 Exception encountered at ""In [14]"":
 -------------------------------------"
-10,dapm/Model_uncertainty_dapm_cp.ipynb,DAPM Conformal Prediction Evaluation,FAILED,202.4,"
+10,dapm/Model_uncertainty_dapm_cp.ipynb,DAPM Conformal Prediction Evaluation,FAILED,9.0,"
 ---------------------------------------------------------------------------
-Exception encountered at ""In [1]"":
+Exception encountered at ""In [4]"":
 --------------------------------------"
+11,multicp_sacp/Model_uncertainty_multicp_sacp.ipynb,Spatial MultiCP (SCMCP) Evaluation,SUCCESS,14292.1,

@@ -1,0 +1,24 @@
+{
+  "seed": 42,
+  "project_root": "/kaggle/working",
+  "model_dir": "/kaggle/working/models",
+  "dapm_dir": "/kaggle/working/models",
+  "output_dir": "/kaggle/working/results",
+  "data_file": "/kaggle/input/datasets/daneshselwal/achla-dataset-k08/k001.csv",
+  "label_file": "/kaggle/input/datasets/daneshselwal/achla-dataset-k08/k003.csv",
+  "h": 964,
+  "w": 1028,
+  "b": 32,
+  "patch_size": 9,
+  "n_samples": 30,
+  "p_threshold": 0.05,
+  "batch_size": 128,
+  "scene_chunk_size": 1000,
+  "diffusion_steps": "full_T (per model config)",
+  "models": [
+    "AlexNet_CNN",
+    "GFNet",
+    "ViT_UNet"
+  ],
+  "timestamp_utc": "2026-11-21T23:16:36.252121+00:00"
+}
